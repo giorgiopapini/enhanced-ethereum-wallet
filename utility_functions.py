@@ -1,0 +1,57 @@
+from tkinter import *
+
+from eth_keys import keys
+from eth_utils import decode_hex
+
+import constants
+import json
+import qrcode
+
+
+def user_is_registered():
+    try:
+        with open("encrypted_private_keys.json", "r") as json_file:
+            # IMPORTANTE!!! --> Cambiare condizioni (verificare che il file esiste e verificare che l'array di private
+            # keys non sia vuoto)
+            if not json_file.read(1):
+                return False
+            else:
+                return True
+    except FileNotFoundError:
+        return False
+
+
+def error_message(entry, error):
+    entry.delete(0, END)
+    entry.config(fg="red")
+    entry.insert(END, error)
+
+
+def clear_error_message(event):
+    for error in constants.ERRORS:
+        if event.widget.get() == constants.ERRORS[error]:
+            event.widget.delete(0, END)
+            event.widget.config(fg="black")
+
+
+def create_qrcode(data):
+    img = qrcode.make(data)
+
+    # IMPORTANTE!!! --> E' necessario salvare il qr code? Nel caso capire in che punto del codice é piú opportuno
+    # salvarlo
+    img.save("public_key_qrcode.png")
+
+
+def get_private_key(web3, password):
+    with open("encrypted_private_keys.json", "r") as json_file:
+        user_data = json.load(json_file)["keys"][0]
+        print(user_data)
+        return web3.eth.account.decrypt(user_data, password).hex()
+
+
+def get_address(private_key):
+    priv_key_bytes = decode_hex(private_key)
+    priv_key = keys.PrivateKey(priv_key_bytes)
+    pub_key = priv_key.public_key
+    address = pub_key.to_checksum_address()
+    return address
