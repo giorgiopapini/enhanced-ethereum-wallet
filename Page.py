@@ -11,9 +11,6 @@ class Page(Frame):
         self.web3 = web3
         self.previous_page = kwargs.get("previous_page", None)
 
-    # Capire come usare **kwargs, sia per rendere piú generico e riutilizzabile il codice sia per renderlo piú esplicito
-    # e comprensibile
-
     def to_page(self, page=None, previous_page=None, **kwargs):
         page(self.root, self.web3, previous_page=previous_page, **kwargs)
         print(previous_page)

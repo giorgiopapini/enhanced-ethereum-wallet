@@ -67,7 +67,6 @@ class ImportPage(Page):
             height=38)
 
     def import_account(self):
-        # IMPORTANTE!! Reinderizzare l'utente alla pagina successiva
 
         # - Verificare che il testo presente nell'Entry rispetti il regex.
         # - Verificare che la private key o la seed phrase sia valida

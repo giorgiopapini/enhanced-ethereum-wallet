@@ -2,7 +2,7 @@ from tkinter import *
 
 import constants
 import utility_functions
-from Homepage.Homepage import Homepage
+from App.Homepage.Homepage import Homepage
 from KeyImport.ImportPage import ImportPage
 from Page import Page
 
@@ -93,7 +93,7 @@ class LoginPage(Page):
             self.to_page(
                 page=Homepage,
                 previous_page=None,
-                account=account,  # passare la variabile di tipo Account, non solo l'address
+                account=account,
             )
 
         except ValueError:

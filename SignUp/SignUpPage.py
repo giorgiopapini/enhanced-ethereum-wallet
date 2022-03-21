@@ -2,10 +2,9 @@ import json
 from tkinter import *
 import constants
 import utility_functions
-from Homepage.Homepage import Homepage
+from App.Homepage.Homepage import Homepage
 
 from Page import Page
-# Possibile errore causato da circular dependency? https://en.wikipedia.org/wiki/Circular_dependency
 
 
 class SignUpPage(Page):
