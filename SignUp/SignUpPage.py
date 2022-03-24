@@ -2,8 +2,9 @@ import json
 from tkinter import *
 import constants
 import utility_functions
-from App.Homepage.Homepage import Homepage
 
+from App.AppPageManager import AppPageManager
+from App.Homepage.Homepage import Homepage
 from Page import Page
 
 
@@ -110,7 +111,7 @@ class SignUpPage(Page):
                 priv_key_json.write(json.dumps({"keys": [json_string]}))
 
             self.to_page(
-                page=Homepage,
+                page=AppPageManager,
                 previous_page=None,
                 account=self.account,
             )

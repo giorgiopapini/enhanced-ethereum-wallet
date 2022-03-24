@@ -12,6 +12,6 @@ class Page(Frame):
         self.previous_page = kwargs.get("previous_page", None)
 
     def to_page(self, page=None, **kwargs):
-        page(self.root, self.web3, **kwargs)
-        #print(previous_page)
+        if page is not None:
+            page(self.root, self.web3, **kwargs)
 

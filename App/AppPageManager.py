@@ -11,9 +11,74 @@ class AppPageManager(Page):
 
         self.account = kwargs.get("account")
 
-        # Page content change here
+        self.canvas = Canvas(
+            root,
+            bg="#ffffff",
+            height=480,
+            width=800,
+            bd=0,
+            highlightthickness=0,
+            relief="ridge")
+        self.canvas.place(x=0, y=0)
 
-    def view_page(self, page):
-        self.to_page(
-            page=page
-        )
+        self.background_img = PhotoImage(file=f"App/background.png")
+        self.background = self.canvas.create_image(
+            133.5, 240.0,
+            image=self.background_img)
+
+        self.img0 = PhotoImage(file=f"App/img0.png")
+        self.b0 = Button(
+            image=self.img0,
+            borderwidth=0,
+            highlightthickness=0,
+            command=self.btn_clicked,
+            relief="flat")
+
+        self.b0.place(
+            x=28, y=380,
+            width=202,
+            height=42)
+
+        self.img1 = PhotoImage(file=f"App/img1.png")
+        self.b1 = Button(
+            image=self.img1,
+            borderwidth=0,
+            highlightthickness=0,
+            command=self.btn_clicked,
+            relief="flat")
+
+        self.b1.place(
+            x=28, y=334,
+            width=204,
+            height=42)
+
+        self.img2 = PhotoImage(file=f"App/img2.png")
+        self.b2 = Button(
+            image=self.img2,
+            borderwidth=0,
+            highlightthickness=0,
+            command=self.btn_clicked,
+            relief="flat")
+
+        self.b2.place(
+            x=28, y=288,
+            width=202,
+            height=42)
+
+        self.img3 = PhotoImage(file=f"App/img3.png")
+        self.b3 = Button(
+            image=self.img3,
+            borderwidth=0,
+            highlightthickness=0,
+            command=self.btn_clicked,
+            relief="flat")
+
+        self.b3.place(
+            x=28, y=240,
+            width=202,
+            height=42)
+
+    # self.b0.bind("<Button-1>", lambda _: "break", add=True)  Serve per disabilitare l'animazione del click sul button
+
+    def btn_clicked(self):
+        print("clicked")

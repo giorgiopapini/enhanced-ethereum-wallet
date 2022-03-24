@@ -2,8 +2,10 @@ from tkinter import *
 
 import constants
 import utility_functions
-from App.Homepage.Homepage import Homepage
+
 from KeyImport.ImportPage import ImportPage
+from App.AppPageManager import AppPageManager
+from App.Homepage.Homepage import Homepage
 from Page import Page
 
 
@@ -91,7 +93,7 @@ class LoginPage(Page):
                 widget.destroy()
 
             self.to_page(
-                page=Homepage,
+                page=AppPageManager,
                 previous_page=None,
                 account=account,
             )
