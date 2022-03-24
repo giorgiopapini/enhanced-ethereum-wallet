@@ -8,7 +8,7 @@ from web3 import Web3
 
 def main():
     root = Tk()
-    root.title("Tk")
+    root.title("UWallet")
     root.geometry('800x480')
     root.resizable(False, False)
     web3 = Web3(Web3.HTTPProvider("https://goerli.infura.io/v3/25ecde64226c4e8797eb2d75b2d6b641"))

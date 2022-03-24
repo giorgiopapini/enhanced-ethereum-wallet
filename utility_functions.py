@@ -1,4 +1,5 @@
 from tkinter import *
+from PIL import Image
 
 from eth_keys import keys
 from eth_utils import decode_hex
@@ -36,10 +37,16 @@ def clear_error_message(event):
 
 def create_qrcode(data):
     img = qrcode.make(data)
-
-    # IMPORTANTE!!! --> E' necessario salvare il qr code? Nel caso capire in che punto del codice é piú opportuno
-    # salvarlo
     img.save("public_key_qrcode.png")
+
+
+def resize_image(image=None, width=None, heigth=None, path=None):
+    try:
+        res_qrcode = Image.open(path)
+        print(res_qrcode)
+    except FileNotFoundError:
+        img = image.resize((width, heigth))
+        img.save(path)
 
 
 def get_private_key(web3, password):

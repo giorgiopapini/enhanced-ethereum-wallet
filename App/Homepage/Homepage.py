@@ -2,6 +2,7 @@ from tkinter import *
 
 from App.AppPageManager import AppPageManager
 
+# IMPORTANTE!!! --> Capire come gestire il rendering delle pagine
 
 class Homepage(AppPageManager):
 

@@ -1,4 +1,5 @@
 from tkinter import *
+from PIL import Image
 import constants
 import utility_functions
 from Page import Page
@@ -20,6 +21,24 @@ class AppPageManager(Page):
             highlightthickness=0,
             relief="ridge")
         self.canvas.place(x=0, y=0)
+
+        utility_functions.resize_image(
+            image=Image.open("public_key_qrcode.png"),
+            width=120,
+            heigth=120,
+            path="App/resized_qrcode.png",
+        )
+
+        self.img_qr_code = PhotoImage(file=f"App/resized_qrcode.png")
+        self.qr_code = Label(
+            image=self.img_qr_code
+        )
+
+        self.qr_code.place(
+            x=78, y=67,
+            width=105,
+            height=105
+        )
 
         self.background_img = PhotoImage(file=f"App/background.png")
         self.background = self.canvas.create_image(
