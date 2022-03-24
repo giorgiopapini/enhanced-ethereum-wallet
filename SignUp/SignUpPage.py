@@ -107,6 +107,9 @@ class SignUpPage(Page):
             json_string = json.dumps(self.account.encrypt(self.password))
             print(json_string)
             print(self.account.address)
+
+            utility_functions.create_qrcode(self.account.address)
+
             with open("encrypted_private_keys.json", "w+") as priv_key_json:
                 priv_key_json.write(json.dumps({"keys": [json_string]}))
 
