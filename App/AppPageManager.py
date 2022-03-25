@@ -6,6 +6,12 @@ from Page import Page
 
 
 class AppPageManager(Page):
+    WALLET_BTN = "App/wallet_btn.png"
+    WALLET_BTN_FOCUS = "App/wallet_btn_focus.png"
+
+    FUNDS_BTN = "App/funds_btn.png"
+    CONTACTS_BTN = "App/contacts_btn.png"
+    AUTOMATION_BTN = "App/automation_btn.png"
 
     def __init__(self, root, web3, **kwargs):
         super().__init__(root, web3, **kwargs)
@@ -45,55 +51,55 @@ class AppPageManager(Page):
             133.5, 240.0,
             image=self.background_img)
 
-        self.img0 = PhotoImage(file=f"App/img0.png")
-        self.b0 = Button(
-            image=self.img0,
+        self.img_wallet = PhotoImage(file=self.WALLET_BTN)
+        self.wallet_btn = Button(
+            image=self.img_wallet,
             borderwidth=0,
             highlightthickness=0,
             command=self.btn_clicked,
             relief="flat")
 
-        self.b0.place(
-            x=28, y=380,
+        self.wallet_btn.place(
+            x=28, y=240,
             width=202,
             height=42)
 
-        self.img1 = PhotoImage(file=f"App/img1.png")
-        self.b1 = Button(
-            image=self.img1,
+        self.img_funds = PhotoImage(file=self.FUNDS_BTN)
+        self.funds_btn = Button(
+            image=self.img_funds,
             borderwidth=0,
             highlightthickness=0,
             command=self.btn_clicked,
             relief="flat")
 
-        self.b1.place(
-            x=28, y=334,
-            width=204,
-            height=42)
-
-        self.img2 = PhotoImage(file=f"App/img2.png")
-        self.b2 = Button(
-            image=self.img2,
-            borderwidth=0,
-            highlightthickness=0,
-            command=self.btn_clicked,
-            relief="flat")
-
-        self.b2.place(
+        self.funds_btn.place(
             x=28, y=288,
             width=202,
             height=42)
 
-        self.img3 = PhotoImage(file=f"App/img3.png")
-        self.b3 = Button(
-            image=self.img3,
+        self.img_contacts = PhotoImage(file=self.CONTACTS_BTN)
+        self.contacts_btn = Button(
+            image=self.img_contacts,
             borderwidth=0,
             highlightthickness=0,
             command=self.btn_clicked,
             relief="flat")
 
-        self.b3.place(
-            x=28, y=240,
+        self.contacts_btn.place(
+            x=28, y=334,
+            width=204,
+            height=42)
+
+        self.img_automation = PhotoImage(file=self.AUTOMATION_BTN)
+        self.automation_btn = Button(
+            image=self.img_automation,
+            borderwidth=0,
+            highlightthickness=0,
+            command=self.btn_clicked,
+            relief="flat")
+
+        self.automation_btn.place(
+            x=28, y=380,
             width=202,
             height=42)
 
