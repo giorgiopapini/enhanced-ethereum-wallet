@@ -18,6 +18,8 @@ class AppPageManager(Page):
     AUTOMATION_BTN = "App/BtnAssets/automation_btn.png"
     AUTOMATION_BTN_FOCUS = "App/BtnAssets/automation_btn_focus.png"
 
+    buttons = []
+
     def __init__(self, root, web3, **kwargs):
         super().__init__(root, web3, **kwargs)
 
@@ -113,6 +115,8 @@ class AppPageManager(Page):
             width=202,
             height=42)
 
+        self.buttons = [self.wallet_btn, self.funds_btn, self.contacts_btn, self.automation_btn]
+
         self.wallet_btn.bind("<Button>", self.btn_clicked)
         self.funds_btn.bind("<Button>", self.btn_clicked)
         self.contacts_btn.bind("<Button>", self.btn_clicked)
@@ -122,4 +126,9 @@ class AppPageManager(Page):
         event.widget.config(
             image=event.widget.focused_image
         )
-        print(event.widget)
+        for btn in self.buttons:
+            if btn is not event.widget:
+                btn.config(
+                    image=btn.default_image
+                )
+
