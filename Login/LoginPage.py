@@ -76,9 +76,6 @@ class LoginPage(Page):
 
         self.entry0.bind("<Button>", utility_functions.clear_error_message)
 
-    def render_import(self):
-        ImportPage(self.root, self.web3, previous_page=LoginPage)
-
     def login(self):
         self.password = self.entry0.get()
         try:
