@@ -1,7 +1,11 @@
 from tkinter import *
 from PIL import Image
 import utility_functions
+from App.Automation.AutomationPage import AutomationPage
+from App.Contacts.ContactsPage import ContactsPage
+from App.ManageFunds.FundsPage import FundsPage
 from App.MenuButton import MenuButton
+from App.YourWallet.WalletPage import WalletPage
 from Page import Page
 
 
@@ -35,6 +39,13 @@ class AppPageManager(Page):
             relief="ridge")
         self.canvas.place(x=0, y=0)
 
+        self.content_frame = Frame(root)
+        self.content_frame.place(
+            x=268, y=7,
+            width=522,
+            height=466
+        )
+
         utility_functions.resize_image(
             image=Image.open("public_key_qrcode.png"),
             width=120,
@@ -63,6 +74,7 @@ class AppPageManager(Page):
         self.wallet_btn = MenuButton(
             image=self.root.img_wallet,
             focused_image=self.root.focused_img_wallet,
+            related_page=WalletPage,
             borderwidth=0,
             highlightthickness=0,
             relief="flat")
@@ -77,6 +89,7 @@ class AppPageManager(Page):
         self.funds_btn = MenuButton(
             image=self.root.img_funds,
             focused_image=self.root.focused_img_funds,
+            related_page=FundsPage,
             borderwidth=0,
             highlightthickness=0,
             relief="flat",
@@ -92,6 +105,7 @@ class AppPageManager(Page):
         self.contacts_btn = MenuButton(
             image=self.root.img_contacts,
             focused_image=self.root.focused_img_contacts,
+            related_page=ContactsPage,
             borderwidth=0,
             highlightthickness=0,
             relief="flat")
@@ -106,6 +120,7 @@ class AppPageManager(Page):
         self.automation_btn = MenuButton(
             image=self.root.img_automation,
             focused_image=self.root.focused_img_automation,
+            related_page=AutomationPage,
             borderwidth=0,
             highlightthickness=0,
             relief="flat")
@@ -122,13 +137,24 @@ class AppPageManager(Page):
         self.contacts_btn.bind("<Button>", self.btn_clicked)
         self.automation_btn.bind("<Button>", self.btn_clicked)
 
-    def btn_clicked(self, event):
-        event.widget.config(
-            image=event.widget.focused_image
+    def update_menu(self, clicked_btn):
+        clicked_btn.config(
+            image=clicked_btn.focused_image
         )
         for btn in self.buttons:
-            if btn is not event.widget:
+            if btn is not clicked_btn:
                 btn.config(
                     image=btn.default_image
                 )
 
+    def clean_frame(self):
+        for widget in self.content_frame.winfo_children():
+            widget.destroy()
+
+    def btn_clicked(self, event):
+        self.update_menu(event.widget)
+        self.clean_frame()
+        self.to_page(
+            page=event.widget.related_page,
+            frame=self.content_frame,
+        )

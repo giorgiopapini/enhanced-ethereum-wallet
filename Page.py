@@ -10,6 +10,7 @@ class Page(Frame):
         self.root = root
         self.web3 = web3
         self.previous_page = kwargs.get("previous_page", None)
+        self.frame = kwargs.get("frame", None)
 
     def to_page(self, page=None, **kwargs):
         if page is not None:
