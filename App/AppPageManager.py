@@ -28,6 +28,7 @@ class AppPageManager(Page):
         super().__init__(root, web3, **kwargs)
 
         self.account = kwargs.get("account")
+        self.default_active_page = kwargs.get("default_active_page", None)
 
         self.canvas = Canvas(
             root,
@@ -137,6 +138,13 @@ class AppPageManager(Page):
         self.contacts_btn.bind("<Button>", self.btn_clicked)
         self.automation_btn.bind("<Button>", self.btn_clicked)
 
+        self.render_default_page()
+
+    def render_default_page(self):
+        for btn in self.buttons:
+            if btn.related_page is self.default_active_page:
+                self.btn_clicked(def_btn=btn)
+
     def update_menu(self, clicked_btn):
         clicked_btn.config(
             image=clicked_btn.focused_image
@@ -151,10 +159,17 @@ class AppPageManager(Page):
         for widget in self.content_frame.winfo_children():
             widget.destroy()
 
-    def btn_clicked(self, event):
-        self.update_menu(event.widget)
+    def btn_clicked(self, event=None, def_btn=None):
+        btn = None
+        if def_btn is None:
+            btn = event.widget
+        elif event is None:
+            btn = def_btn
+
+        self.update_menu(btn)
         self.clean_frame()
+
         self.to_page(
-            page=event.widget.related_page,
+            page=btn.related_page,
             frame=self.content_frame,
         )

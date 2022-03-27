@@ -43,7 +43,6 @@ def create_qrcode(data):
 def resize_image(image=None, width=None, heigth=None, path=None):
     try:
         res_qrcode = Image.open(path)
-        print(res_qrcode)
     except FileNotFoundError:
         img = image.resize((width, heigth))
         img.save(path)

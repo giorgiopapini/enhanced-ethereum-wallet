@@ -2,6 +2,7 @@ from tkinter import *
 
 import constants
 import utility_functions
+from App.YourWallet.WalletPage import WalletPage
 
 from KeyImport.ImportPage import ImportPage
 from App.AppPageManager import AppPageManager
@@ -95,6 +96,7 @@ class LoginPage(Page):
                 page=AppPageManager,
                 previous_page=None,
                 account=account,
+                default_active_page=WalletPage
             )
 
         except ValueError:

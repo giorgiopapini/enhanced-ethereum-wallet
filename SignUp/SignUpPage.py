@@ -4,6 +4,7 @@ import constants
 import utility_functions
 
 from App.AppPageManager import AppPageManager
+from App.YourWallet.WalletPage import WalletPage
 from Page import Page
 
 
@@ -116,6 +117,7 @@ class SignUpPage(Page):
                 page=AppPageManager,
                 previous_page=None,
                 account=self.account,
+                default_active_page=WalletPage
             )
             print(self.web3.eth.account.decrypt(json_string, self.password).hex())
         else:
