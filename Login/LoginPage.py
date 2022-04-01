@@ -3,6 +3,7 @@ from tkinter import *
 import constants
 import utility_functions
 from App.YourWallet.WalletPage import WalletPage
+from EthereumAccount import EthereumAccount
 
 from KeyImport.ImportPage import ImportPage
 from App.AppPageManager import AppPageManager
@@ -92,7 +93,7 @@ class LoginPage(Page):
             self.to_page(
                 page=AppPageManager,
                 previous_page=None,
-                account=account,
+                eth_account=EthereumAccount(web3=self.web3, account=account),
                 default_active_page=WalletPage
             )
 

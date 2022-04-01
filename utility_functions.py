@@ -61,3 +61,9 @@ def get_address(private_key):
     pub_key = priv_key.public_key
     address = pub_key.to_checksum_address()
     return address
+
+
+def get_contract_name(contract_address=None, web3=None):
+    print(constants.ERC20_ABI)
+    contract = web3.eth.contract(address=contract_address, abi=constants.ERC20_ABI)
+    print(contract.functions.name().call())

@@ -15,3 +15,4 @@ class AutomationPage(Page):
         self.automation.place(
             x=123, y=111
         )
+

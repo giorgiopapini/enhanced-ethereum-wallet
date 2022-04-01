@@ -1,5 +1,6 @@
 from tkinter import *
 
+from EthereumAccount import EthereumAccount
 from Page import Page
 from SignUp.SignUpPage import SignUpPage
 
@@ -76,6 +77,6 @@ class ImportPage(Page):
         self.to_page(
             page=SignUpPage,
             previous_page=self.previous_page,
-            account=account,
+            eth_account=EthereumAccount(web3=self.web3, account=account),
         ),
 

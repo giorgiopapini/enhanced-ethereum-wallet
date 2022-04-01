@@ -24,11 +24,20 @@ class AppPageManager(Page):
 
     buttons = []
 
+    # Creare CSV file contenente i principali token presenti sulla rete Ethereum, l'utente può cercare per nome tali
+    # token, se non sono presenti in lista dare la possibilità di aggiungerli tramite l'address del relativo smart
+    # contract. Sarebbe bello permettere l'accesso a etherscan direttamente dal dispositivo (usando o un webviewer
+    # direttamente nel programma, oppure aprendo tramite browser in una finestra separata il sito di etherscan)
+
     def __init__(self, root, web3, **kwargs):
         super().__init__(root, web3, **kwargs)
 
-        self.account = kwargs.get("account")
         self.default_active_page = kwargs.get("default_active_page", None)
+
+        utility_functions.get_contract_name(
+            contract_address="0x3fb4601911871b635011aF01eDda5854F27560ce",
+            web3=self.web3
+        )
 
         self.canvas = Canvas(
             root,
@@ -172,4 +181,5 @@ class AppPageManager(Page):
         self.to_page(
             page=btn.related_page,
             frame=self.content_frame,
+            eth_account=self.eth_account,
         )

@@ -1,5 +1,6 @@
 from tkinter import *
 
+from EthereumAccount import EthereumAccount
 from Page import Page
 from SignUp.SignUpPage import SignUpPage
 from KeyImport.ImportPage import ImportPage
@@ -52,15 +53,10 @@ class WelcomePage(Page):
             width=185,
             height=33)
 
-    # IMPORTANTE! --> É possibile definire una unica funzione go_to_page(**kwargs)? Cosí tramite i kwargs uno potrebbe
-    # reinderizzare l'utente alla pagina voluta senza il bisogno di creare una funzione di indirizzamento per ogni
-    # pagina
-
     def render_import(self):
         self.to_page(
             page=ImportPage,
             previous_page=WelcomePage,
-            account=self.account
         )
 
     def render_sign_up(self):
@@ -68,5 +64,5 @@ class WelcomePage(Page):
         self.to_page(
             page=SignUpPage,
             previous_page=WelcomePage,
-            account=self.account
+            eth_account=EthereumAccount(web3=self.web3, account=self.account)
         )

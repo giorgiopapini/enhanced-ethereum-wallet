@@ -15,3 +15,12 @@ class WalletPage(Page):
         self.wallet.place(
             x=150, y=150,
         )
+
+        self.bal = Label(
+            self.frame,
+            text=f"balance: {round(self.eth_account.get_balance('ether'), 4)} eth"
+        )
+
+        self.bal.place(
+            x=150, y=135,
+        )

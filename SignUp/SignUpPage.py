@@ -10,14 +10,10 @@ from Page import Page
 
 class SignUpPage(Page):
 
-    #self.root
-    #self.private_key
-    #self.password
-
     def __init__(self, root, web3, **kwargs):
         super().__init__(root, web3, **kwargs)
 
-        self.account = kwargs.get("account", None)
+        self.account = kwargs.get("eth_account", None)
         self.password = ""
 
         self.canvas = Canvas(
@@ -69,7 +65,7 @@ class SignUpPage(Page):
             disabledbackground="#ffffff",
             highlightthickness=0)
 
-        self.entry0.insert(END, self.account.privateKey.hex())
+        self.entry0.insert(END, self.eth_account.account.privateKey.hex())
         self.entry0.config(state=DISABLED)
 
         self.entry0.place(
@@ -104,11 +100,11 @@ class SignUpPage(Page):
         if len(self.password) > constants.MIN_LENGTH_PASSWORD and self.password != constants.ERRORS["ERROR_PASSWORD_LENGTH"]:
             for widget in self.root.winfo_children():
                 widget.destroy()
-            json_string = json.dumps(self.account.encrypt(self.password))
+            json_string = json.dumps(self.eth_account.account.encrypt(self.password))
             print(json_string)
-            print(self.account.address)
+            print(self.eth_account.account.address)
 
-            utility_functions.create_qrcode(self.account.address)
+            utility_functions.create_qrcode(self.eth_account.account.address)
 
             with open("encrypted_private_keys.json", "w+") as priv_key_json:
                 priv_key_json.write(json.dumps({"keys": [json_string]}))
@@ -116,7 +112,7 @@ class SignUpPage(Page):
             self.to_page(
                 page=AppPageManager,
                 previous_page=None,
-                account=self.account,
+                eth_account=self.eth_account,
                 default_active_page=WalletPage
             )
             print(self.web3.eth.account.decrypt(json_string, self.password).hex())
@@ -125,7 +121,7 @@ class SignUpPage(Page):
 
     def show_entire_private_key(self):
         # IMPORTANTE!!! --> Creare tasto che crei un popup che mostri la private key per intero --> La private key
-        # é piú lunga del textbox, quindi é necessario che per procede l'utenta debba attivare e il popup --> Tramite
+        # é piú lunga del textbox, quindi é necessario che per procedere l'utenta debba attivare il popup --> Tramite
         # una variabile booleana verificare se l'utente ha preso visione del popup e permettergli (dopo aver inserito
         # la password) di procedere alla schermata successiva
         pass

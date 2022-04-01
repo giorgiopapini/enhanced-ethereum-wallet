@@ -1,6 +1,4 @@
 from tkinter import *
-import utility_functions
-import constants
 
 
 class Page(Frame):
@@ -11,6 +9,7 @@ class Page(Frame):
         self.web3 = web3
         self.previous_page = kwargs.get("previous_page", None)
         self.frame = kwargs.get("frame", None)
+        self.eth_account = kwargs.get("eth_account", None)
 
     def to_page(self, page=None, **kwargs):
         if page is not None:
