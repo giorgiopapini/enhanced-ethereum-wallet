@@ -21,27 +21,66 @@ class WalletPage(Page):
             x=40, y=40,
         )
 
-        self.tokens = Label(
+        self.tokens_label = Label(
             self.frame,
-            text=f"Tokens:",
+            text="Tokens:",
             font=("Helvetica", 15)
         )
 
-        self.tokens.place(
-            x=90, y=120
+        self.tokens_label.place(
+            x=80, y=105
+        )
+
+        self.nfts_label = Label(
+            self.frame,
+            text="NFTs:",
+            font=("Helvetica", 15)
+        )
+
+        self.nfts_label.place(
+            x=353, y=120
         )
 
         self.tokens_list_frame = Frame(self.frame)
         self.tokens_list_frame.place(
-            x=20, y=165,
+            x=10, y=150,
             width=240,
-            height=270,
+            height=255,
         )
 
-        self.list = ListWidget(
+        self.token_list = ListWidget(
             parent=self.tokens_list_frame,
             space_between=5,
             elements=[
                 PhotoImage(file=self.TOKEN_BG_IMG)
             ]
         )
+
+        self.nfts_list_frame = Frame(self.frame)
+        self.nfts_list_frame.place(
+            x=270, y=165,
+            width=240,
+            height=270,
+        )
+
+        self.nfts_list = ListWidget(
+            parent=self.nfts_list_frame,
+            space_between=5,
+            elements=[
+                PhotoImage(file=self.TOKEN_BG_IMG)
+            ]
+        )
+
+        self.import_tokens = Button(
+            self.frame,
+            text="Import tokens",
+            font=("Helvetica", 10),
+            borderwidth=0,
+            highlightthickness=0,
+            relief="flat"
+        )
+
+        self.import_tokens.place(
+            x=80, y=420
+        )
+

@@ -49,7 +49,7 @@ class AppPageManager(Page):
             relief="ridge")
         self.canvas.place(x=0, y=0)
 
-        self.content_frame = Frame(root)
+        self.content_frame = Frame(root, bg="white")
         self.content_frame.place(
             x=268, y=7,
             width=522,

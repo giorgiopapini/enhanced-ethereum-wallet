@@ -16,7 +16,11 @@ class ListWidget:
         self.canvas.create_window(0, 0, anchor='nw', window=self.frame)
         self.canvas.update_idletasks()
 
-        self.scrollbar = Scrollbar(self.parent, orient="vertical", command=self.canvas.yview)
+        self.scrollbar = Scrollbar(
+            self.parent,
+            orient="vertical",
+            command=self.canvas.yview
+        )
         self.canvas.configure(
             scrollregion=self.canvas.bbox('all'),
             yscrollcommand=self.scrollbar.set
