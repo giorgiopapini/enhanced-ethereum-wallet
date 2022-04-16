@@ -38,7 +38,7 @@ class WalletPage(Page):
         )
 
         self.nfts_label.place(
-            x=353, y=120
+            x=353, y=105
         )
 
         self.tokens_list_frame = Frame(self.frame)
@@ -52,15 +52,15 @@ class WalletPage(Page):
             parent=self.tokens_list_frame,
             space_between=5,
             elements=[
-                PhotoImage(file=self.TOKEN_BG_IMG)
+                #PhotoImage(file=self.TOKEN_BG_IMG)
             ]
         )
 
         self.nfts_list_frame = Frame(self.frame)
         self.nfts_list_frame.place(
-            x=270, y=165,
+            x=270, y=150,
             width=240,
-            height=270,
+            height=255,
         )
 
         self.nfts_list = ListWidget(

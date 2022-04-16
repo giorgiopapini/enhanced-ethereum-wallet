@@ -32,15 +32,22 @@ class ListWidget:
         self.scrollbar.pack(fill='y', side='right')
 
     def display_elements(self):
-        for element in self.elements:
-            label = Label(
+        if len(self.elements) > 0:
+            for element in self.elements:
+                label = Label(
+                    self.frame,
+                    image=element,
+                )
+                label.pack(
+                    pady=self.space_between
+                )
+                label.bind("<Button>", self.clicked)
+        else:
+            empty_list = Label(
                 self.frame,
-                image=element,
+                text="You haven't imported any tokens yet"
             )
-            label.pack(
-                pady=self.space_between
-            )
-            label.bind("<Button>", self.clicked)
+            empty_list.pack()
 
     def clicked(self, event):
         print(event.widget.cget("text"))

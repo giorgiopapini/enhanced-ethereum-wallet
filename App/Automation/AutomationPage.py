@@ -1,5 +1,6 @@
 from tkinter import *
 from Page import Page
+import webview
 
 
 class AutomationPage(Page):
@@ -16,3 +17,5 @@ class AutomationPage(Page):
             x=123, y=111
         )
 
+        #webview.create_window('Etherscan', 'https://etherscan.io/')
+        #webview.start()
