@@ -10,6 +10,7 @@ from Page import Page
 
 
 class AppPageManager(Page):
+
     WALLET_BTN = "App/BtnAssets/wallet_btn.png"
     WALLET_BTN_FOCUS = "App/BtnAssets/wallet_btn_focus.png"
 

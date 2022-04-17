@@ -1,6 +1,7 @@
 from tkinter import *
 
-from App.ListWidget import ListWidget
+from App.ReusableComponents.ListWidget import ListWidget
+from App.ReusableComponents.ListElement import ListElement
 from Page import Page
 
 
@@ -67,7 +68,12 @@ class WalletPage(Page):
             parent=self.nfts_list_frame,
             space_between=5,
             elements=[
-                PhotoImage(file=self.TOKEN_BG_IMG)
+                ListElement(
+                    widget=Frame,
+                    bg="black",
+                    height=50,
+                    width=100,
+                ),
             ]
         )
 

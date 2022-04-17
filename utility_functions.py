@@ -28,6 +28,11 @@ def error_message(entry, error):
     entry.insert(END, error)
 
 
+def check_var_type(variable=None, requested_type=None, error_msg=None):
+    if type(variable) is not requested_type:
+        raise TypeError(error_msg)
+
+
 def clear_error_message(event):
     for error in constants.ERRORS:
         if event.widget.get() == constants.ERRORS[error]:

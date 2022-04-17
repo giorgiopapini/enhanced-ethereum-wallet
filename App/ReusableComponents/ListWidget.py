@@ -1,5 +1,8 @@
 from tkinter import *
 
+import utility_functions
+from App.ReusableComponents.ListElement import ListElement
+
 
 class ListWidget:
 
@@ -32,22 +35,34 @@ class ListWidget:
         self.scrollbar.pack(fill='y', side='right')
 
     def display_elements(self):
-        if len(self.elements) > 0:
+        if self.is_empty(self.elements) is False:
             for element in self.elements:
-                label = Label(
-                    self.frame,
-                    image=element,
+                utility_functions.check_var_type(
+                    variable=element,
+                    requested_type=ListElement,
+                    error_msg="ListWidget elements array accepts only variables of type ListElement"
                 )
-                label.pack(
+                widget = self.define_object(element)  # Uses ListElement data for declaring the actual widget
+                widget.pack(
                     pady=self.space_between
                 )
-                label.bind("<Button>", self.clicked)
-        else:
+                widget.bind("<Button>", self.clicked)
+
+    def is_empty(self, arr):
+        if len(arr) is 0:
             empty_list = Label(
                 self.frame,
-                text="You haven't imported any tokens yet"
+                text="Nothing to see here yet"
             )
             empty_list.pack()
+            return True
+        else:
+            return False
+
+    def define_object(self, element):
+        obj = element.widget(self.frame)
+        obj.config(**element.widget_attributes)
+        return obj
 
     def clicked(self, event):
-        print(event.widget.cget("text"))
+        print(event.widget)

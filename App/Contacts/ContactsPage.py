@@ -1,8 +1,13 @@
 from tkinter import *
+
+from App.ReusableComponents.ListWidget import ListWidget
 from Page import Page
 
 
 class ContactsPage(Page):
+
+    BACKGROUND_IMG = "App/Contacts/background.png"
+    SEARCH_BOX_IMAGE = "App/Contacts/search_box.png"
 
     def __init__(self, root, web3, **kwargs):
         super().__init__(root, web3, **kwargs)
@@ -20,24 +25,42 @@ class ContactsPage(Page):
             relief="ridge")
         self.canvas.place(x=0, y=0)
 
-        self.background_img = PhotoImage(file=f"App/Contacts/background.png")
+        self.background_img = PhotoImage(file=self.BACKGROUND_IMG)
         self.background = self.canvas.create_image(
             162.5, 72.5,
-            image=self.background_img)
+            image=self.background_img
+        )
 
-        self.search_box_image = PhotoImage(file=f"App/Contacts/img_textBox0.png")
+        self.search_box_image = PhotoImage(file=self.SEARCH_BOX_IMAGE)
         self.search_box_bg = self.canvas.create_image(
             201.5, 136.5,
-            image=self.search_box_image)
+            image=self.search_box_image
+        )
 
         self.search_box = Entry(
             self.frame,
             bd=0,
             bg="#ffffff",
-            highlightthickness=0)
+            highlightthickness=0
+        )
 
         self.search_box.place(
             x=73.5, y=124,
             width=256.0,
-            height=27)
+            height=27
+        )
+
+        self.contacts_list_frame = Frame(self.frame)
+        self.contacts_list_frame.place(
+            x=59, y=177,
+            width=443,
+            height=267
+        )
+        self.contacts_list = ListWidget(
+            parent=self.contacts_list_frame,
+            space_between=5,
+            elements=[
+                # ListElement(widget=ContactTile, ...)
+            ],
+        )
 
