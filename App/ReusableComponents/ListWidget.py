@@ -46,7 +46,7 @@ class ListWidget:
                 widget.pack(
                     pady=self.space_between
                 )
-                widget.bind("<Button>", self.clicked)
+                widget.bind_all("<Button>", self.clicked)
 
     def is_empty(self, arr):
         if len(arr) is 0:
@@ -60,8 +60,9 @@ class ListWidget:
             return False
 
     def define_object(self, element):
-        obj = element.widget(self.frame)
+        obj = element.widget(master=self.frame)
         obj.config(**element.widget_attributes)
+        print(vars(obj))
         return obj
 
     def clicked(self, event):

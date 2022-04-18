@@ -1,5 +1,7 @@
 from tkinter import *
 
+from App.Contacts.ContactTile.ContactTile import ContactTile
+from App.ReusableComponents.ListElement import ListElement
 from App.ReusableComponents.ListWidget import ListWidget
 from Page import Page
 
@@ -53,14 +55,20 @@ class ContactsPage(Page):
         self.contacts_list_frame = Frame(self.frame)
         self.contacts_list_frame.place(
             x=59, y=177,
-            width=443,
+            width=435,
             height=267
         )
         self.contacts_list = ListWidget(
             parent=self.contacts_list_frame,
-            space_between=5,
+            space_between=1,
             elements=[
-                # ListElement(widget=ContactTile, ...)
+                ListElement(
+                    widget=ContactTile,
+                    name="Giorgio",
+                    address="0x0er303403904930",
+                    height=50,
+                    width=435  # This value should not be hardcoded. It should equals to parent frame width
+                )
             ],
         )
 
