@@ -1,11 +1,14 @@
 from tkinter import *
+import json
 
 
 class ContactTile(Frame):
 
     CONTACT_BG_IMG = "App/Contacts/ContactTile/background.png"
+    LETTER_BG_IMG = "App/Contacts/ContactTile/letter_bg_img.png"
     COPY_BTN_IMG = "App/Contacts/ContactTile/copy_img.png"
     DELETE_BTN_IMG = "App/Contacts/ContactTile/delete_img.png"
+    CONTACTS_JSON_PATH = "App/Contacts/contacts.json"
 
     def __init__(self, genesis_root=None, username=None, address=None, **kwargs):
         super().__init__(**kwargs)
@@ -23,6 +26,35 @@ class ContactTile(Frame):
         )
         self.background.pack()
 
+        self.letter_bg_img = PhotoImage(file=self.LETTER_BG_IMG)
+        self.letter_bg = Label(
+            self,
+            image=self.letter_bg_img,
+            bd=0,
+            highlightthickness=0,
+            relief="ridge"
+        )
+        self.letter_bg.place(
+            x=8.5, y=4
+        )
+
+        self.letter_frame = Frame(
+            self,
+            height=40,
+            width=40,
+        )
+        self.letter_frame.place(
+            x=20.5, y=12
+        )
+
+        self.letter = Label(
+            self.letter_frame,
+            text=f"{self.username[0]}",
+            font=("Helvetica", 11, "bold"),
+            bg="#ffffff"
+        )
+        self.letter.pack()
+
         self.username_label = Label(
             self,
             text=f"{self.username}",
@@ -30,7 +62,7 @@ class ContactTile(Frame):
             bg="white"
         )
         self.username_label.place(
-            x=50, y=5
+            x=52, y=5
         )
 
         self.address_label = Label(
@@ -40,7 +72,7 @@ class ContactTile(Frame):
             bg="white"
         )
         self.address_label.place(
-            x=50, y=28
+            x=52, y=28
         )
 
         self.copy_btn_img = PhotoImage(file=self.COPY_BTN_IMG)
@@ -86,6 +118,13 @@ class ContactTile(Frame):
             self.genesis_root.update()
 
     def delete_contact(self):
-        # Delete contact inside the JSON file
-        self.destroy()
+        with open(self.CONTACTS_JSON_PATH, "r+") as file:
+            contacts = json.load(file)
+            index = contacts.index({"name": self.username, "address": self.address})
+            contacts.pop(index)
 
+            file.seek(0)
+            json.dump(contacts, file)
+            file.truncate()
+
+        self.destroy()

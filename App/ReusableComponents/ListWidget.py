@@ -58,7 +58,8 @@ class ListWidget:
         if len(arr) is 0:
             empty_list = Label(
                 self.frame,
-                text="Nothing to see here yet"
+                text="Nothing to see here yet",
+                bg="white"
             )
             empty_list.pack()
             return True
@@ -66,7 +67,11 @@ class ListWidget:
             return False
 
     def define_object(self, element):
-        obj = element.widget(master=self.frame, **element.widget_attributes)
+        obj = element.widget(
+            master=self.frame,
+            width=self.frame.cget("width"),
+            **element.widget_attributes
+        )
         return obj
 
     def clicked(self, event):

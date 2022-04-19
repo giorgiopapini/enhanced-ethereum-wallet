@@ -1,4 +1,5 @@
 from tkinter import *
+import json
 
 from App.Contacts.ContactTile.ContactTile import ContactTile
 from App.ReusableComponents.ListElement import ListElement
@@ -10,6 +11,8 @@ class ContactsPage(Page):
 
     BACKGROUND_IMG = "App/Contacts/background.png"
     SEARCH_BOX_IMAGE = "App/Contacts/search_box.png"
+    ADD_CONTACT_IMAGE = "App/Contacts/add_contact_img.png"
+    CONTACTS_JSON_PATH = "App/Contacts/contacts.json"
 
     def __init__(self, root, web3, **kwargs):
         super().__init__(root, web3, **kwargs)
@@ -53,6 +56,19 @@ class ContactsPage(Page):
             height=27
         )
 
+        self.new_contact_img = PhotoImage(file=f"{self.ADD_CONTACT_IMAGE}")
+        self.new_contact_label = Button(
+            self.frame,
+            image=self.new_contact_img,
+            bd=0,
+            highlightthickness=0,
+            relief="ridge"
+        )
+
+        self.new_contact_label.place(
+            x=380, y=128
+        )
+
         self.contacts_list_frame = Frame(self.frame, bg="white")
         self.contacts_list_frame.place(
             x=59, y=177,
@@ -62,15 +78,24 @@ class ContactsPage(Page):
         self.contacts_list = ListWidget(
             parent=self.contacts_list_frame,
             space_between=1,
-            elements=[
-                ListElement(
-                    widget=ContactTile,
-                    genesis_root=self.root,
-                    username="Jeff",
-                    address="0xB8AC05b6003c8106226B1231989AF2D778Ce7098",
-                    height=50,
-                    width=435  # This value should not be hardcoded. It should be equal to parent frame width
-                )
-            ],
+            elements=self.get_contacts()
         )
 
+    def get_contacts(self):
+        contact_list = []
+        try:
+            with open(self.CONTACTS_JSON_PATH, "r") as file:
+                contacts = json.load(file)
+                for contact in contacts:
+                    contact_list.append(
+                        ListElement(
+                            widget=ContactTile,
+                            genesis_root=self.root,
+                            username=contact["name"],
+                            address=contact["address"],
+                            height=50,
+                        )
+                    )
+                return contact_list
+        except (FileNotFoundError, ValueError):
+            return []
