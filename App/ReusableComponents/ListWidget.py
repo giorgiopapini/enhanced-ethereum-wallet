@@ -11,8 +11,14 @@ class ListWidget:
         self.elements = elements
         self.space_between = kwargs.get("space_between", 1)
 
-        self.canvas = Canvas(self.parent)
-        self.frame = Frame(self.canvas)
+        self.canvas = Canvas(
+            self.parent,
+            bg="white",
+            bd=0,
+            highlightthickness=0,
+            relief="ridge"
+        )
+        self.frame = Frame(self.canvas, bg="white")
 
         self.display_elements()
 
@@ -22,11 +28,11 @@ class ListWidget:
         self.scrollbar = Scrollbar(
             self.parent,
             orient="vertical",
-            command=self.canvas.yview
+            command=self.canvas.yview,
         )
         self.canvas.configure(
             scrollregion=self.canvas.bbox('all'),
-            yscrollcommand=self.scrollbar.set
+            yscrollcommand=self.scrollbar.set,
         )
 
         self.canvas.place(
@@ -60,9 +66,7 @@ class ListWidget:
             return False
 
     def define_object(self, element):
-        obj = element.widget(master=self.frame)
-        obj.config(**element.widget_attributes)
-        print(vars(obj))
+        obj = element.widget(master=self.frame, **element.widget_attributes)
         return obj
 
     def clicked(self, event):

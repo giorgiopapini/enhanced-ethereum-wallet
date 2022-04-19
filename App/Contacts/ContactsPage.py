@@ -19,12 +19,13 @@ class ContactsPage(Page):
 
         self.canvas = Canvas(
             self.frame,
-            bg="#ffffff",
+            bg="white",
             height=466,
             width=522,
             bd=0,
             highlightthickness=0,
-            relief="ridge")
+            relief="ridge"
+        )
         self.canvas.place(x=0, y=0)
 
         self.background_img = PhotoImage(file=self.BACKGROUND_IMG)
@@ -52,7 +53,7 @@ class ContactsPage(Page):
             height=27
         )
 
-        self.contacts_list_frame = Frame(self.frame)
+        self.contacts_list_frame = Frame(self.frame, bg="white")
         self.contacts_list_frame.place(
             x=59, y=177,
             width=435,
@@ -64,10 +65,11 @@ class ContactsPage(Page):
             elements=[
                 ListElement(
                     widget=ContactTile,
-                    name="Giorgio",
-                    address="0x0er303403904930",
+                    genesis_root=self.root,
+                    username="Jeff",
+                    address="0xB8AC05b6003c8106226B1231989AF2D778Ce7098",
                     height=50,
-                    width=435  # This value should not be hardcoded. It should equals to parent frame width
+                    width=435  # This value should not be hardcoded. It should be equal to parent frame width
                 )
             ],
         )
