@@ -33,6 +33,21 @@ def check_var_type(variable=None, requested_type=None, error_msg=None):
         raise TypeError(error_msg)
 
 
+def check_fields_validity(fields=None, error=None):
+    valid = True
+    for field in fields:
+        if len(field.get()) > 0 and field.get() != error:
+            valid = True
+        else:
+            error_message(
+                entry=field,
+                error=error
+            )
+            valid = False
+            break
+    return valid
+
+
 def clear_error_message(event):
     for error in constants.ERRORS:
         if event.widget.get() == constants.ERRORS[error]:

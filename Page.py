@@ -14,4 +14,3 @@ class Page(Frame):
     def to_page(self, page=None, **kwargs):
         if page is not None:
             page(self.root, self.web3, **kwargs)
-

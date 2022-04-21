@@ -1,6 +1,7 @@
 from tkinter import *
 import json
 
+from App.Contacts.AddContact.AddContactPage import AddContactPage
 from App.Contacts.ContactTile.ContactTile import ContactTile
 from App.ReusableComponents.ListElement import ListElement
 from App.ReusableComponents.ListWidget import ListWidget
@@ -62,7 +63,12 @@ class ContactsPage(Page):
             image=self.new_contact_img,
             bd=0,
             highlightthickness=0,
-            relief="ridge"
+            relief="ridge",
+            command=lambda: self.to_page(
+                page=AddContactPage,
+                frame=self.frame,
+                previous_page=ContactsPage
+            )
         )
 
         self.new_contact_label.place(
@@ -71,7 +77,7 @@ class ContactsPage(Page):
 
         self.contacts_list_frame = Frame(self.frame, bg="white")
         self.contacts_list_frame.place(
-            x=59, y=177,
+            x=59, y=179,
             width=435,
             height=267
         )
