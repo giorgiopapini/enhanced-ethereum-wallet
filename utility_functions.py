@@ -48,6 +48,13 @@ def check_fields_validity(fields=None, error=None):
     return valid
 
 
+def is_list_empty(array=None):
+    if len(array) == 0:
+        return True
+    else:
+        return True
+
+
 def clear_error_message(event):
     for error in constants.ERRORS:
         if event.widget.get() == constants.ERRORS[error]:

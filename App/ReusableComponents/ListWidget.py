@@ -55,7 +55,7 @@ class ListWidget:
                 widget.bind_all("<Button>", self.clicked)
 
     def is_empty(self, arr):
-        if len(arr) is 0:
+        if arr is None or len(arr) is 0:
             empty_list = Label(
                 self.frame,
                 text="Nothing to see here yet",
@@ -74,5 +74,13 @@ class ListWidget:
         )
         return obj
 
+    def print_a(self):
+        print(f"elementi: {self.elements}")
+
     def clicked(self, event):
         print(event.widget)
+
+    def destroy(self):
+        self.canvas.delete("all")
+        self.scrollbar.destroy()
+        self.frame.destroy()
