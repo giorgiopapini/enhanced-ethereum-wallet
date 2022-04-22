@@ -10,6 +10,7 @@ class AddContactPage(Page):
 
     BACKGROUND_IMG = "App/Contacts/AddContact/background.png"
     INPUT_FIELD_IMG = "App/Contacts/AddContact/img_textBox.png"
+    BACK_ARROW_IMG = "KeyImport/img1.png"
     CREATE_CONTACT_IMG = "App/Contacts/AddContact/create_btn_img.png"
     CONTACTS_JSON_PATH = "App/Contacts/contacts.json"
 
@@ -71,6 +72,22 @@ class AddContactPage(Page):
             height=27
         )
 
+        self.back_button_img = PhotoImage(file=self.BACK_ARROW_IMG)
+        self.back_button = Button(
+            self.frame,
+            image=self.back_button_img,
+            borderwidth=0,
+            highlightthickness=0,
+            command=lambda: self.to_page(
+                page=self.previous_page,
+                frame=self.frame
+            ),
+            relief="flat"
+        )
+        self.back_button.place(
+            x=60, y=350
+        )
+
         self.add_button_img = PhotoImage(file=self.CREATE_CONTACT_IMG)
         self.add_button = Button(
             self.frame,
@@ -82,7 +99,7 @@ class AddContactPage(Page):
         )
 
         self.add_button.place(
-            x=146, y=335,
+            x=246, y=350,
             width=229,
             height=59
         )
