@@ -2,44 +2,43 @@ from tkinter import *
 
 from App.ReusableComponents.ListWidget import ListWidget
 from App.ReusableComponents.ListElement import ListElement
+from App.YourWallet.TokenTile import TokenTile
 from Page import Page
 
 
 class WalletPage(Page):
 
-    TOKEN_BG_IMG = "App/YourWallet/token_bg_img.png"
+    BACKGROUND_IMG = "App/YourWallet/background.png"
 
     def __init__(self, root, web3, **kwargs):
         super().__init__(root, web3, **kwargs)
 
+        self.canvas = Canvas(
+            self.frame,
+            bg="white",
+            height=466,
+            width=522,
+            bd=0,
+            highlightthickness=0,
+            relief="ridge"
+        )
+        self.canvas.place(x=0, y=0)
+
+        self.background_img = PhotoImage(file=self.BACKGROUND_IMG)
+        self.background = self.canvas.create_image(
+            231.5, 227.0,
+            image=self.background_img
+        )
+
         self.wallet_eth_balance = Label(
             self.frame,
-            text=f"Total ETH value: {round(self.eth_account.get_balance('ether'), 4)} ETH",
-            font=("Helvetica", 20)
+            text=f"{round(self.eth_account.get_balance('ether'), 4)}",
+            font=("Helvetica", 20, "bold"),
+            bg="white"
         )
 
         self.wallet_eth_balance.place(
-            x=40, y=40,
-        )
-
-        self.tokens_label = Label(
-            self.frame,
-            text="Tokens:",
-            font=("Helvetica", 15)
-        )
-
-        self.tokens_label.place(
-            x=80, y=105
-        )
-
-        self.nfts_label = Label(
-            self.frame,
-            text="NFTs:",
-            font=("Helvetica", 15)
-        )
-
-        self.nfts_label.place(
-            x=353, y=105
+            x=310, y=37,
         )
 
         self.tokens_list_frame = Frame(self.frame)
@@ -53,13 +52,19 @@ class WalletPage(Page):
             parent=self.tokens_list_frame,
             space_between=5,
             elements=[
-                #PhotoImage(file=self.TOKEN_BG_IMG)
+                ListElement(
+                    widget=TokenTile,
+                    genesis_root=self.root,
+                    token_name="example2",
+                    bg="red",
+                    height=50
+                )
             ]
         )
 
         self.nfts_list_frame = Frame(self.frame)
         self.nfts_list_frame.place(
-            x=270, y=150,
+            x=280, y=150,
             width=240,
             height=255,
         )
@@ -69,10 +74,12 @@ class WalletPage(Page):
             space_between=5,
             elements=[
                 ListElement(
-                    widget=Frame,
-                    bg="black",
-                    height=50,
-                ),
+                    widget=TokenTile,
+                    genesis_root=self.root,
+                    token_name="example1",
+                    bg="red",
+                    height=50
+                )
             ]
         )
 
