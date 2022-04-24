@@ -2,7 +2,7 @@ from tkinter import *
 
 from App.ReusableComponents.ListWidget import ListWidget
 from App.ReusableComponents.ListElement import ListElement
-from App.YourWallet.TokenTile import TokenTile
+from App.YourWallet.TokenTile.TokenTile import TokenTile
 from Page import Page
 
 
