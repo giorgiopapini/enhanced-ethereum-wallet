@@ -8,11 +8,12 @@ class TokenTile(Frame):
     TOKEN_ICON_IMG = "App/YourWallet/TokenTile/token_bg_img.png"
     ARROW_IMG = "App/YourWallet/TokenTile/arrow_img.png"
 
-    def __init__(self, genesis_root=None, token_name=None, **kwargs):
+    def __init__(self, genesis_root=None, token_symbol=None, token_amount=None, **kwargs):
         super().__init__(**kwargs)
 
         self.genesis_root = genesis_root
-        self.token_name = token_name
+        self.token_symbol = token_symbol
+        self.token_amount = token_amount
 
         self.background_img = PhotoImage(file=self.TOKEN_BG_IMG)
         self.background = Label(
@@ -37,6 +38,16 @@ class TokenTile(Frame):
             x=14, y=2,
             width=35,
             height=35
+        )
+
+        self.amount = Label(
+            self,
+            text=f"{self.token_symbol}: {round(self.token_amount, 4)}",
+            font=("Helvetica", 11),
+            bg="white"
+        )
+        self.amount.place(
+            x=55, y=8.5
         )
 
         self.arrow_img = PhotoImage(file=self.ARROW_IMG)

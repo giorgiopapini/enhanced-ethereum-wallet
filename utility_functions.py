@@ -94,3 +94,8 @@ def get_contract_name(contract_address=None, web3=None):
     print(constants.ERC20_ABI)
     contract = web3.eth.contract(address=contract_address, abi=constants.ERC20_ABI)
     print(contract.functions.name().call())
+
+
+def get_token_amount(token_address=None, user_address=None, web3=None):
+    token = web3.eth.contract(address=token_address, abi=constants.ERC20_ABI)
+    return token.functions.balanceOf(user_address).call()

@@ -1,7 +1,10 @@
+import json
 from tkinter import *
 
+import utility_functions
 from App.ReusableComponents.ListWidget import ListWidget
 from App.ReusableComponents.ListElement import ListElement
+from App.YourWallet.ImportToken.ImportTokenPage import ImportTokenPage
 from App.YourWallet.TokenTile.TokenTile import TokenTile
 from Page import Page
 
@@ -9,6 +12,8 @@ from Page import Page
 class WalletPage(Page):
 
     BACKGROUND_IMG = "App/YourWallet/background.png"
+    TOKENS_PATH = "App/YourWallet/tokens.json"
+    NFTS_PATH = "App/YourWallet/nfts.json"
 
     def __init__(self, root, web3, **kwargs):
         super().__init__(root, web3, **kwargs)
@@ -51,15 +56,13 @@ class WalletPage(Page):
         self.token_list = ListWidget(
             parent=self.tokens_list_frame,
             space_between=5,
-            elements=[
-                ListElement(
-                    widget=TokenTile,
-                    genesis_root=self.root,
-                    token_name="example2",
-                    bg="red",
-                    height=50
-                )
-            ]
+            elements=[ListElement(
+                widget=TokenTile,
+                genesis_root=self.root,
+                token_symbol="ETH",
+                token_amount=round(self.eth_account.get_balance('ether'), 4),
+                height=50
+            )] + self.get_tokens()
         )
 
         self.nfts_list_frame = Frame(self.frame)
@@ -72,15 +75,7 @@ class WalletPage(Page):
         self.nfts_list = ListWidget(
             parent=self.nfts_list_frame,
             space_between=5,
-            elements=[
-                ListElement(
-                    widget=TokenTile,
-                    genesis_root=self.root,
-                    token_name="example1",
-                    bg="red",
-                    height=50
-                )
-            ]
+            elements=[]
         )
 
         self.import_tokens = Button(
@@ -89,10 +84,36 @@ class WalletPage(Page):
             font=("Helvetica", 10),
             borderwidth=0,
             highlightthickness=0,
-            relief="flat"
+            relief="flat",
+            command=lambda: self.to_page(
+                page=ImportTokenPage,
+                frame=self.frame,
+                previous_page=WalletPage
+            )
         )
 
         self.import_tokens.place(
             x=80, y=420
         )
 
+    def get_tokens(self):
+        tokens = []
+        with open(self.TOKENS_PATH, "r") as file:
+            raw_tokens = json.load(file)
+            for token in raw_tokens:
+                tokens.append(
+                    ListElement(
+                        widget=TokenTile,
+                        genesis_root=self.root,
+                        token_symbol=token["symbol"],
+                        token_amount=utility_functions.get_token_amount(  # This causes laggy loading, because for every token it asks the blockchain for the updated balance
+                            # Solution may be saving the current balance inside the JSON file and than update it when required
+                            # Solution may be loading tokens balances inside separate threads
+                            web3=self.web3,
+                            token_address=token["address"],
+                            user_address=self.eth_account.account.address
+                        ),
+                        height=50
+                    )
+                )
+            return tokens
