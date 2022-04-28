@@ -8,6 +8,9 @@ import constants
 import json
 import qrcode
 
+from web3 import Web3
+from threading import Thread
+
 
 def user_is_registered():
     try:
@@ -98,4 +101,5 @@ def get_contract_name(contract_address=None, web3=None):
 
 def get_token_amount(token_address=None, user_address=None, web3=None):
     token = web3.eth.contract(address=token_address, abi=constants.ERC20_ABI)
+    print(token.functions.balanceOf(user_address).call())
     return token.functions.balanceOf(user_address).call()

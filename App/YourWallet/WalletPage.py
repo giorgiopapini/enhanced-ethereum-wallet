@@ -88,7 +88,8 @@ class WalletPage(Page):
             command=lambda: self.to_page(
                 page=ImportTokenPage,
                 frame=self.frame,
-                previous_page=WalletPage
+                previous_page=WalletPage,
+                eth_account=self.eth_account
             )
         )
 
