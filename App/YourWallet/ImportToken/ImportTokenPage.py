@@ -27,13 +27,13 @@ class ImportTokenPage(Page):
 
         self.background_img = PhotoImage(file=self.BACKGROUND_IMG)
         self.background = self.canvas.create_image(
-            159.0, 168.0,
+            159.0, 165.5,
             image=self.background_img
         )
 
         self.contract_addr_field_img = PhotoImage(file=self.TEXT_BOX_IMAGE)
         self.contract_addr_field_bg = self.canvas.create_image(
-            217.0, 159.5,
+            217.0, 154.5,
             image=self.contract_addr_field_img
         )
 
@@ -45,14 +45,14 @@ class ImportTokenPage(Page):
         )
 
         self.contract_addr_field.place(
-            x=73.5, y=147,
+            x=73.5, y=142,
             width=287.0,
             height=27
         )
 
         self.token_symbol_field_img = PhotoImage(file=self.TEXT_BOX_IMAGE)
         self.token_symbol_field_bg = self.canvas.create_image(
-            217.0, 242.5,
+            217.0, 237.5,
             image=self.token_symbol_field_img
         )
 
@@ -64,14 +64,14 @@ class ImportTokenPage(Page):
         )
 
         self.token_symbol_field.place(
-            x=73.5, y=230,
+            x=73.5, y=225,
             width=287.0,
             height=27
         )
 
         self.decimals_field_img = PhotoImage(file=self.TEXT_BOX_IMAGE)
         self.decimals_field_bg = self.canvas.create_image(
-            217.0, 325.5,
+            217.0, 320.5,
             image=self.decimals_field_img
         )
 
@@ -83,7 +83,7 @@ class ImportTokenPage(Page):
         )
 
         self.decimals_field.place(
-            x=73.5, y=313,
+            x=73.5, y=308,
             width=287.0,
             height=27
         )
