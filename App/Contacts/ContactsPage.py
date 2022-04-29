@@ -12,9 +12,10 @@ class ContactsPage(Page):
 
     BACKGROUND_IMG = "App/Contacts/background.png"
     SEARCH_BOX_IMAGE = "App/Contacts/search_box.png"
-    SEARCH_BUTTON_IMAGE = "App/Contacts/search_button.png"
+    CLEAN_BUTTON_IMAGE = "App/Contacts/clean_button.png"
     ADD_CONTACT_IMAGE = "App/Contacts/add_contact_img.png"
     CONTACTS_JSON_PATH = "App/Contacts/contacts.json"
+    BACKSPACE_KEYSYM_NUM = 65288
 
     def __init__(self, root, web3, **kwargs):
         super().__init__(root, web3, **kwargs)
@@ -58,13 +59,13 @@ class ContactsPage(Page):
             height=27
         )
 
-        self.search_button_img = PhotoImage(file=self.SEARCH_BUTTON_IMAGE)
+        self.search_button_img = PhotoImage(file=self.CLEAN_BUTTON_IMAGE)
         self.search_button = Button(
             self.frame,
             image=self.search_button_img,
             borderwidth=0,
             highlightthickness=0,
-            command=self.filter_contacts,
+            command=self.clean_search_box,
             relief="flat"
         )
 
@@ -104,6 +105,8 @@ class ContactsPage(Page):
             elements=self.get_contacts()
         )
 
+        self.search_box.bind("<Key>", self.filter_contacts)
+
     def get_contacts(self):
         try:
             with open(self.CONTACTS_JSON_PATH, "r") as file:
@@ -113,8 +116,14 @@ class ContactsPage(Page):
         except (FileNotFoundError, ValueError):
             return []
 
-    def filter_contacts(self):
-        query = self.search_box.get()
+    def format_query(self, event):
+        if event.keysym_num == self.BACKSPACE_KEYSYM_NUM:
+            return event.widget.get()[0:len(event.widget.get()) - 1]
+        else:
+            return event.widget.get() + event.char
+
+    def filter_contacts(self, event):
+        query = self.format_query(event=event)
         with open(self.CONTACTS_JSON_PATH, "r") as file:
             raw_contacts = json.load(file)
             filtered_raw_contacts = []
@@ -124,6 +133,15 @@ class ContactsPage(Page):
 
         contacts = self.create_list_elements(raw_contacts=filtered_raw_contacts)
         self.refresh_contacts_frame(contacts=contacts)
+
+    def clean_search_box(self):
+        self.search_box.delete(0, END)
+        self.__init__(
+            self.root,
+            self.web3,
+            frame=self.frame,
+            eth_account=self.eth_account
+        )
 
     def create_list_elements(self, raw_contacts):
         contact_list = []

@@ -121,6 +121,13 @@ class ImportTokenPage(Page):
             x=60, y=383
         )
 
+        self.contract_addr_field.bind("<Key>", self.check_addr)
+        # entry bind with <Key> (any key) --> Check the content of address field --> If address field contains an address
+        # ask the token symbol and decimal to the blockchain
+
+    def check_addr(self, event):
+        print("checking addr")
+
     def import_token(self):
         # Check if token alredy in list
         # Read json file and save as list
