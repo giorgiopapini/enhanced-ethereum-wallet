@@ -1,6 +1,9 @@
 from tkinter import *
 import json
+import time
 
+import constants
+import utility_functions
 from Page import Page
 
 
@@ -121,12 +124,31 @@ class ImportTokenPage(Page):
             x=60, y=383
         )
 
-        self.contract_addr_field.bind("<Key>", self.check_addr)
-        # entry bind with <Key> (any key) --> Check the content of address field --> If address field contains an address
-        # ask the token symbol and decimal to the blockchain
+        self.contract_addr_field.bind("<Key>", self.get_field_text)
+        self.contract_addr_field.bind("<<Paste>>", self.paste)
 
-    def check_addr(self, event):
-        print("checking addr")
+    def get_field_text(self, event, pasted_text=None):
+        if pasted_text is None:
+            query = utility_functions.format_query(event=event)
+        else:
+            query = utility_functions.format_query(event=event, pasted=True)
+            self.contract_addr_field.delete(0, len(pasted_text))
+
+        if len(query) == constants.ETHEREUM_ADDRESS_LENGTH:
+            utility_functions.get_token_amount(
+                token_address=query,
+                user_address=self.eth_account.account.address,
+                web3=self.web3
+            )
+            # query length = default ETH address length
+            # check_address()
+        print(f"checking addr: {query}; len query: {len(query)}")
+
+    def paste(self, event):
+        pasted_text = self.root.clipboard_get()
+        self.contract_addr_field.insert(0, pasted_text)
+        self.get_field_text(event=event, pasted_text=pasted_text)
+
 
     def import_token(self):
         # Check if token alredy in list

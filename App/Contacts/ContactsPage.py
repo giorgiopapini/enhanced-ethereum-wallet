@@ -1,6 +1,7 @@
 from tkinter import *
 import json
 
+import utility_functions
 from App.Contacts.AddContact.AddContactPage import AddContactPage
 from App.Contacts.ContactTile.ContactTile import ContactTile
 from App.ReusableComponents.ListElement import ListElement
@@ -15,7 +16,6 @@ class ContactsPage(Page):
     CLEAN_BUTTON_IMAGE = "App/Contacts/clean_button.png"
     ADD_CONTACT_IMAGE = "App/Contacts/add_contact_img.png"
     CONTACTS_JSON_PATH = "App/Contacts/contacts.json"
-    BACKSPACE_KEYSYM_NUM = 65288
 
     def __init__(self, root, web3, **kwargs):
         super().__init__(root, web3, **kwargs)
@@ -116,14 +116,8 @@ class ContactsPage(Page):
         except (FileNotFoundError, ValueError):
             return []
 
-    def format_query(self, event):
-        if event.keysym_num == self.BACKSPACE_KEYSYM_NUM:
-            return event.widget.get()[0:len(event.widget.get()) - 1]
-        else:
-            return event.widget.get() + event.char
-
     def filter_contacts(self, event):
-        query = self.format_query(event=event)
+        query = utility_functions.format_query(event=event)
         with open(self.CONTACTS_JSON_PATH, "r") as file:
             raw_contacts = json.load(file)
             filtered_raw_contacts = []

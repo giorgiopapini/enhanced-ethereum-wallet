@@ -103,3 +103,13 @@ def get_token_amount(token_address=None, user_address=None, web3=None):
     token = web3.eth.contract(address=token_address, abi=constants.ERC20_ABI)
     print(token.functions.balanceOf(user_address).call())
     return token.functions.balanceOf(user_address).call()
+
+
+def format_query(event=None, pasted=False):
+    if pasted is True:
+        return event.widget.get()
+    else:
+        if event.keysym_num == constants.BACKSPACE_KEYSYM_NUM:
+            return event.widget.get()[0:len(event.widget.get()) - 1]
+        else:
+            return event.widget.get() + event.char
