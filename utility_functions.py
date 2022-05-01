@@ -38,7 +38,7 @@ def check_var_type(variable=None, requested_type=None, error_msg=None):
         raise TypeError(error_msg)
 
 
-def check_fields_validity(fields=None, error=None):
+def check_fields_validity(fields=None, error=None, disable=False):
     valid = True
     for field in fields:
         if len(field.get()) > 0 and field.get() != error:
@@ -46,7 +46,8 @@ def check_fields_validity(fields=None, error=None):
         else:
             error_message(
                 entry=field,
-                error=error
+                error=error,
+                disable=disable
             )
             valid = False
             break
@@ -115,3 +116,10 @@ def get_address(private_key):
     pub_key = priv_key.public_key
     address = pub_key.to_checksum_address()
     return address
+
+
+def is_token_saved(tokens=None, token_address=None):
+    for token in tokens:
+        if token["address"] == token_address:
+            return True
+    return False
