@@ -30,11 +30,6 @@ class AppPageManager(Page):
 
         self.default_active_page = kwargs.get("default_active_page", None)
 
-        utility_functions.get_contract_name(
-            contract_address="0x3fb4601911871b635011aF01eDda5854F27560ce",
-            web3=self.web3
-        )
-
         self.canvas = Canvas(
             root,
             bg="#ffffff",

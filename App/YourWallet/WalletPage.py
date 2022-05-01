@@ -1,7 +1,7 @@
 import json
 from tkinter import *
 
-import utility_functions
+import smart_contract_functions
 from App.ReusableComponents.ListWidget import ListWidget
 from App.ReusableComponents.ListElement import ListElement
 from App.YourWallet.ImportToken.ImportTokenPage import ImportTokenPage
@@ -107,7 +107,7 @@ class WalletPage(Page):
                         widget=TokenTile,
                         genesis_root=self.root,
                         token_symbol=token["symbol"],
-                        token_amount=utility_functions.get_token_amount(  # This causes laggy loading, because for every token it asks the blockchain for the updated balance
+                        token_amount=smart_contract_functions.get_token_amount(  # This causes laggy loading, because for every token it asks the blockchain for the updated balance
                             # Solution may be saving the current balance inside the JSON file and than update it when required
                             # Solution may be loading tokens balances inside separate threads
                             web3=self.web3,

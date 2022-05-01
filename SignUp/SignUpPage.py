@@ -88,7 +88,7 @@ class SignUpPage(Page):
             width=252.0,
             height=31)
 
-        self.entry1.bind("<Button>", utility_functions.clear_error_message)
+        self.entry1.bind("<Button>", utility_functions.clear_error_message_binded)
 
         self.background_img = PhotoImage(file=f"SignUp/background.png")
         self.background = self.canvas.create_image(

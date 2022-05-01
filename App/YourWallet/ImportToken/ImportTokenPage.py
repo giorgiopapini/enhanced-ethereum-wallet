@@ -1,9 +1,8 @@
 from tkinter import *
-import json
-import time
 
 import constants
 import utility_functions
+import smart_contract_functions
 from Page import Page
 
 
@@ -63,7 +62,8 @@ class ImportTokenPage(Page):
             self.frame,
             bd=0,
             bg="#ffffff",
-            highlightthickness=0
+            highlightthickness=0,
+            state='disabled'
         )
 
         self.token_symbol_field.place(
@@ -82,7 +82,8 @@ class ImportTokenPage(Page):
             self.frame,
             bd=0,
             bg="#ffffff",
-            highlightthickness=0
+            highlightthickness=0,
+            state='disabled'
         )
 
         self.decimals_field.place(
@@ -135,20 +136,46 @@ class ImportTokenPage(Page):
             self.contract_addr_field.delete(0, len(pasted_text))
 
         if len(query) == constants.ETHEREUM_ADDRESS_LENGTH:
-            utility_functions.get_token_amount(
-                token_address=query,
-                user_address=self.eth_account.account.address,
-                web3=self.web3
-            )
-            # query length = default ETH address length
-            # check_address()
-        print(f"checking addr: {query}; len query: {len(query)}")
+            try:
+                token_symbol = smart_contract_functions.get_token_symbol(token_address=query, web3=self.web3)
+                token_decimals = smart_contract_functions.get_token_decimals(token_address=query, web3=self.web3)
+
+                self.clear_fields()
+                self.update_fields(token_symbol=token_symbol, token_decimals=token_decimals)
+            except:
+                self.show_errors()
 
     def paste(self, event):
         pasted_text = self.root.clipboard_get()
+        utility_functions.clear_field(self.contract_addr_field)
         self.contract_addr_field.insert(0, pasted_text)
         self.get_field_text(event=event, pasted_text=pasted_text)
 
+    def clear_fields(self):
+        utility_functions.clear_field(widget=self.token_symbol_field, disable=True)
+        utility_functions.clear_field(widget=self.decimals_field, disable=True)
+
+    def update_fields(self, token_symbol=None, token_decimals=None):
+        utility_functions.update_field_value(
+            entry=self.token_symbol_field,
+            value=token_symbol
+        )
+        utility_functions.update_field_value(
+            entry=self.decimals_field,
+            value=token_decimals
+        )
+
+    def show_errors(self):
+        utility_functions.error_message(
+            entry=self.token_symbol_field,
+            error=constants.ERRORS["ERROR_ERC20_NOT_FOUND"],
+            disable=True
+        )
+        utility_functions.error_message(
+            entry=self.decimals_field,
+            error=constants.ERRORS["ERROR_ERC20_NOT_FOUND"],
+            disable=True
+        )
 
     def import_token(self):
         # Check if token alredy in list

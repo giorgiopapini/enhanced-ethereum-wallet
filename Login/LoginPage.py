@@ -75,7 +75,7 @@ class LoginPage(Page):
             width=185,
             height=33)
 
-        self.entry0.bind("<Button>", utility_functions.clear_error_message)
+        self.entry0.bind("<Button>", utility_functions.clear_error_message_binded)
 
     def login(self):
         self.password = self.entry0.get()

@@ -104,8 +104,8 @@ class AddContactPage(Page):
             height=59
         )
 
-        self.username_field.bind("<Button>", utility_functions.clear_error_message)
-        self.address_field.bind("<Button>", utility_functions.clear_error_message)
+        self.username_field.bind("<Button>", utility_functions.clear_error_message_binded)
+        self.address_field.bind("<Button>", utility_functions.clear_error_message_binded)
 
     def add_contact(self):
         username = self.username_field.get()

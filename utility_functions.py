@@ -25,10 +25,12 @@ def user_is_registered():
         return False
 
 
-def error_message(entry, error):
+def error_message(entry, error, disable=False):
+    entry.config(state="normal")
     entry.delete(0, END)
     entry.config(fg="red")
     entry.insert(END, error)
+    entry.config(state="disabled") if disable is True else None
 
 
 def check_var_type(variable=None, requested_type=None, error_msg=None):
@@ -58,11 +60,33 @@ def is_list_empty(array=None):
         return True
 
 
-def clear_error_message(event):
+def clear_error_message_binded(event):
     for error in constants.ERRORS:
         if event.widget.get() == constants.ERRORS[error]:
-            event.widget.delete(0, END)
-            event.widget.config(fg="black")
+            clear_field(widget=event.widget)
+
+
+def clear_field(widget=None, disable=False):
+    widget.config(state="normal")
+    widget.delete(0, END)
+    widget.config(fg="black")
+    widget.config(state="disabled") if disable is True else None
+
+
+def update_field_value(entry=None, value=None):
+    entry.config(state="normal")
+    entry.insert(END, value)
+    entry.config(state="disabled")
+
+
+def format_query(event=None, pasted=False):
+    if pasted is True:
+        return event.widget.get()
+    else:
+        if event.keysym_num == constants.BACKSPACE_KEYSYM_NUM:
+            return event.widget.get()[0:len(event.widget.get()) - 1]
+        else:
+            return event.widget.get() + event.char
 
 
 def create_qrcode(data):
@@ -91,25 +115,3 @@ def get_address(private_key):
     pub_key = priv_key.public_key
     address = pub_key.to_checksum_address()
     return address
-
-
-def get_contract_name(contract_address=None, web3=None):
-    print(constants.ERC20_ABI)
-    contract = web3.eth.contract(address=contract_address, abi=constants.ERC20_ABI)
-    print(contract.functions.name().call())
-
-
-def get_token_amount(token_address=None, user_address=None, web3=None):
-    token = web3.eth.contract(address=token_address, abi=constants.ERC20_ABI)
-    print(token.functions.balanceOf(user_address).call())
-    return token.functions.balanceOf(user_address).call()
-
-
-def format_query(event=None, pasted=False):
-    if pasted is True:
-        return event.widget.get()
-    else:
-        if event.keysym_num == constants.BACKSPACE_KEYSYM_NUM:
-            return event.widget.get()[0:len(event.widget.get()) - 1]
-        else:
-            return event.widget.get() + event.char
