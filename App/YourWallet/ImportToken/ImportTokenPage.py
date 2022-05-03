@@ -3,7 +3,7 @@ import json
 
 import constants
 import utility_functions
-import smart_contract_functions
+import eth_generic_functions
 from Page import Page
 
 
@@ -140,8 +140,8 @@ class ImportTokenPage(Page):
             self.contract_addr_field.delete(0, len(pasted_text))
 
         try:
-            token_symbol = smart_contract_functions.get_token_symbol(token_address=query, web3=self.web3)
-            token_decimals = smart_contract_functions.get_token_decimals(token_address=query, web3=self.web3)
+            token_symbol = eth_generic_functions.get_token_symbol(token_address=query, web3=self.web3)
+            token_decimals = eth_generic_functions.get_token_decimals(token_address=query, web3=self.web3)
 
             self.clear_fields()
             self.update_fields(token_symbol=token_symbol, token_decimals=token_decimals)
@@ -197,18 +197,11 @@ class ImportTokenPage(Page):
             )
 
             if fields_valid is True and token_already_saved is False:
-                # ++++++++++++++++++++++++++++++++ prova
-                smart_contract_functions.get_token_transactions(
-                    token_address=self.contract_addr_field.get(),
-                    user_address=self.eth_account.account.address,
-                    web3=self.web3
-                )
-                # ++++++++++++++++++++++++++++++++ end prova
                 tokens.append(
                     {
                         "symbol": self.token_symbol_field.get(),
                         "address": self.contract_addr_field.get(),
-                        "value": smart_contract_functions.get_token_amount(
+                        "value": eth_generic_functions.get_token_amount(
                             token_address=self.contract_addr_field.get(),
                             user_address=self.eth_account.account.address,
                             web3=self.web3

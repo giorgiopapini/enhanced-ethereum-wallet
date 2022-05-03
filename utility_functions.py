@@ -5,11 +5,9 @@ from eth_keys import keys
 from eth_utils import decode_hex
 
 import constants
+import requests
 import json
 import qrcode
-
-from web3 import Web3
-from threading import Thread
 
 
 def user_is_registered():
@@ -36,6 +34,11 @@ def error_message(entry, error, disable=False):
 def check_var_type(variable=None, requested_type=None, error_msg=None):
     if type(variable) is not requested_type:
         raise TypeError(error_msg)
+
+
+def get_api_response(url=None):
+    res = requests.get(url=url, headers=constants.HEADERS)
+    return json.loads(res.text)
 
 
 def check_fields_validity(fields=None, error=None, disable=False):
