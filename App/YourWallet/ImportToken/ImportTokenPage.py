@@ -197,6 +197,13 @@ class ImportTokenPage(Page):
             )
 
             if fields_valid is True and token_already_saved is False:
+                # ++++++++++++++++++++++++++++++++ prova
+                smart_contract_functions.get_token_transactions(
+                    token_address=self.contract_addr_field.get(),
+                    user_address=self.eth_account.account.address,
+                    web3=self.web3
+                )
+                # ++++++++++++++++++++++++++++++++ end prova
                 tokens.append(
                     {
                         "symbol": self.token_symbol_field.get(),
