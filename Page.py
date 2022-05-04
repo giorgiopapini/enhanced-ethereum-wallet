@@ -14,3 +14,8 @@ class Page(Frame):
     def to_page(self, page=None, **kwargs):
         if page is not None:
             page(self.root, self.web3, **kwargs)
+
+    @staticmethod
+    def render_page(root=None, web3=None, page=None, **kwargs):
+        if page is not None:
+            page(root, web3, **kwargs)

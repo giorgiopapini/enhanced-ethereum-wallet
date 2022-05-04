@@ -59,7 +59,11 @@ class WalletPage(Page):
             space_between=5,
             elements=[ListElement(
                 widget=TokenTile,
-                genesis_root=self.root,
+                root=self.root,
+                web3=self.web3,
+                next_page_frame=self.frame,
+                previous_page=WalletPage,
+                eth_account=self.eth_account,
                 token_symbol="ETH",
                 token_amount=round(self.eth_account.get_balance('ether'), 4),
                 height=50
@@ -106,7 +110,11 @@ class WalletPage(Page):
                 tokens.append(
                     ListElement(
                         widget=TokenTile,
-                        genesis_root=self.root,
+                        root=self.root,
+                        web3=self.web3,
+                        next_page_frame=self.frame,
+                        previous_page=WalletPage,
+                        eth_account=self.eth_account,
                         token_symbol=token["symbol"],
                         token_amount=eth_generic_functions.get_token_amount(  # This causes laggy loading, because for every token it asks the blockchain for the updated balance
                             # Solution may be saving the current balance inside the JSON file and than update it when required

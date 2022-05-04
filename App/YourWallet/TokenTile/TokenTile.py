@@ -1,5 +1,7 @@
 from tkinter import *
-import json
+
+from App.YourWallet.TokenDetails.TokenDetailsPage import TokenDetailsPage
+from Page import Page
 
 
 class TokenTile(Frame):
@@ -8,12 +10,18 @@ class TokenTile(Frame):
     TOKEN_ICON_IMG = "App/YourWallet/TokenTile/token_bg_img.png"
     ARROW_IMG = "App/YourWallet/TokenTile/arrow_img.png"
 
-    def __init__(self, genesis_root=None, token_symbol=None, token_amount=None, **kwargs):
+    # Is it possible to create a 'Tile' class that manages root, web3, next_page_frame, previous_page and eth_account?
+
+    def __init__(self, root=None, web3=None, next_page_frame=None, previous_page=None, eth_account=None, token_symbol=None, token_amount=None, **kwargs):
         super().__init__(**kwargs)
 
-        self.genesis_root = genesis_root
+        self.root = root
+        self.web3 = web3
         self.token_symbol = token_symbol
         self.token_amount = token_amount
+        self.next_page_frame = next_page_frame
+        self.previous_page = previous_page
+        self.eth_account = eth_account
 
         self.background_img = PhotoImage(file=self.TOKEN_BG_IMG)
         self.background = Label(
@@ -56,6 +64,7 @@ class TokenTile(Frame):
             image=self.arrow_img,
             borderwidth=0,
             highlightthickness=0,
+            command=self.to_token_details,
             relief="flat"
         )
 
@@ -65,5 +74,13 @@ class TokenTile(Frame):
             height=19
         )
 
-    # Arrow button will render a new page containing every transaction made with that specific token (history)
+    def to_token_details(self):
+        Page.render_page(
+            root=self.root,
+            web3=self.web3,
+            page=TokenDetailsPage,
+            previous_page=self.previous_page,
+            frame=self.next_page_frame,
+            eth_account=self.eth_account
+        )
 

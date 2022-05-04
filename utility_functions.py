@@ -4,6 +4,7 @@ from PIL import Image
 from eth_keys import keys
 from eth_utils import decode_hex
 
+import config
 import constants
 import requests
 import json
@@ -36,7 +37,14 @@ def check_var_type(variable=None, requested_type=None, error_msg=None):
         raise TypeError(error_msg)
 
 
-def get_api_response(url=None):
+def make_etherscan_api_url(module=None, action=None, address=None, **kwargs):
+    url = f"{constants.ETHERSCAN_BASE_API_URL}?module={module}&action={action}&address={address}&apikey={config.ETHERSCAN_API_KEY}"
+    for key, value in kwargs.items():
+        url += f"&{key}={value}"
+    return url
+
+
+def get_api_response(url):
     res = requests.get(url=url, headers=constants.HEADERS)
     return json.loads(res.text)
 
