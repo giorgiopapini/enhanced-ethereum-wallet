@@ -1,4 +1,9 @@
 from tkinter import *
+
+import eth_generic_functions
+from App.ReusableComponents.ListElement import ListElement
+from App.ReusableComponents.ListWidget import ListWidget
+from App.YourWallet.TokenDetails.TransactionTile.TransactionTile import TransactionTile
 from Page import Page
 
 
@@ -11,6 +16,12 @@ class TokenDetailsPage(Page):
 
     def __init__(self, root, web3, **kwargs):
         super().__init__(root, web3, **kwargs)
+
+        self.token = kwargs.get("token", None)
+
+        # Update token amount (value) inside tokens.json when token amount is loaded from the blockchain
+        # Move the word 'transaction' up (contained in the background), move up and enlarge the frame containing the
+        # transaction list accordingly
 
         self.canvas = Canvas(
             self.frame,
@@ -60,6 +71,19 @@ class TokenDetailsPage(Page):
             height=46
         )
 
+        self.transaction_frame = Frame(self.frame, bg="white")
+        self.transaction_frame.place(
+            x=74, y=222,
+            width=420,
+            height=190
+        )
+
+        self.transaction_list = ListWidget(
+            parent=self.transaction_frame,
+            space_between=5,
+            elements=self.create_transactions_list()
+        )
+
         self.back_button_img = PhotoImage(file=self.BACK_ARROW_IMG)
         self.back_button = Button(
             self.frame,
@@ -74,8 +98,31 @@ class TokenDetailsPage(Page):
             relief="flat"
         )
         self.back_button.place(
-            x=60, y=350
+            x=47, y=415
         )
+
+    def create_transactions_list(self):
+        transactions = []
+        if self.token is None:
+            raw_transactions = eth_generic_functions.get_eth_transactions(user_address=self.eth_account.account.address)
+        else:
+            raw_transactions = eth_generic_functions.get_token_transactions(
+                token_address=self.token["address"],
+                user_address=self.eth_account.account.address,
+            )
+        for transaction in raw_transactions:
+            if transaction['value'] != '0':
+                transactions.append(
+                    ListElement(
+                        widget=TransactionTile,
+                        genesis_root=self.root,
+                        web3=self.web3,
+                        transaction_json=transaction,
+                        eth_account=self.eth_account,
+                        height=50
+                    )
+                )
+        return transactions
 
     def btn_clicked(self):
         pass

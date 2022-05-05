@@ -35,7 +35,7 @@ def get_eth_transactions(user_address=None):
         sort="desc",
         apikey=config.ETHERSCAN_API_KEY
     )
-    return utility_functions.get_api_response(url=url)
+    return utility_functions.get_api_response(url=url)["result"]
 
 
 def get_token_transactions(token_address=None, user_address=None):
@@ -52,4 +52,4 @@ def get_token_transactions(token_address=None, user_address=None):
             sort="desc",
             apikey=config.ETHERSCAN_API_KEY
         )
-        return utility_functions.get_api_response(url=url)
+        return utility_functions.get_api_response(url=url)["result"]

@@ -1,5 +1,6 @@
 from tkinter import *
 from PIL import Image
+from _datetime import datetime
 
 from eth_keys import keys
 from eth_utils import decode_hex
@@ -134,3 +135,11 @@ def is_token_saved(tokens=None, token_address=None):
         if token["address"] == token_address:
             return True
     return False
+
+
+def get_date_from_timestamp(timestamp=None):
+    if timestamp is not None:
+        date = datetime.fromtimestamp(int(timestamp))
+        day = date.date().day
+        month = date.strftime("%b")
+        return f"{month}/{day}"

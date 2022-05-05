@@ -1,5 +1,6 @@
 from tkinter import *
 
+import eth_generic_functions
 from App.YourWallet.TokenDetails.TokenDetailsPage import TokenDetailsPage
 from Page import Page
 
@@ -12,16 +13,19 @@ class TokenTile(Frame):
 
     # Is it possible to create a 'Tile' class that manages root, web3, next_page_frame, previous_page and eth_account?
 
-    def __init__(self, root=None, web3=None, next_page_frame=None, previous_page=None, eth_account=None, token_symbol=None, token_amount=None, **kwargs):
+    def __init__(self, genesis_root=None, web3=None, next_page_frame=None, previous_page=None, eth_account=None, token=None, token_amount=None, **kwargs):
         super().__init__(**kwargs)
 
-        self.root = root
+        self.genesis_root = genesis_root
         self.web3 = web3
-        self.token_symbol = token_symbol
-        self.token_amount = token_amount
         self.next_page_frame = next_page_frame
         self.previous_page = previous_page
         self.eth_account = eth_account
+
+        self.token = token
+        self.token_amount = 0
+
+        self.define_token_details()
 
         self.background_img = PhotoImage(file=self.TOKEN_BG_IMG)
         self.background = Label(
@@ -50,8 +54,8 @@ class TokenTile(Frame):
 
         self.amount = Label(
             self,
-            text=f"{self.token_symbol}: {round(self.token_amount, 4)}",
-            font=("Helvetica", 11),
+            text=(f"ETH: " if self.token is None else f"{self.token['symbol']}: ") + str(round(self.token_amount, 4)),
+            font=("Arial", 11),
             bg="white"
         )
         self.amount.place(
@@ -74,13 +78,24 @@ class TokenTile(Frame):
             height=19
         )
 
+    def define_token_details(self):
+        if self.token is None:
+            self.token_amount = self.eth_account.get_balance("ether")
+        else:
+            self.token_amount = eth_generic_functions.get_token_amount(
+                token_address=self.token["address"],
+                user_address=self.eth_account.account.address,
+                web3=self.web3
+            )
+
     def to_token_details(self):
         Page.render_page(
-            root=self.root,
+            root=self.genesis_root,
             web3=self.web3,
             page=TokenDetailsPage,
             previous_page=self.previous_page,
             frame=self.next_page_frame,
-            eth_account=self.eth_account
+            eth_account=self.eth_account,
+            token=self.token
         )
 

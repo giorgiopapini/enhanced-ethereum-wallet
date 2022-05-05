@@ -1,8 +1,6 @@
 import json
 from tkinter import *
 
-import eth_generic_functions
-
 from App.ReusableComponents.ListWidget import ListWidget
 from App.ReusableComponents.ListElement import ListElement
 from App.YourWallet.ImportToken.ImportTokenPage import ImportTokenPage
@@ -59,12 +57,11 @@ class WalletPage(Page):
             space_between=5,
             elements=[ListElement(
                 widget=TokenTile,
-                root=self.root,
+                genesis_root=self.root,
                 web3=self.web3,
                 next_page_frame=self.frame,
                 previous_page=WalletPage,
                 eth_account=self.eth_account,
-                token_symbol="ETH",
                 token_amount=round(self.eth_account.get_balance('ether'), 4),
                 height=50
             )] + self.get_tokens()
@@ -110,19 +107,12 @@ class WalletPage(Page):
                 tokens.append(
                     ListElement(
                         widget=TokenTile,
-                        root=self.root,
+                        genesis_root=self.root,
                         web3=self.web3,
                         next_page_frame=self.frame,
                         previous_page=WalletPage,
                         eth_account=self.eth_account,
-                        token_symbol=token["symbol"],
-                        token_amount=eth_generic_functions.get_token_amount(  # This causes laggy loading, because for every token it asks the blockchain for the updated balance
-                            # Solution may be saving the current balance inside the JSON file and than update it when required
-                            # Solution may be loading tokens balances inside separate threads
-                            web3=self.web3,
-                            token_address=token["address"],
-                            user_address=self.eth_account.account.address
-                        ),
+                        token=token,
                         height=50
                     )
                 )
