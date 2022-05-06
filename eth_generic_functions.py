@@ -21,8 +21,10 @@ def get_token_decimals(token_address=None, web3=None):
 
 def get_token_amount(token_address=None, user_address=None, web3=None):
     token = web3.eth.contract(address=token_address, abi=constants.ERC20_ABI)
-    print(token.functions.balanceOf(user_address).call())
-    return token.functions.balanceOf(user_address).call()
+    token_amount = token.functions.balanceOf(user_address).call()
+    decimals = get_token_decimals(token_address=token_address, web3=web3)
+    token_amount = utility_functions.format_balance(amount=token_amount, decimals=decimals)
+    return token_amount
 
 
 def get_eth_transactions(user_address=None):

@@ -17,6 +17,8 @@ class WalletPage(Page):
     def __init__(self, root, web3, **kwargs):
         super().__init__(root, web3, **kwargs)
 
+        print(round(self.eth_account.get_balance('ether'), 4))
+
         self.canvas = Canvas(
             self.frame,
             bg="white",
@@ -62,7 +64,6 @@ class WalletPage(Page):
                 next_page_frame=self.frame,
                 previous_page=WalletPage,
                 eth_account=self.eth_account,
-                token_amount=round(self.eth_account.get_balance('ether'), 4),
                 height=50
             )] + self.get_tokens()
         )

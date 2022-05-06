@@ -201,6 +201,7 @@ class ImportTokenPage(Page):
                     {
                         "symbol": self.token_symbol_field.get(),
                         "address": self.contract_addr_field.get(),
+                        "decimals": int(self.decimals_field.get()),
                         "value": eth_generic_functions.get_token_amount(
                             token_address=self.contract_addr_field.get(),
                             user_address=self.eth_account.account.address,

@@ -50,7 +50,7 @@ class TokenDetailsPage(Page):
         )
 
         self.send_button.place(
-            x=60, y=108,
+            x=60, y=110,
             width=170,
             height=46
         )
@@ -66,16 +66,16 @@ class TokenDetailsPage(Page):
         )
 
         self.buy_button.place(
-            x=294, y=108,
+            x=294, y=110,
             width=170,
             height=46
         )
 
         self.transaction_frame = Frame(self.frame, bg="white")
         self.transaction_frame.place(
-            x=74, y=222,
+            x=74, y=212,
             width=420,
-            height=190
+            height=197
         )
 
         self.transaction_list = ListWidget(
@@ -119,6 +119,7 @@ class TokenDetailsPage(Page):
                         web3=self.web3,
                         transaction_json=transaction,
                         eth_account=self.eth_account,
+                        token=self.token,
                         height=50
                     )
                 )

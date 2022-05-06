@@ -143,3 +143,12 @@ def get_date_from_timestamp(timestamp=None):
         day = date.date().day
         month = date.strftime("%b")
         return f"{month}/{day}"
+
+
+def format_balance(amount=None, decimals=None, round_to=5, cut_until=5):
+    rounded_value = round(amount / (10**decimals), round_to)
+    str_token = str(rounded_value)
+    if str_token[len(str_token) - 2] == ".":
+        return int(str_token[0:cut_until][:-2])
+    else:
+        return float(str_token[0:cut_until])

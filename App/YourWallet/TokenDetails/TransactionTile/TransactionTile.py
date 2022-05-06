@@ -9,13 +9,14 @@ class TransactionTile(Frame):
     RECEIVED_BUTTON_IMG = "App/YourWallet/TokenDetails/TransactionTile/received_img.png"
     TILE_BACKGROUND = "App/YourWallet/TokenDetails/TransactionTile/tile_background.png"
 
-    def __init__(self, genesis_root=None, web3=None, transaction_json=None, eth_account=None, **kwargs):
+    def __init__(self, genesis_root=None, web3=None, transaction_json=None, eth_account=None, token=None, **kwargs):
         super().__init__(**kwargs)
 
         self.genesis_root = genesis_root,
         self.web3 = web3
         self.transaction_json = transaction_json
         self.eth_account = eth_account
+        self.token = token
 
         self.background_img = PhotoImage(file=self.TILE_BACKGROUND)
         self.background = Label(
@@ -69,13 +70,23 @@ class TransactionTile(Frame):
 
         self.amount_transacted = Label(
             self,
-            text=("-" if self.is_sent() else "+") + f"{round(self.get_transaction_value(), 3)}",
-            font=("Arial", 13),
+            text=("-" if self.is_sent() else "+") + f"{str(self.get_transaction_value())[0:4]}",
+            font=("Arial", 12),
             fg="red" if self.is_sent() else "green",
             bg="white"
         )
         self.amount_transacted.place(
-            x=300, y=15
+            x=300, y=6
+        )
+
+        self.token_symbol = Label(
+            self,
+            text="ETH" if self.token is None else self.token["symbol"],
+            font=("Arial", 8),
+            bg="white"
+        )
+        self.token_symbol.place(
+            x=302, y=26,
         )
 
     def is_sent(self):
@@ -84,6 +95,11 @@ class TransactionTile(Frame):
         else:
             return False  # Transaction not sent means transaction received
 
+    # ELIMINARE IL PUNTO NEL CASO SIA POSTO A DESTRA SENZA MOSTRARE DECIMALI ULTERIORI
+
     def get_transaction_value(self):
-        value = int(self.transaction_json['value'])
-        return self.web3.fromWei(value, 'ether')
+        value = float(self.transaction_json['value'])
+        if self.token is None:
+            return round(self.web3.fromWei(value, 'ether'), 5)
+        else:
+            return utility_functions.format_balance(amount=value, decimals=self.token['decimals'])

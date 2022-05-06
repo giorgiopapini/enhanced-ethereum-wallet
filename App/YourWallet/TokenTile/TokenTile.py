@@ -13,7 +13,7 @@ class TokenTile(Frame):
 
     # Is it possible to create a 'Tile' class that manages root, web3, next_page_frame, previous_page and eth_account?
 
-    def __init__(self, genesis_root=None, web3=None, next_page_frame=None, previous_page=None, eth_account=None, token=None, token_amount=None, **kwargs):
+    def __init__(self, genesis_root=None, web3=None, next_page_frame=None, previous_page=None, eth_account=None, token=None, **kwargs):
         super().__init__(**kwargs)
 
         self.genesis_root = genesis_root
@@ -54,7 +54,7 @@ class TokenTile(Frame):
 
         self.amount = Label(
             self,
-            text=(f"ETH: " if self.token is None else f"{self.token['symbol']}: ") + str(round(self.token_amount, 4)),
+            text=f"ETH: {str(self.eth_account.get_balance('ether'))[0:5]}" if self.token is None else f"{self.token['symbol']}: {self.token_amount}",
             font=("Arial", 11),
             bg="white"
         )
