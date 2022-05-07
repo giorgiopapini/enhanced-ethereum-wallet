@@ -38,7 +38,7 @@ class WalletPage(Page):
 
         self.wallet_eth_balance = Label(
             self.frame,
-            text=f"{round(self.eth_account.get_balance('ether'), 4)}",
+            text=f"{round(self.eth_account.get_balance('ether'), 4)}"[0:5],
             font=("Helvetica", 20, "bold"),
             bg="white"
         )

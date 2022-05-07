@@ -70,7 +70,7 @@ class TransactionTile(Frame):
 
         self.amount_transacted = Label(
             self,
-            text=("-" if self.is_sent() else "+") + f"{str(self.get_transaction_value())[0:4]}",
+            text=("-" if self.is_sent() else "+") + f"{str(self.get_transaction_value())}",
             font=("Arial", 12),
             fg="red" if self.is_sent() else "green",
             bg="white"
@@ -95,11 +95,12 @@ class TransactionTile(Frame):
         else:
             return False  # Transaction not sent means transaction received
 
-    # ELIMINARE IL PUNTO NEL CASO SIA POSTO A DESTRA SENZA MOSTRARE DECIMALI ULTERIORI
-
     def get_transaction_value(self):
         value = float(self.transaction_json['value'])
+        gas_fee = float((int(self.transaction_json['gas']) * int(self.transaction_json["gasPrice"])))
+        total = value + gas_fee
         if self.token is None:
-            return round(self.web3.fromWei(value, 'ether'), 5)
+            str_amount = str(round(self.web3.fromWei(total, 'ether'), 5))[0:5]
+            return float(str_amount)
         else:
-            return utility_functions.format_balance(amount=value, decimals=self.token['decimals'])
+            return utility_functions.format_balance(amount=total, decimals=self.token['decimals'], cut_until=5)
