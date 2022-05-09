@@ -12,6 +12,7 @@ class WalletPage(Page):
 
     BACKGROUND_IMG = "App/YourWallet/background.png"
     TOKENS_PATH = "App/YourWallet/tokens.json"
+    IMPORT_TOKEN_IMG = "App/YourWallet/import_token_img.png"
     NFTS_PATH = "App/YourWallet/nfts.json"
 
     def __init__(self, root, web3, **kwargs):
@@ -38,7 +39,7 @@ class WalletPage(Page):
 
         self.wallet_eth_balance = Label(
             self.frame,
-            text=f"{round(self.eth_account.get_balance('ether'), 4)}"[0:5],
+            text=f"{round(self.eth_account.get_balance('ether'), 4)}"[0:8],
             font=("Helvetica", 20, "bold"),
             bg="white"
         )
@@ -81,10 +82,10 @@ class WalletPage(Page):
             elements=[]
         )
 
+        self.import_tokens_img = PhotoImage(file=self.IMPORT_TOKEN_IMG)
         self.import_tokens = Button(
             self.frame,
-            text="Import tokens",
-            font=("Helvetica", 10),
+            image=self.import_tokens_img,
             borderwidth=0,
             highlightthickness=0,
             relief="flat",
@@ -97,7 +98,7 @@ class WalletPage(Page):
         )
 
         self.import_tokens.place(
-            x=80, y=420
+            x=79.8, y=420
         )
 
     def get_tokens(self):

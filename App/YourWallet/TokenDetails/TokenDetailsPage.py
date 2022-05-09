@@ -18,10 +18,7 @@ class TokenDetailsPage(Page):
         super().__init__(root, web3, **kwargs)
 
         self.token = kwargs.get("token", None)
-
-        # Update token amount (value) inside tokens.json when token amount is loaded from the blockchain
-        # Move the word 'transaction' up (contained in the background), move up and enlarge the frame containing the
-        # transaction list accordingly
+        self.token_amount = kwargs.get("token_amount", 0)
 
         self.canvas = Canvas(
             self.frame,
@@ -33,10 +30,25 @@ class TokenDetailsPage(Page):
             relief="ridge")
         self.canvas.place(x=0, y=0)
 
+        # IMPORTANTE!!! --> Valutare se rendere le posizioni Y degli elementi background (figma) di questa pagina
+        # uguali a quelle delle altre pagine (es: WalletPage) --> Ora non c'é piú il problema di dover "riempire" lo
+        # spazio vuoto, la cronologia delle transazioni potrebbe occupare piú spazio di quello che giá occupa
+
         self.background_img = PhotoImage(file=self.BACKGROUND_IMG)
         self.background = self.canvas.create_image(
-            167.5, 120.0,
+            167.5, 107.5,
             image=self.background_img
+        )
+
+        self.token_amount_label = Label(
+            self.frame,
+            text=f"{self.token_amount}"[0:8],
+            font=("Helvetica", 20, "bold"),
+            bg="white"
+        )
+
+        self.token_amount_label.place(
+            x=296, y=38,
         )
 
         self.send_button_img = PhotoImage(file=self.SEND_BUTTON_IMG)
@@ -50,7 +62,7 @@ class TokenDetailsPage(Page):
         )
 
         self.send_button.place(
-            x=60, y=110,
+            x=60, y=104,
             width=170,
             height=46
         )
@@ -66,14 +78,14 @@ class TokenDetailsPage(Page):
         )
 
         self.buy_button.place(
-            x=294, y=110,
+            x=294, y=104,
             width=170,
             height=46
         )
 
         self.transaction_frame = Frame(self.frame, bg="white")
         self.transaction_frame.place(
-            x=74, y=212,
+            x=74, y=205,
             width=420,
             height=197
         )

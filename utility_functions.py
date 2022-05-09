@@ -66,6 +66,17 @@ def check_fields_validity(fields=None, error=None, disable=False):
     return valid
 
 
+def check_address_field_validity(address_field=None, error=None, disable=False, web3=None):
+    if web3.isAddress(address_field.get()) is False:
+        error_message(
+            entry=address_field,
+            error=error,
+            disable=disable
+        )
+        return False
+    return True
+
+
 def is_list_empty(array=None):
     if len(array) == 0:
         return True

@@ -54,7 +54,7 @@ class TokenTile(Frame):
 
         self.amount = Label(
             self,
-            text=f"ETH: {str(self.eth_account.get_balance('ether'))[0:5]}" if self.token is None else f"{self.token['symbol']}: {self.token_amount}",
+            text=(f"ETH: " if self.token is None else f"{self.token['symbol']}: ") + str(self.token_amount)[0:5],
             font=("Arial", 11),
             bg="white"
         )
@@ -80,7 +80,7 @@ class TokenTile(Frame):
 
     def define_token_details(self):
         if self.token is None:
-            self.token_amount = self.eth_account.get_balance("ether")
+            self.token_amount = round(self.eth_account.get_balance("ether"), 4)
         else:
             self.token_amount = eth_generic_functions.get_token_amount(
                 token_address=self.token["address"],
@@ -96,6 +96,7 @@ class TokenTile(Frame):
             previous_page=self.previous_page,
             frame=self.next_page_frame,
             eth_account=self.eth_account,
+            token_amount=self.token_amount,
             token=self.token
         )
 

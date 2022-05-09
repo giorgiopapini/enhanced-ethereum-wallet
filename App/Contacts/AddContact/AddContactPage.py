@@ -116,6 +116,12 @@ class AddContactPage(Page):
             error=constants.ERRORS["ERROR_EMPTY_FIELD"]
         )
 
+        valid = utility_functions.check_address_field_validity(
+            address_field=self.address_field,
+            error=constants.ERRORS["ERROR_ADDRESS_NOT_VALID"],
+            web3=self.web3
+        )
+
         if valid is True:
             with open(self.CONTACTS_JSON_PATH, "r+") as file:
                 contacts = json.load(file)
