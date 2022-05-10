@@ -3,6 +3,7 @@ from tkinter import *
 
 from App.ReusableComponents.ListWidget import ListWidget
 from App.ReusableComponents.ListElement import ListElement
+from App.YourWallet.ImportNFT.ImportNFTPage import ImportNFTPage
 from App.YourWallet.ImportToken.ImportTokenPage import ImportTokenPage
 from App.YourWallet.TokenTile.TokenTile import TokenTile
 from Page import Page
@@ -14,6 +15,7 @@ class WalletPage(Page):
     TOKENS_PATH = "App/YourWallet/tokens.json"
     IMPORT_TOKEN_IMG = "App/YourWallet/import_token_img.png"
     NFTS_PATH = "App/YourWallet/nfts.json"
+    IMPORT_NFT_IMG = "App/YourWallet/import_nft_img.png"
 
     def __init__(self, root, web3, **kwargs):
         super().__init__(root, web3, **kwargs)
@@ -96,9 +98,26 @@ class WalletPage(Page):
                 eth_account=self.eth_account
             )
         )
-
         self.import_tokens.place(
             x=79.8, y=420
+        )
+
+        self.import_nft_img = PhotoImage(file=self.IMPORT_NFT_IMG)
+        self.import_nft = Button(
+            self.frame,
+            image=self.import_nft_img,
+            borderwidth=0,
+            highlightthickness=0,
+            relief="flat",
+            command=lambda: self.to_page(
+                page=ImportNFTPage,
+                frame=self.frame,
+                previous_page=WalletPage,
+                eth_account=self.eth_account
+            )
+        )
+        self.import_nft.place(
+            x=352, y=420
         )
 
     def get_tokens(self):
