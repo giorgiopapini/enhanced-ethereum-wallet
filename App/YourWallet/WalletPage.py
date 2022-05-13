@@ -1,6 +1,7 @@
 import json
 from tkinter import *
 
+import eth_generic_functions
 from App.ReusableComponents.ListWidget import ListWidget
 from App.ReusableComponents.ListElement import ListElement
 from App.YourWallet.ImportNFT.ImportNFTPage import ImportNFTPage
@@ -20,7 +21,11 @@ class WalletPage(Page):
     def __init__(self, root, web3, **kwargs):
         super().__init__(root, web3, **kwargs)
 
-        print(round(self.eth_account.get_balance('ether'), 4))
+        #eth_generic_functions.get_nft_image(
+        #    contract_address="0x2b5b1a261cc9Be8dDF1F28864a4D62F10E0E50f6",
+        #    web3=self.web3,
+        #    token_id=9975
+        #)
 
         self.canvas = Canvas(
             self.frame,
