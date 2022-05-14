@@ -1,6 +1,7 @@
 from tkinter import *
 
 import utility_functions
+from App.ReusableComponents.TextField import TextField
 from Page import Page
 
 
@@ -10,6 +11,7 @@ class ImportNFTPage(Page):
     INPUT_FIELD_IMG = "App/Contacts/AddContact/img_textBox.png"
     DISABLED_TEXT_BOX_IMAGE = "App/YourWallet/ImportToken/disabled_textbox_img.png"
     IMPORT_BUTTON_IMG = "App/YourWallet/ImportNFT/import_button.png"
+    COPY_BUTTON_IMG = "App/Contacts/ContactTile/copy_img.png"
 
     def __init__(self, root, web3, **kwargs):
         super().__init__(root, web3, **kwargs)
@@ -52,8 +54,9 @@ class ImportNFTPage(Page):
             image=self.address_field_img
         )
 
-        self.address_field = Entry(
-            self.frame,
+        self.address_field = TextField(
+            master=self.frame,
+            genesis_root=self.root,
             bd=0,
             bg="#ffffff",
             highlightthickness=0
@@ -104,11 +107,30 @@ class ImportNFTPage(Page):
             height=27
         )
 
-        self.address_field.bind("<Key>", self.get_field_text)
+        self.copy_button_img = PhotoImage(file=self.COPY_BUTTON_IMG)
+        self.copy_button = Button(
+            self.frame,
+            image=self.copy_button_img,
+            borderwidth=0,
+            highlightthickness=0,
+            command=self.copy_to_clipboard,
+            relief="flat"
+        )
+
+        self.copy_button.place(
+            x=396, y=306,
+            width=30,
+            height=30
+        )
+
+        #self.address_field.bind("<Key>", self.get_field_text)
         self.nft_id_field.bind("<Key>", self.get_field_text)
 
     def get_field_text(self, event):
         pass
 
     def import_nft(self):
+        pass
+
+    def copy_to_clipboard(self):
         pass
