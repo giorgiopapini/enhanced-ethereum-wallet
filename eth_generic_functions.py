@@ -1,5 +1,3 @@
-import json
-
 import constants
 import config
 
@@ -10,11 +8,9 @@ import urllib.request
 def get_nft_metadata(contract_address=None, web3=None, token_id=None):
     contract = web3.eth.contract(address=contract_address, abi=constants.ERC721_ABI)
     uri = contract.functions.tokenURI(token_id).call()
-    print(uri)
     response = utility_functions.get_api_response(
         url=f"{constants.IPFS_BASE_URL}{uri.replace('ipfs://', '')}" if "ipfs" in uri else uri
     )
-    print(response)
     return response
 
 

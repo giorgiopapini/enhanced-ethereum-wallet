@@ -80,8 +80,6 @@ class LoginPage(Page):
         try:
             private_key = utility_functions.get_private_key(self.web3, self.entry0.text)
             account = self.web3.eth.account.from_key(private_key)
-            print(private_key)
-            print(f"address derived: {account.address}")
 
             utility_functions.create_qrcode(account.address)
 

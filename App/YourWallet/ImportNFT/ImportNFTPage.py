@@ -158,6 +158,7 @@ class ImportNFTPage(Page):
                 contract_address=self.address_field.text,
                 token_id=int(self.nft_id_field.text)
             )
+            self.nft_url_field.clear_field()
             self.nft_url_field.override_text(text=self.nft_metadata["image"])
         except:
             self.nft_url_field.show_error(error=constants.ERRORS["ERROR_ERC721_NOT_FOUND"])
@@ -167,6 +168,9 @@ class ImportNFTPage(Page):
         #0x2b5b1a261cc9Be8dDF1F28864a4D62F10E0E50f6
         #9975
 
+        # IMPORTANTE!!! --> Prima di importare un NFT verificare che l'address del proprietario combaci con quello
+        # del wallet (verificare che l'address loggato nel wallet sia effettivamente il proprietario dell'NFT)
+
         with open(self.NFT_JSON_PATH, "r+") as file:
             nfts = json.load(file)
             nft_alredy_saved = utility_functions.is_nft_saved(
@@ -175,11 +179,11 @@ class ImportNFTPage(Page):
                 token_id=self.nft_id_field.text,
             )
             fields_valid = utility_functions.check_fields_validity(
-                fields=[self.nft_url_field, self.nft_id_field],
-                error=constants.ERRORS["ERROR_ERC721_NOT_VALID"],
+                fields=[self.nft_url_field],
+                error=constants.ERRORS["ERROR_ERC721_NOT_FOUND"],
             )
 
-            if nft_alredy_saved is False and fields_valid is True:
+            if fields_valid is True and nft_alredy_saved is False:
                 nfts.append(
                     {
                         "name": self.nft_metadata["name"],
@@ -194,6 +198,12 @@ class ImportNFTPage(Page):
                 json.dump(nfts, file)
                 file.truncate()
 
+                eth_generic_functions.save_nft(
+                    nft_metadata=self.nft_metadata,
+                    contract_address=self.address_field.text,
+                    token_id=self.nft_id_field.text
+                )
+
                 self.to_page(
                     page=self.previous_page,
                     previous_page=None,
@@ -203,7 +213,6 @@ class ImportNFTPage(Page):
             else:
                 self.address_field.show_error(error=constants.ERRORS["ERROR_ERC721_NOT_VALID"])
                 self.nft_id_field.show_error(error=constants.ERRORS["ERROR_ERC721_NOT_VALID"])
-                self.nft_url_field.show_error(error=constants.ERRORS["ERROR_ERC721_NOT_VALID"])
 
     def copy_to_clipboard(self):
         if self.root is not None:

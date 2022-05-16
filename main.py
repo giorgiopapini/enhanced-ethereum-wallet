@@ -14,8 +14,6 @@ def main():
     root.resizable(False, False)
 
     web3 = Web3(Web3.HTTPProvider(config.INFURA_MAINNET_API_URL))
-    # https://goerli.infura.io/v3/25ecde64226c4e8797eb2d75b2d6b641
-    # https://mainnet.infura.io/v3/25ecde64226c4e8797eb2d75b2d6b641
 
     if utility_functions.user_is_registered():
         LoginPage(root, web3)

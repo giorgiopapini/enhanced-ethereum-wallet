@@ -1,5 +1,6 @@
 from tkinter import *
 
+from App.ReusableComponents.TextField import TextField
 from EthereumAccount import EthereumAccount
 from Page import Page
 from SignUp.SignUpPage import SignUpPage
@@ -24,7 +25,8 @@ class ImportPage(Page):
             400.0, 272.5,
             image=self.entry0_img)
 
-        self.entry0 = Entry(
+        self.entry0 = TextField(
+            genesis_root=self.root,
             bd=0,
             bg="#ffffff",
             highlightthickness=0)
@@ -73,7 +75,6 @@ class ImportPage(Page):
         # - Verificare che la private key o la seed phrase sia valida
 
         account = self.web3.eth.account.from_key(self.entry0.get())
-        print(f"Account address: {account.address}")
         self.to_page(
             page=SignUpPage,
             previous_page=self.previous_page,

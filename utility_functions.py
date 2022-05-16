@@ -48,8 +48,8 @@ def check_fields_validity(fields=None, error=None):
         if len(field.get()) > 0 and field.get() != error:
             valid = True
         else:
-            field.show_error(error=error)
             valid = False
+            field.show_error(error=error)
             break
     return valid
 
