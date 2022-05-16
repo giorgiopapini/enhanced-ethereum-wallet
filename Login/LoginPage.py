@@ -2,6 +2,7 @@ from tkinter import *
 
 import constants
 import utility_functions
+from App.ReusableComponents.TextField import TextField
 from App.YourWallet.WalletPage import WalletPage
 from EthereumAccount import EthereumAccount
 
@@ -49,7 +50,7 @@ class LoginPage(Page):
             398.5, 228.5,
             image=self.entry0_img)
 
-        self.entry0 = Entry(
+        self.entry0 = TextField(
             bd=0,
             bg="#ffffff",
             highlightthickness=0)
@@ -75,12 +76,9 @@ class LoginPage(Page):
             width=185,
             height=33)
 
-        self.entry0.bind("<Button>", utility_functions.clear_error_message_binded)
-
     def login(self):
-        self.password = self.entry0.get()
         try:
-            private_key = utility_functions.get_private_key(self.web3, self.password)
+            private_key = utility_functions.get_private_key(self.web3, self.entry0.text)
             account = self.web3.eth.account.from_key(private_key)
             print(private_key)
             print(f"address derived: {account.address}")
@@ -98,5 +96,4 @@ class LoginPage(Page):
             )
 
         except ValueError:
-            utility_functions.error_message(self.entry0, constants.ERRORS["ERROR_PASSWORD_WRONG"])
-
+            self.entry0.show_error(error=constants.ERRORS["ERROR_PASSWORD_WRONG"])

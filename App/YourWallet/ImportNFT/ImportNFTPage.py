@@ -1,5 +1,8 @@
+import json
 from tkinter import *
 
+import constants
+import eth_generic_functions
 import utility_functions
 from App.ReusableComponents.TextField import TextField
 from Page import Page
@@ -12,6 +15,10 @@ class ImportNFTPage(Page):
     DISABLED_TEXT_BOX_IMAGE = "App/YourWallet/ImportToken/disabled_textbox_img.png"
     IMPORT_BUTTON_IMG = "App/YourWallet/ImportNFT/import_button.png"
     COPY_BUTTON_IMG = "App/Contacts/ContactTile/copy_img.png"
+    BACK_ARROW_IMG = "KeyImport/img1.png"
+    NFT_JSON_PATH = "App/YourWallet/nfts.json"
+
+    nft_metadata = {}
 
     def __init__(self, root, web3, **kwargs):
         super().__init__(root, web3, **kwargs)
@@ -57,6 +64,7 @@ class ImportNFTPage(Page):
         self.address_field = TextField(
             master=self.frame,
             genesis_root=self.root,
+            callback=self.get_nft_data,
             bd=0,
             bg="#ffffff",
             highlightthickness=0
@@ -74,8 +82,10 @@ class ImportNFTPage(Page):
             image=self.nft_id_field_img
         )
 
-        self.nft_id_field = Entry(
-            self.frame,
+        self.nft_id_field = TextField(
+            master=self.frame,
+            genesis_root=self.root,
+            callback=self.get_nft_data,
             bd=0,
             bg="#ffffff",
             highlightthickness=0
@@ -93,8 +103,9 @@ class ImportNFTPage(Page):
             image=self.nft_url_field_img
         )
 
-        self.nft_url_field = Entry(
-            self.frame,
+        self.nft_url_field = TextField(
+            master=self.frame,
+            genesis_root=self.root,
             bd=0,
             bg="#f0f0f0",
             highlightthickness=0,
@@ -123,14 +134,79 @@ class ImportNFTPage(Page):
             height=30
         )
 
-        #self.address_field.bind("<Key>", self.get_field_text)
-        self.nft_id_field.bind("<Key>", self.get_field_text)
+        self.back_button_img = PhotoImage(file=self.BACK_ARROW_IMG)
+        self.back_button = Button(
+            self.frame,
+            image=self.back_button_img,
+            borderwidth=0,
+            highlightthickness=0,
+            command=lambda: self.to_page(
+                page=self.previous_page,
+                frame=self.frame,
+                eth_account=self.eth_account
+            ),
+            relief="flat"
+        )
+        self.back_button.place(
+            x=60, y=383
+        )
 
-    def get_field_text(self, event):
-        pass
+    def get_nft_data(self):
+        try:
+            self.nft_metadata = eth_generic_functions.get_nft_metadata(
+                web3=self.web3,
+                contract_address=self.address_field.text,
+                token_id=int(self.nft_id_field.text)
+            )
+            self.nft_url_field.override_text(text=self.nft_metadata["image"])
+        except:
+            self.nft_url_field.show_error(error=constants.ERRORS["ERROR_ERC721_NOT_FOUND"])
 
     def import_nft(self):
-        pass
+
+        #0x2b5b1a261cc9Be8dDF1F28864a4D62F10E0E50f6
+        #9975
+
+        with open(self.NFT_JSON_PATH, "r+") as file:
+            nfts = json.load(file)
+            nft_alredy_saved = utility_functions.is_nft_saved(
+                nfts=nfts,
+                token_address=self.address_field.text,
+                token_id=self.nft_id_field.text,
+            )
+            fields_valid = utility_functions.check_fields_validity(
+                fields=[self.nft_url_field, self.nft_id_field],
+                error=constants.ERRORS["ERROR_ERC721_NOT_VALID"],
+            )
+
+            if nft_alredy_saved is False and fields_valid is True:
+                nfts.append(
+                    {
+                        "name": self.nft_metadata["name"],
+                        "address": self.address_field.text,
+                        "token_id": self.nft_id_field.text,
+                        "image_url": self.nft_metadata["image"]
+                    }
+                )
+                nfts.sort(key=lambda x: x["name"].lower())
+
+                file.seek(0)
+                json.dump(nfts, file)
+                file.truncate()
+
+                self.to_page(
+                    page=self.previous_page,
+                    previous_page=None,
+                    frame=self.frame,
+                    eth_account=self.eth_account
+                )
+            else:
+                self.address_field.show_error(error=constants.ERRORS["ERROR_ERC721_NOT_VALID"])
+                self.nft_id_field.show_error(error=constants.ERRORS["ERROR_ERC721_NOT_VALID"])
+                self.nft_url_field.show_error(error=constants.ERRORS["ERROR_ERC721_NOT_VALID"])
 
     def copy_to_clipboard(self):
-        pass
+        if self.root is not None:
+            self.root.clipboard_clear()
+            self.root.clipboard_append(self.nft_url_field.text)
+            self.root.update()

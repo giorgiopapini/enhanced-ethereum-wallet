@@ -25,14 +25,6 @@ def user_is_registered():
         return False
 
 
-def error_message(entry, error, disable=False):
-    entry.config(state="normal")
-    entry.delete(0, END)
-    entry.config(fg="red")
-    entry.insert(END, error)
-    entry.config(state="disabled") if disable is True else None
-
-
 def check_var_type(variable=None, requested_type=None, error_msg=None):
     if type(variable) is not requested_type:
         raise TypeError(error_msg)
@@ -50,29 +42,21 @@ def get_api_response(url):
     return json.loads(res.text)
 
 
-def check_fields_validity(fields=None, error=None, disable=False):
+def check_fields_validity(fields=None, error=None):
     valid = True
     for field in fields:
         if len(field.get()) > 0 and field.get() != error:
             valid = True
         else:
-            error_message(
-                entry=field,
-                error=error,
-                disable=disable
-            )
+            field.show_error(error=error)
             valid = False
             break
     return valid
 
 
-def check_address_field_validity(address_field=None, error=None, disable=False, web3=None):
+def check_address_field_validity(address_field=None, error=None, web3=None):
     if web3.isAddress(address_field.get()) is False:
-        error_message(
-            entry=address_field,
-            error=error,
-            disable=disable
-        )
+        address_field.show_error(error=error)
         return False
     return True
 
@@ -82,25 +66,6 @@ def is_list_empty(array=None):
         return True
     else:
         return True
-
-
-def clear_error_message_binded(event):
-    for error in constants.ERRORS:
-        if event.widget.get() == constants.ERRORS[error]:
-            clear_field(widget=event.widget)
-
-
-def clear_field(widget=None, disable=False):
-    widget.config(state="normal")
-    widget.delete(0, END)
-    widget.config(fg="black")
-    widget.config(state="disabled") if disable is True else None
-
-
-def update_field_value(entry=None, value=None):
-    entry.config(state="normal")
-    entry.insert(END, value)
-    entry.config(state="disabled")
 
 
 def format_query(event=None, pasted=False):
@@ -144,6 +109,13 @@ def get_address(private_key):
 def is_token_saved(tokens=None, token_address=None):
     for token in tokens:
         if token["address"] == token_address:
+            return True
+    return False
+
+
+def is_nft_saved(nfts=None, token_address=None, token_id=None):
+    for nft in nfts:
+        if nft["address"] == token_address and nft["token_id"] == token_id:
             return True
     return False
 

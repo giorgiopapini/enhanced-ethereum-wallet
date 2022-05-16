@@ -7,32 +7,19 @@ import utility_functions
 import urllib.request
 
 
-def get_nft_image(contract_address=None, web3=None, token_id=None):
+def get_nft_metadata(contract_address=None, web3=None, token_id=None):
     contract = web3.eth.contract(address=contract_address, abi=constants.ERC721_ABI)
     uri = contract.functions.tokenURI(token_id).call()
+    print(uri)
     response = utility_functions.get_api_response(
         url=f"{constants.IPFS_BASE_URL}{uri.replace('ipfs://', '')}" if "ipfs" in uri else uri
     )
-
-    urllib.request.urlretrieve(response["image"], f"App/YourWallet/NFTs/{contract_address}-{token_id}.png")
-
-    add_nft_to_json(
-        name=response["name"],
-        address=contract_address,
-        token_id=token_id,
-        image_url=response["image"]
-    )
+    print(response)
+    return response
 
 
-def add_nft_to_json(name=None, address=None, token_id=None, image_url=None):
-    with open("App/YourWallet/nfts.json", "r+") as file:
-        nfts = json.load(file)
-        nfts.append({"name": name, "address": address, "token_id": token_id, "image_url": image_url})
-        nfts.sort(key=lambda x: x["name"])
-
-        file.seek(0)
-        json.dump(nfts, file)
-        file.truncate()
+def save_nft(nft_metadata=None, contract_address=None, token_id=None):
+    urllib.request.urlretrieve(nft_metadata["image"], f"App/YourWallet/NFTs/{contract_address}-{token_id}.png")
 
 
 def get_contract_name(contract_address=None, web3=None):

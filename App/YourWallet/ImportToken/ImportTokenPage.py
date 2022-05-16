@@ -4,6 +4,7 @@ import json
 import constants
 import utility_functions
 import eth_generic_functions
+from App.ReusableComponents.TextField import TextField
 from Page import Page
 
 
@@ -42,8 +43,10 @@ class ImportTokenPage(Page):
             image=self.contract_addr_field_img
         )
 
-        self.contract_addr_field = Entry(
-            self.frame,
+        self.contract_addr_field = TextField(
+            master=self.frame,
+            genesis_root=self.root,
+            callback=self.get_token_data,
             bd=0,
             bg="#ffffff",
             highlightthickness=0
@@ -61,8 +64,9 @@ class ImportTokenPage(Page):
             image=self.token_symbol_field_img
         )
 
-        self.token_symbol_field = Entry(
-            self.frame,
+        self.token_symbol_field = TextField(
+            master=self.frame,
+            genesis_root=self.root,
             bd=0,
             bg="#ffffff",
             highlightthickness=0,
@@ -81,8 +85,9 @@ class ImportTokenPage(Page):
             image=self.decimals_field_img
         )
 
-        self.decimals_field = Entry(
-            self.frame,
+        self.decimals_field = TextField(
+            master=self.frame,
+            genesis_root=self.root,
             bd=0,
             bg="#ffffff",
             highlightthickness=0,
@@ -128,57 +133,27 @@ class ImportTokenPage(Page):
             x=60, y=383
         )
 
-        self.contract_addr_field.bind("<Key>", self.get_field_text)
-        self.contract_addr_field.bind("<<Paste>>", self.paste)
-        self.contract_addr_field.bind("<Button>", utility_functions.clear_error_message_binded)
-
-    def get_field_text(self, event, pasted_text=None):
-        if pasted_text is None:
-            query = utility_functions.format_query(event=event)
-        else:
-            query = utility_functions.format_query(event=event, pasted=True)
-            self.contract_addr_field.delete(0, len(pasted_text))
-
+    def get_token_data(self):
         try:
-            token_symbol = eth_generic_functions.get_token_symbol(token_address=query, web3=self.web3)
-            token_decimals = eth_generic_functions.get_token_decimals(token_address=query, web3=self.web3)
+            token_symbol = eth_generic_functions.get_token_symbol(token_address=self.contract_addr_field.text, web3=self.web3)
+            token_decimals = eth_generic_functions.get_token_decimals(token_address=self.contract_addr_field.text, web3=self.web3)
 
             self.clear_fields()
             self.update_fields(token_symbol=token_symbol, token_decimals=token_decimals)
         except:
             self.show_errors()
 
-    def paste(self, event):
-        pasted_text = self.root.clipboard_get()
-        utility_functions.clear_field(self.contract_addr_field)
-        self.contract_addr_field.insert(0, pasted_text)
-        self.get_field_text(event=event, pasted_text=pasted_text)
-
     def clear_fields(self):
-        utility_functions.clear_field(widget=self.token_symbol_field, disable=True)
-        utility_functions.clear_field(widget=self.decimals_field, disable=True)
+        self.token_symbol_field.clear_field()
+        self.decimals_field.clear_field()
 
     def update_fields(self, token_symbol=None, token_decimals=None):
-        utility_functions.update_field_value(
-            entry=self.token_symbol_field,
-            value=token_symbol
-        )
-        utility_functions.update_field_value(
-            entry=self.decimals_field,
-            value=token_decimals
-        )
+        self.token_symbol_field.override_text(text=token_symbol)
+        self.decimals_field.override_text(text=token_decimals)
 
     def show_errors(self):
-        utility_functions.error_message(
-            entry=self.token_symbol_field,
-            error=constants.ERRORS["ERROR_ERC20_NOT_FOUND"],
-            disable=True
-        )
-        utility_functions.error_message(
-            entry=self.decimals_field,
-            error=constants.ERRORS["ERROR_ERC20_NOT_FOUND"],
-            disable=True
-        )
+        self.token_symbol_field.show_error(error=constants.ERRORS["ERROR_ERC20_NOT_FOUND"])
+        self.decimals_field.show_error(error=constants.ERRORS["ERROR_ERC20_NOT_FOUND"])
 
     def import_token(self):
         with open(self.TOKENS_JSON_PATH, "r+") as file:
@@ -193,7 +168,6 @@ class ImportTokenPage(Page):
                     self.decimals_field
                 ],
                 error=constants.ERRORS["ERROR_ERC20_NOT_FOUND"],
-                disable=True
             )
 
             if fields_valid is True and token_already_saved is False:
@@ -217,7 +191,4 @@ class ImportTokenPage(Page):
                     eth_account=self.eth_account
                 )
             else:
-                utility_functions.error_message(
-                    entry=self.contract_addr_field,
-                    error=constants.ERRORS["ERROR_ERC20_NOT_VALID"]
-                )
+                self.contract_addr_field.show_error(error=constants.ERRORS["ERROR_ERC20_NOT_VALID"])

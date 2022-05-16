@@ -4,6 +4,7 @@ import constants
 import utility_functions
 
 from App.AppPageManager import AppPageManager
+from App.ReusableComponents.TextField import TextField
 from App.YourWallet.WalletPage import WalletPage
 from Page import Page
 
@@ -59,14 +60,14 @@ class SignUpPage(Page):
             199.5, 283.5,
             image=self.entry0_img)
 
-        self.entry0 = Entry(
+        self.entry0 = TextField(
+            genesis_root=self.root,
+            placeholder_text=self.eth_account.account.privateKey.hex(),
+            state="disabled",
             bd=0,
             bg="#ffffff",
             disabledbackground="#ffffff",
             highlightthickness=0)
-
-        self.entry0.insert(END, self.eth_account.account.privateKey.hex())
-        self.entry0.config(state=DISABLED)
 
         self.entry0.place(
             x=73.5, y=269,
@@ -78,7 +79,7 @@ class SignUpPage(Page):
             199.5, 359.5,
             image=self.entry1_img)
 
-        self.entry1 = Entry(
+        self.entry1 = TextField(
             bd=0,
             bg="#ffffff",
             highlightthickness=0)
@@ -88,21 +89,16 @@ class SignUpPage(Page):
             width=252.0,
             height=31)
 
-        self.entry1.bind("<Button>", utility_functions.clear_error_message_binded)
-
         self.background_img = PhotoImage(file=f"SignUp/background.png")
         self.background = self.canvas.create_image(
             400.0, 186.0,
             image=self.background_img)
 
     def sign_up(self):
-        self.password = self.entry1.get()
-        if len(self.password) > constants.MIN_LENGTH_PASSWORD and self.password != constants.ERRORS["ERROR_PASSWORD_LENGTH"]:
+        if len(self.entry1.text) > constants.MIN_LENGTH_PASSWORD and self.entry1.text != constants.ERRORS["ERROR_PASSWORD_LENGTH"]:
             for widget in self.root.winfo_children():
                 widget.destroy()
-            json_string = json.dumps(self.eth_account.account.encrypt(self.password))
-            print(json_string)
-            print(self.eth_account.account.address)
+            json_string = json.dumps(self.eth_account.account.encrypt(self.entry1.text))
 
             utility_functions.create_qrcode(self.eth_account.account.address)
 
@@ -115,9 +111,9 @@ class SignUpPage(Page):
                 eth_account=self.eth_account,
                 default_active_page=WalletPage
             )
-            print(self.web3.eth.account.decrypt(json_string, self.password).hex())
+            print(self.web3.eth.account.decrypt(json_string, self.entry1.text).hex())
         else:
-            utility_functions.error_message(self.entry1, constants.ERRORS["ERROR_PASSWORD_LENGTH"])
+            self.entry1.show_error(error=constants.ERRORS["ERROR_PASSWORD_LENGTH"])
 
     def show_entire_private_key(self):
         # IMPORTANTE!!! --> Creare tasto che crei un popup che mostri la private key per intero --> La private key

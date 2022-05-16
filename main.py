@@ -1,5 +1,6 @@
 from tkinter import *
 
+import config
 import utility_functions
 from Welcome.WelcomePage import WelcomePage
 from Login.LoginPage import LoginPage
@@ -12,7 +13,7 @@ def main():
     root.geometry('800x480')
     root.resizable(False, False)
 
-    web3 = Web3(Web3.HTTPProvider("https://goerli.infura.io/v3/25ecde64226c4e8797eb2d75b2d6b641"))
+    web3 = Web3(Web3.HTTPProvider(config.INFURA_MAINNET_API_URL))
     # https://goerli.infura.io/v3/25ecde64226c4e8797eb2d75b2d6b641
     # https://mainnet.infura.io/v3/25ecde64226c4e8797eb2d75b2d6b641
 

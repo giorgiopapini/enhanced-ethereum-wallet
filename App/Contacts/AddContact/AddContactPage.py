@@ -2,6 +2,7 @@ from tkinter import *
 
 import constants
 import utility_functions
+from App.ReusableComponents.TextField import TextField
 from Page import Page
 import json
 
@@ -40,8 +41,8 @@ class AddContactPage(Page):
             image=self.username_field_img
         )
 
-        self.username_field = Entry(
-            self.frame,
+        self.username_field = TextField(
+            master=self.frame,
             bd=0,
             bg="#ffffff",
             highlightthickness=0
@@ -59,8 +60,9 @@ class AddContactPage(Page):
             image=self.address_field_img
         )
 
-        self.address_field = Entry(
-            self.frame,
+        self.address_field = TextField(
+            master=self.frame,
+            genesis_root=self.root,
             bd=0,
             bg="#ffffff",
             highlightthickness=0
@@ -104,12 +106,9 @@ class AddContactPage(Page):
             height=59
         )
 
-        self.username_field.bind("<Button>", utility_functions.clear_error_message_binded)
-        self.address_field.bind("<Button>", utility_functions.clear_error_message_binded)
-
     def add_contact(self):
-        username = self.username_field.get()
-        address = self.address_field.get()
+        username = self.username_field.text
+        address = self.address_field.text
 
         valid = utility_functions.check_fields_validity(
             fields=[self.username_field, self.address_field],
