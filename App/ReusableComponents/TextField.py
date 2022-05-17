@@ -21,6 +21,7 @@ class TextField(Entry):
         self.bind("<Button>", self.clear_error)
 
     def get_text(self, event, pasted_text=None):
+        self.clear_error(event=event)
         if pasted_text is None:
             self.text = utility_functions.format_query(event=event)
         else:

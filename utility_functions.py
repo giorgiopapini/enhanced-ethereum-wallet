@@ -1,3 +1,4 @@
+import mimetypes
 from tkinter import *
 from PIL import Image
 from _datetime import datetime
@@ -40,6 +41,12 @@ def make_etherscan_api_url(module=None, action=None, address=None, **kwargs):
 def get_api_response(url):
     res = requests.get(url=url, headers=constants.HEADERS)
     return json.loads(res.text)
+
+
+def get_file_extension_from_url(url=None):
+    res = requests.get(url)
+    content_type = res.headers["content-type"]
+    return mimetypes.guess_extension(content_type)
 
 
 def check_fields_validity(fields=None, error=None):

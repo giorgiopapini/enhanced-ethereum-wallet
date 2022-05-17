@@ -165,8 +165,9 @@ class ImportNFTPage(Page):
 
     def import_nft(self):
 
-        #0x2b5b1a261cc9Be8dDF1F28864a4D62F10E0E50f6
-        #9975
+        # 0x2b5b1a261cc9Be8dDF1F28864a4D62F10E0E50f6
+        # 9975
+        # 0x5E14097dAEb9b91c4354E2280DfBa01C68E3e103
 
         # IMPORTANTE!!! --> Prima di importare un NFT verificare che l'address del proprietario combaci con quello
         # del wallet (verificare che l'address loggato nel wallet sia effettivamente il proprietario dell'NFT)
@@ -189,7 +190,7 @@ class ImportNFTPage(Page):
                         "name": self.nft_metadata["name"],
                         "address": self.address_field.text,
                         "token_id": self.nft_id_field.text,
-                        "image_url": self.nft_metadata["image"]
+                        "image": self.nft_metadata["image"]
                     }
                 )
                 nfts.sort(key=lambda x: x["name"].lower())
@@ -198,11 +199,7 @@ class ImportNFTPage(Page):
                 json.dump(nfts, file)
                 file.truncate()
 
-                eth_generic_functions.save_nft(
-                    nft_metadata=self.nft_metadata,
-                    contract_address=self.address_field.text,
-                    token_id=self.nft_id_field.text
-                )
+                eth_generic_functions.save_nft(nft_metadata=self.nft_metadata)
 
                 self.to_page(
                     page=self.previous_page,
