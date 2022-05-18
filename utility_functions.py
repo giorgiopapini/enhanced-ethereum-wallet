@@ -85,6 +85,20 @@ def format_query(event=None, pasted=False):
             return event.widget.get() + event.char
 
 
+def format_nft_name(nft_metadata=None, contract_name=None, token_id=None):
+    if "name" in nft_metadata and nft_metadata["name"][0] != "#":
+        return nft_metadata["name"]
+    else:
+        return f"{contract_name} #{token_id}"
+
+
+def format_folder_name(nft_name=None):
+    folder_name = nft_name.split("#", 1)[0]
+    if folder_name[len(folder_name) - 1] is " ":
+        folder_name = folder_name[:-1]
+    return folder_name
+
+
 def create_qrcode(data):
     img = qrcode.make(data)
     img.save("public_key_qrcode.png")

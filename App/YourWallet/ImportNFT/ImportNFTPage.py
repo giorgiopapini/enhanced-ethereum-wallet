@@ -185,6 +185,7 @@ class ImportNFTPage(Page):
             )
 
             if fields_valid is True and nft_alredy_saved is False:
+                eth_generic_functions.save_nft(nft_metadata=self.nft_metadata)
                 nfts.append(
                     {
                         "name": self.nft_metadata["name"],
@@ -198,8 +199,6 @@ class ImportNFTPage(Page):
                 file.seek(0)
                 json.dump(nfts, file)
                 file.truncate()
-
-                eth_generic_functions.save_nft(nft_metadata=self.nft_metadata)
 
                 self.to_page(
                     page=self.previous_page,

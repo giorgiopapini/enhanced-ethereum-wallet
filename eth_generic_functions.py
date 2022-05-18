@@ -1,3 +1,5 @@
+import requests
+
 import constants
 import config
 import os
@@ -9,11 +11,16 @@ import urllib.request
 def get_nft_metadata(contract_address=None, web3=None, token_id=None):
     contract = web3.eth.contract(address=contract_address, abi=constants.ERC721_ABI)
     uri = contract.functions.tokenURI(token_id).call()
-    name = contract.functions.name().call()
     response = utility_functions.get_api_response(
-        url=f"{constants.IPFS_BASE_URL}{uri.replace('ipfs://', '')}" if "ipfs" in uri else uri
+        url=f"{constants.IPFS_BASE_URL}{uri.replace('ipfs://', '')}" if "ipfs://" in uri else uri
     )
     response["image"] = format_ipfs_url(url=response["image"])
+
+    name = utility_functions.format_nft_name(
+        nft_metadata=response,
+        contract_name=contract.functions.name().call(),
+        token_id=token_id
+    )
 
     return {
         "name": name,
@@ -30,18 +37,21 @@ def format_ipfs_url(url=None):
 
 
 def save_nft(nft_metadata=None):
-    nfts_folder = f"{os.getcwd()}/App/YourWallet/NFTs/{nft_metadata['name']}"
+    folder_name = utility_functions.format_folder_name(nft_name=nft_metadata["name"])
+    nfts_folder = f"{os.getcwd()}/App/YourWallet/NFTs/{folder_name}"
     if os.path.isdir(nfts_folder) is False:
         os.mkdir(nfts_folder)
 
     extension = utility_functions.get_file_extension_from_url(url=nft_metadata["image"])
 
+    opener = urllib.request.build_opener()
+    opener.addheaders = [('User-agent', 'Mozilla/5.0')]
+    urllib.request.install_opener(opener)
+
     urllib.request.urlretrieve(
         nft_metadata["image"],
-        f"App/YourWallet/NFTs/{nft_metadata['name']}/{nft_metadata['name']} #{nft_metadata['token_id']}{extension}"
+        f"App/YourWallet/NFTs/{folder_name}/{nft_metadata['name']}{extension}"
     )
-    # IMPORTANTE!!! --> Il nome dell'NFT non corrsponde con il nome del contract --> Verificare prima se nei metadati
-    # esiste il parametro name, nel caso prendere come nome quello... Non il nome dello smart contract
 
 
 def get_contract_name(contract_address=None, web3=None):
