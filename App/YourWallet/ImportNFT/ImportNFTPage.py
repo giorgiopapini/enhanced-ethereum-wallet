@@ -164,17 +164,6 @@ class ImportNFTPage(Page):
             self.nft_url_field.show_error(error=constants.ERRORS["ERROR_ERC721_NOT_FOUND"])
 
     def import_nft(self):
-
-        # 0x2b5b1a261cc9Be8dDF1F28864a4D62F10E0E50f6
-        # 9975
-        # 0x5E14097dAEb9b91c4354E2280DfBa01C68E3e103
-
-        # 0x4bBCc727822b99330BF164C0972Fcf1b537CAA78
-        # 698394
-
-        # IMPORTANTE!!! --> Prima di importare un NFT verificare che l'address del   proprietario combaci con quello
-        # del wallet (verificare che l'address loggato nel wallet sia effettivamente il proprietario dell'NFT)
-
         with open(self.NFT_JSON_PATH, "r+") as file:
             collections = json.load(file)
             try:
@@ -191,12 +180,18 @@ class ImportNFTPage(Page):
                     token_address=self.address_field.text,
                     token_id=self.nft_id_field.text,
                 )
+                is_owner = eth_generic_functions.get_nft_owner(
+                    nft_address=self.nft_metadata["address"],
+                    nft_id=self.nft_metadata["token_id"],
+                    user_address=self.eth_account.account.address,
+                    web3=self.web3
+                )
                 fields_valid = utility_functions.check_fields_validity(
                     fields=[self.nft_url_field],
                     error=constants.ERRORS["ERROR_ERC721_NOT_FOUND"],
                 )
 
-                if fields_valid is True and nft_alredy_saved is False:
+                if fields_valid is True and nft_alredy_saved is False and is_owner is True:
                     nfts.append(
                         {
                             "name": self.nft_metadata["name"],
@@ -220,11 +215,17 @@ class ImportNFTPage(Page):
                         eth_account=self.eth_account
                     )
                 else:
-                    self.address_field.show_error(error=constants.ERRORS["ERROR_ERC721_NOT_VALID"])
-                    self.nft_id_field.show_error(error=constants.ERRORS["ERROR_ERC721_NOT_VALID"])
+                    self.address_field.show_error(
+                        error=constants.ERRORS["ERROR_ERC721_NOT_VALID"] if is_owner else constants.ERRORS["ERROR_ERC721_DIFFERENT_OWNER"]
+                    )
+                    self.nft_id_field.show_error(
+                        error=constants.ERRORS["ERROR_ERC721_NOT_VALID"] if is_owner else constants.ERRORS["ERROR_ERC721_DIFFERENT_OWNER"]
+                    )
             except KeyError:
                 self.address_field.show_error(error=constants.ERRORS["ERROR_ERC721_NOT_VALID"])
                 self.nft_id_field.show_error(error=constants.ERRORS["ERROR_ERC721_NOT_VALID"])
+
+        self.nft_url_field.clear_field()
 
     def copy_to_clipboard(self):
         if self.root is not None:

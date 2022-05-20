@@ -4,6 +4,14 @@ import config
 import utility_functions
 
 
+def get_nft_owner(nft_address=None, nft_id=None, user_address=None, web3=None):
+    contract = web3.eth.contract(address=nft_address, abi=constants.ERC721_ABI)
+    nft_owner = web3.toChecksumAddress(contract.functions.ownerOf(nft_id).call())
+    if web3.toChecksumAddress(user_address) is nft_owner:
+        return True
+    return False
+
+
 def get_nft_metadata(contract_address=None, web3=None, token_id=None):
     contract = web3.eth.contract(address=contract_address, abi=constants.ERC721_ABI)
     uri = contract.functions.tokenURI(token_id).call()
