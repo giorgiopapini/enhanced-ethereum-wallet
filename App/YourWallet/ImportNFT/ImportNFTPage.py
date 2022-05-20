@@ -169,44 +169,60 @@ class ImportNFTPage(Page):
         # 9975
         # 0x5E14097dAEb9b91c4354E2280DfBa01C68E3e103
 
-        # IMPORTANTE!!! --> Prima di importare un NFT verificare che l'address del proprietario combaci con quello
+        # 0x4bBCc727822b99330BF164C0972Fcf1b537CAA78
+        # 698394
+
+        # IMPORTANTE!!! --> Prima di importare un NFT verificare che l'address del   proprietario combaci con quello
         # del wallet (verificare che l'address loggato nel wallet sia effettivamente il proprietario dell'NFT)
 
         with open(self.NFT_JSON_PATH, "r+") as file:
-            nfts = json.load(file)
-            nft_alredy_saved = utility_functions.is_nft_saved(
-                nfts=nfts,
-                token_address=self.address_field.text,
-                token_id=self.nft_id_field.text,
-            )
-            fields_valid = utility_functions.check_fields_validity(
-                fields=[self.nft_url_field],
-                error=constants.ERRORS["ERROR_ERC721_NOT_FOUND"],
-            )
-
-            if fields_valid is True and nft_alredy_saved is False:
-                eth_generic_functions.save_nft(nft_metadata=self.nft_metadata)
-                nfts.append(
-                    {
-                        "name": self.nft_metadata["name"],
-                        "address": self.address_field.text,
-                        "token_id": self.nft_id_field.text,
-                        "image": self.nft_metadata["image"]
-                    }
+            collections = json.load(file)
+            try:
+                collection_name = eth_generic_functions.get_contract_name(
+                    contract_address=self.nft_metadata["address"],
+                    web3=self.web3
                 )
-                nfts.sort(key=lambda x: x["name"].lower())
+                if collection_name not in collections:
+                    collections[collection_name] = []
 
-                file.seek(0)
-                json.dump(nfts, file)
-                file.truncate()
-
-                self.to_page(
-                    page=self.previous_page,
-                    previous_page=None,
-                    frame=self.frame,
-                    eth_account=self.eth_account
+                nfts = collections[collection_name]
+                nft_alredy_saved = utility_functions.is_nft_saved(
+                    nfts=nfts,
+                    token_address=self.address_field.text,
+                    token_id=self.nft_id_field.text,
                 )
-            else:
+                fields_valid = utility_functions.check_fields_validity(
+                    fields=[self.nft_url_field],
+                    error=constants.ERRORS["ERROR_ERC721_NOT_FOUND"],
+                )
+
+                if fields_valid is True and nft_alredy_saved is False:
+                    nfts.append(
+                        {
+                            "name": self.nft_metadata["name"],
+                            "address": self.address_field.text,
+                            "token_id": self.nft_id_field.text,
+                            "image": self.nft_metadata["image"]
+                        }
+                    )
+                    nfts.sort(key=lambda x: x["name"].lower())
+
+                    collections[collection_name] = nfts
+
+                    file.seek(0)
+                    json.dump(collections, file)
+                    file.truncate()
+
+                    self.to_page(
+                        page=self.previous_page,
+                        previous_page=None,
+                        frame=self.frame,
+                        eth_account=self.eth_account
+                    )
+                else:
+                    self.address_field.show_error(error=constants.ERRORS["ERROR_ERC721_NOT_VALID"])
+                    self.nft_id_field.show_error(error=constants.ERRORS["ERROR_ERC721_NOT_VALID"])
+            except KeyError:
                 self.address_field.show_error(error=constants.ERRORS["ERROR_ERC721_NOT_VALID"])
                 self.nft_id_field.show_error(error=constants.ERRORS["ERROR_ERC721_NOT_VALID"])
 

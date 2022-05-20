@@ -45,8 +45,8 @@ def get_api_response(url):
 
 def get_file_extension_from_url(url=None):
     res = requests.get(url)
-    content_type = res.headers["content-type"]
-    return mimetypes.guess_extension(content_type)
+
+    return mimetypes.guess_extension(res.headers['content-type'])
 
 
 def check_fields_validity(fields=None, error=None):
@@ -76,13 +76,14 @@ def is_list_empty(array=None):
 
 
 def format_query(event=None, pasted=False):
+    text = event.widget.get()
     if pasted is True:
-        return event.widget.get()
+        return text
     else:
         if event.keysym_num == constants.BACKSPACE_KEYSYM_NUM:
-            return event.widget.get()[0:len(event.widget.get()) - 1]
+            return text[0:len(event.widget.get()) - 1]
         else:
-            return event.widget.get() + event.char
+            return text + event.char
 
 
 def format_nft_name(nft_metadata=None, contract_name=None, token_id=None):
@@ -90,13 +91,6 @@ def format_nft_name(nft_metadata=None, contract_name=None, token_id=None):
         return nft_metadata["name"]
     else:
         return f"{contract_name} #{token_id}"
-
-
-def format_folder_name(nft_name=None):
-    folder_name = nft_name.split("#", 1)[0]
-    if folder_name[len(folder_name) - 1] is " ":
-        folder_name = folder_name[:-1]
-    return folder_name
 
 
 def create_qrcode(data):
@@ -115,7 +109,6 @@ def resize_image(image=None, width=None, heigth=None, path=None):
 def get_private_key(web3, password):
     with open("encrypted_private_keys.json", "r") as json_file:
         user_data = json.load(json_file)["keys"][0]
-        print(user_data)
         return web3.eth.account.decrypt(user_data, password).hex()
 
 

@@ -1,11 +1,7 @@
-import requests
-
 import constants
 import config
-import os
 
 import utility_functions
-import urllib.request
 
 
 def get_nft_metadata(contract_address=None, web3=None, token_id=None):
@@ -22,6 +18,8 @@ def get_nft_metadata(contract_address=None, web3=None, token_id=None):
         token_id=token_id
     )
 
+    print(response["image"])
+
     return {
         "name": name,
         "address": contract_address,
@@ -34,24 +32,6 @@ def format_ipfs_url(url=None):
     if "https://" not in url and "ipfs" in url:
         return f"{constants.IPFS_BASE_URL}{url.replace('ipfs://', '')}"
     return url
-
-
-def save_nft(nft_metadata=None):
-    folder_name = utility_functions.format_folder_name(nft_name=nft_metadata["name"])
-    nfts_folder = f"{os.getcwd()}/App/YourWallet/NFTs/{folder_name}"
-    if os.path.isdir(nfts_folder) is False:
-        os.mkdir(nfts_folder)
-
-    extension = utility_functions.get_file_extension_from_url(url=nft_metadata["image"])
-
-    opener = urllib.request.build_opener()
-    opener.addheaders = [('User-agent', 'Mozilla/5.0')]
-    urllib.request.install_opener(opener)
-
-    urllib.request.urlretrieve(
-        nft_metadata["image"],
-        f"App/YourWallet/NFTs/{folder_name}/{nft_metadata['name']}{extension}"
-    )
 
 
 def get_contract_name(contract_address=None, web3=None):

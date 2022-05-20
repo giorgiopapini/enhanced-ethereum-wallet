@@ -8,7 +8,7 @@ class TextField(Entry):
 
     text = ""
 
-    def __init__(self, genesis_root=None, callback=None, placeholder_text="", **kwargs):
+    def __init__(self, genesis_root=None, callback=None, is_password=False, placeholder_text="", **kwargs):
         super().__init__(**kwargs)
 
         self.genesis_root = genesis_root
