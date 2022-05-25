@@ -6,6 +6,7 @@ from App.ReusableComponents.ListWidget import ListWidget
 from App.ReusableComponents.ListElement import ListElement
 from App.YourWallet.ImportNFT.ImportNFTPage import ImportNFTPage
 from App.YourWallet.ImportToken.ImportTokenPage import ImportTokenPage
+from App.YourWallet.NFTTile.NFTTile import NFTTile
 from App.YourWallet.TokenTile.TokenTile import TokenTile
 from Page import Page
 
@@ -14,12 +15,15 @@ class WalletPage(Page):
 
     BACKGROUND_IMG = "App/YourWallet/background.png"
     TOKENS_PATH = "App/YourWallet/tokens.json"
+    COLLECTIONS_PATH = "App/YourWallet/nfts.json"
     IMPORT_TOKEN_IMG = "App/YourWallet/import_token_img.png"
     NFTS_PATH = "App/YourWallet/nfts.json"
     IMPORT_NFT_IMG = "App/YourWallet/import_nft_img.png"
 
     def __init__(self, root, web3, **kwargs):
         super().__init__(root, web3, **kwargs)
+
+        self.get_collections()
 
         self.canvas = Canvas(
             self.frame,
@@ -41,7 +45,7 @@ class WalletPage(Page):
         self.wallet_eth_balance = Label(
             self.frame,
             text=f"{round(self.eth_account.get_balance('ether'), 4)}"[0:8],
-            font=("Helvetica", 20, "bold"),
+            font=("Helvetica", 20, "bold"),  # ("OpenSansRoman-SemiBold", int(20.0))
             bg="white"
         )
 
@@ -80,7 +84,7 @@ class WalletPage(Page):
         self.nfts_list = ListWidget(
             parent=self.nfts_list_frame,
             space_between=5,
-            elements=[]
+            elements=self.get_collections()
         )
 
         self.import_tokens_img = PhotoImage(file=self.IMPORT_TOKEN_IMG)
@@ -137,3 +141,23 @@ class WalletPage(Page):
                     )
                 )
             return tokens
+
+    def get_collections(self):
+        collections = []
+        with open(self.COLLECTIONS_PATH, "r") as file:
+            raw_collections = json.load(file)
+            for collection in raw_collections:
+                collections.append(
+                    ListElement(
+                        widget=NFTTile,
+                        genesis_root=self.root,
+                        web3=self.web3,
+                        next_page_frame=self.frame,
+                        previous_page=WalletPage,
+                        eth_account=self.eth_account,
+                        collection_name=collection,
+                        collection=raw_collections[collection],
+                        height=50,
+                    )
+                )
+            return collections

@@ -149,3 +149,9 @@ def format_balance(amount=None, decimals=None, round_to=5, cut_until=5):
         return int(str_token[0:cut_until][:-2])
     else:
         return float(str_token[0:cut_until])
+
+
+def format_string(string="", cut_to=20):
+    if len(string) > cut_to:
+        return f"{string}"[0:(cut_to-3)] + "..."
+    return string[0:cut_to]
