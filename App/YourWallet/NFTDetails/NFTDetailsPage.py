@@ -1,6 +1,8 @@
 from tkinter import *
 
 import utility_functions
+from App.ReusableComponents.ListElement import ListElement
+from App.ReusableComponents.ListWidget import ListWidget
 from App.ReusableComponents.TextField import TextField
 from Page import Page
 
@@ -42,6 +44,19 @@ class NFTDetailsPage(Page):
         )
         self.collection_name_label.place(
             x=45, y=32
+        )
+
+        self.nfts_list_frame = Frame(self.frame, bg="white")
+        self.nfts_list_frame.place(
+            x=74, y=110,
+            width=420,
+            height=197
+        )
+
+        self.nfts_list = ListWidget(
+            parent=self.nfts_list_frame,
+            space_between=5,
+            elements=self.create_nfts_list()
         )
 
         self.back_button_img = PhotoImage(file=self.BACK_ARROW_IMG)
@@ -96,3 +111,10 @@ class NFTDetailsPage(Page):
             width=90,
             height=39
         )
+
+    def create_nfts_list(self):
+        nfts_list = []
+        # Create NFTTile component
+        # Insert every NFTTile inside an ListWidget component and append the ListWidget to nfts array
+        # (as TokenDetailsPage)
+

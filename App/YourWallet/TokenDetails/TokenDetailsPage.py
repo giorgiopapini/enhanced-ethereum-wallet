@@ -30,10 +30,6 @@ class TokenDetailsPage(Page):
             relief="ridge")
         self.canvas.place(x=0, y=0)
 
-        # IMPORTANTE!!! --> Valutare se rendere le posizioni Y degli elementi background (figma) di questa pagina
-        # uguali a quelle delle altre pagine (es: WalletPage) --> Ora non c'é piú il problema di dover "riempire" lo
-        # spazio vuoto, la cronologia delle transazioni potrebbe occupare piú spazio di quello che giá occupa
-
         self.background_img = PhotoImage(file=self.BACKGROUND_IMG)
         self.background = self.canvas.create_image(
             167.5, 107.5,
@@ -57,7 +53,6 @@ class TokenDetailsPage(Page):
             image=self.send_button_img,
             borderwidth=0,
             highlightthickness=0,
-            command=self.btn_clicked,
             relief="flat"
         )
 
@@ -73,7 +68,6 @@ class TokenDetailsPage(Page):
             image=self.buy_button_img,
             borderwidth=0,
             highlightthickness=0,
-            command=self.btn_clicked,
             relief="flat"
         )
 
@@ -136,6 +130,3 @@ class TokenDetailsPage(Page):
                     )
                 )
         return transactions
-
-    def btn_clicked(self):
-        pass
