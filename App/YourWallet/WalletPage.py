@@ -6,7 +6,7 @@ from App.ReusableComponents.ListWidget import ListWidget
 from App.ReusableComponents.ListElement import ListElement
 from App.YourWallet.ImportNFT.ImportNFTPage import ImportNFTPage
 from App.YourWallet.ImportToken.ImportTokenPage import ImportTokenPage
-from App.YourWallet.NFTTile.NFTTile import NFTTile
+from App.YourWallet.CollectionTile.CollectionTile import CollectionTile
 from App.YourWallet.TokenTile.TokenTile import TokenTile
 from Page import Page
 
@@ -149,7 +149,7 @@ class WalletPage(Page):
             for collection in raw_collections:
                 collections.append(
                     ListElement(
-                        widget=NFTTile,
+                        widget=CollectionTile,
                         genesis_root=self.root,
                         web3=self.web3,
                         next_page_frame=self.frame,

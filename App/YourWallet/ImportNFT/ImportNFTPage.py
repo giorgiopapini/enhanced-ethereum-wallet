@@ -191,7 +191,7 @@ class ImportNFTPage(Page):
                     error=constants.ERRORS["ERROR_ERC721_NOT_FOUND"],
                 )
 
-                if fields_valid is True and nft_alredy_saved is False:  # and is_owner is True
+                if fields_valid is True and nft_alredy_saved is False and is_owner is True:  # and is_owner is True
                     nfts.append(
                         {
                             "name": self.nft_metadata["name"],

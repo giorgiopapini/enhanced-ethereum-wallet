@@ -4,6 +4,7 @@ import utility_functions
 from App.ReusableComponents.ListElement import ListElement
 from App.ReusableComponents.ListWidget import ListWidget
 from App.ReusableComponents.TextField import TextField
+from App.YourWallet.NFTDetails.NFTTile.NFTTile import NFTTile
 from Page import Page
 
 
@@ -48,7 +49,7 @@ class NFTDetailsPage(Page):
 
         self.nfts_list_frame = Frame(self.frame, bg="white")
         self.nfts_list_frame.place(
-            x=74, y=110,
+            x=74, y=120,
             width=420,
             height=197
         )
@@ -78,7 +79,7 @@ class NFTDetailsPage(Page):
 
         self.address_field_img = PhotoImage(file=self.ADDRESS_FIELD_IMG)
         self.address_field_bg = self.canvas.create_image(
-            242.0, 377.5,
+            238.0, 395,
             image=self.address_field_img
         )
 
@@ -91,7 +92,7 @@ class NFTDetailsPage(Page):
         )
 
         self.address_field.place(
-            x=108.5, y=364.5,
+            x=104.5, y=381.7,
             width=267.0,
             height=27
         )
@@ -107,14 +108,23 @@ class NFTDetailsPage(Page):
         )
 
         self.send_button.place(
-            x=408, y=363,
+            x=408, y=380,
             width=90,
             height=39
         )
 
     def create_nfts_list(self):
         nfts_list = []
-        # Create NFTTile component
-        # Insert every NFTTile inside an ListWidget component and append the ListWidget to nfts array
-        # (as TokenDetailsPage)
+        for nft in self.nfts:
+            nfts_list.append(
+                ListElement(
+                    widget=NFTTile,
+                    genesis_root=self.root,
+                    web3=self.web3,
+                    eth_account=self.eth_account,
+                    nft=nft,
+                    height=50
+                )
+            )
+        return nfts_list
 

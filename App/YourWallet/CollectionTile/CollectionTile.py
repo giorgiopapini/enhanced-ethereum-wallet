@@ -5,7 +5,7 @@ from App.YourWallet.NFTDetails.NFTDetailsPage import NFTDetailsPage
 from Page import Page
 
 
-class NFTTile(Frame):
+class CollectionTile(Frame):
 
     TOKEN_BG_IMG = "App/YourWallet/TokenTile/background.png"
     ARROW_IMG = "App/YourWallet/TokenTile/arrow_img.png"
