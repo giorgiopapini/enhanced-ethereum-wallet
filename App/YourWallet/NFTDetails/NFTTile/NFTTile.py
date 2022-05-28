@@ -1,5 +1,5 @@
 from tkinter import *
-
+from tkinterweb import HtmlFrame
 import utility_functions
 
 
@@ -72,7 +72,20 @@ class NFTTile(Frame):
         )
 
     def render_image(self):
-        print(self.nft["image"])
-        # Create another window in which the nft is displayed (maybe through tkinter webview)
+        top = Toplevel(self.genesis_root, bg="white")
+        top.title(self.nft["name"])
+        top.geometry('600x600')
+
+        url_text = Text(top, height=1, borderwidth=0, font=("OpenSansRoman", int(10.5)))
+        url_text.insert(1.0, f"URL: {self.nft['image']}")
+        url_text.pack()
+        url_text.configure(state="disabled")
+        url_text.configure(inactiveselectbackground=url_text.cget("selectbackground"))
+        url_text.pack()
+
+        frame = HtmlFrame(top)
+        frame.load_website(self.nft["image"])  # load a website
+        frame.pack()
+        top.mainloop()
 
     # Arrow button should call a callback function to NFTDetailsPage --> Change the currently selected NFT
