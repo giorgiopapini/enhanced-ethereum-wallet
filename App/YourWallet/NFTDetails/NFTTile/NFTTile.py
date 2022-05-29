@@ -9,7 +9,7 @@ class NFTTile(Frame):
     NFT_RENDER_IMG = "App/YourWallet/NFTDetails/NFTTile/render_nft_image.png"
     ARROW_IMG = "App/YourWallet/TokenTile/arrow_img.png"
 
-    def __init__(self, genesis_root=None, web3=None, next_page_frame=None, previous_page=None, eth_account=None, nft=None, **kwargs):
+    def __init__(self, genesis_root=None, web3=None, next_page_frame=None, previous_page=None, eth_account=None, nft=None, callback=None, **kwargs):
         super().__init__(**kwargs)
 
         self.genesis_root = genesis_root
@@ -19,6 +19,7 @@ class NFTTile(Frame):
         self.eth_account = eth_account
 
         self.nft = nft
+        self.callback = callback
 
         self.background_img = PhotoImage(file=self.BACKGROUND)
         self.background = Label(
@@ -62,6 +63,7 @@ class NFTTile(Frame):
             image=self.arrow_img,
             borderwidth=0,
             highlightthickness=0,
+            command=self.arrow_clicked,
             relief="flat"
         )
 
@@ -84,8 +86,9 @@ class NFTTile(Frame):
         url_text.pack()
 
         frame = HtmlFrame(top)
-        frame.load_website(self.nft["image"])  # load a website
-        frame.pack()
+        frame.load_website(self.nft["image"])
+        frame.pack(expand=True, fill=Y)
         top.mainloop()
 
-    # Arrow button should call a callback function to NFTDetailsPage --> Change the currently selected NFT
+    def arrow_clicked(self):
+        self.callback(nft_clicked=self.nft)

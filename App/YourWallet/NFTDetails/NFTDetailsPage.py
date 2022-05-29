@@ -21,6 +21,8 @@ class NFTDetailsPage(Page):
         self.collection_name = kwargs.get("collection_name", "")
         self.nfts = kwargs.get("nfts", [])
 
+        self.selected_nft = self.nfts[0]
+
         self.canvas = Canvas(
             self.frame,
             bg="#ffffff",
@@ -60,21 +62,14 @@ class NFTDetailsPage(Page):
             elements=self.create_nfts_list()
         )
 
-        self.back_button_img = PhotoImage(file=self.BACK_ARROW_IMG)
-        self.back_button = Button(
+        self.selected_nft_label = Label(
             self.frame,
-            image=self.back_button_img,
-            borderwidth=0,
-            highlightthickness=0,
-            command=lambda: self.to_page(
-                page=self.previous_page,
-                frame=self.frame,
-                eth_account=self.eth_account
-            ),
-            relief="flat"
+            text=self.selected_nft["name"],
+            font=("OpenSansRoman-SemiBold", int(14.0)),
+            bg="white"
         )
-        self.back_button.place(
-            x=47, y=415
+        self.selected_nft_label.place(
+            x=45, y=345,
         )
 
         self.address_field_img = PhotoImage(file=self.ADDRESS_FIELD_IMG)
@@ -113,6 +108,23 @@ class NFTDetailsPage(Page):
             height=39
         )
 
+        self.back_button_img = PhotoImage(file=self.BACK_ARROW_IMG)
+        self.back_button = Button(
+            self.frame,
+            image=self.back_button_img,
+            borderwidth=0,
+            highlightthickness=0,
+            command=lambda: self.to_page(
+                page=self.previous_page,
+                frame=self.frame,
+                eth_account=self.eth_account
+            ),
+            relief="flat"
+        )
+        self.back_button.place(
+            x=47, y=415
+        )
+
     def create_nfts_list(self):
         nfts_list = []
         for nft in self.nfts:
@@ -123,8 +135,12 @@ class NFTDetailsPage(Page):
                     web3=self.web3,
                     eth_account=self.eth_account,
                     nft=nft,
+                    callback=self.set_active_nft,
                     height=50
                 )
             )
         return nfts_list
 
+    def set_active_nft(self, nft_clicked=None):
+        self.selected_nft = nft_clicked
+        self.selected_nft_label.config(text=self.selected_nft["name"])
