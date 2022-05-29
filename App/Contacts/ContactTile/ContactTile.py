@@ -58,7 +58,7 @@ class ContactTile(Frame):
         self.username_label = Label(
             self,
             text=f"{self.username}",
-            font=("Arial", 12),
+            font=("OpenSansRoman", int(12)),
             bg="white"
         )
         self.username_label.place(

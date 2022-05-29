@@ -20,9 +20,6 @@ class ContactsPage(Page):
     def __init__(self, root, web3, **kwargs):
         super().__init__(root, web3, **kwargs)
 
-        # This canvas will be created for every page, should I declare a general canvas inside AppPageManager
-        # and pass it as a **kwarg to every page?
-
         self.canvas = Canvas(
             self.frame,
             bg="white",

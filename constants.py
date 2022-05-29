@@ -5,6 +5,7 @@ MIN_LENGTH_PASSWORD = 8
 ERRORS = {
     "ERROR_PASSWORD_LENGTH": "Password should be at least 8 character long",
     "ERROR_PASSWORD_WRONG": "The password is incorrect. Please try again",
+    "ERROR_INCORRECT_PRIVATE_KEY": "The private key entered does not exist",
     "ERROR_EMPTY_FIELD": "This field should not be empty",
     "ERROR_ERC20_NOT_FOUND": "No token found at this specific address",
     "ERROR_ERC20_NOT_VALID": "Address not valid or already saved",

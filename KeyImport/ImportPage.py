@@ -1,5 +1,6 @@
 from tkinter import *
 
+import constants
 from App.ReusableComponents.TextField import TextField
 from EthereumAccount import EthereumAccount
 from Page import Page
@@ -20,18 +21,18 @@ class ImportPage(Page):
             relief="ridge")
         self.canvas.place(x=0, y=0)
 
-        self.entry0_img = PhotoImage(file=f"KeyImport/img_textBox0.png")
-        self.entry0_bg = self.canvas.create_image(
+        self.prv_key_field_img = PhotoImage(file=f"KeyImport/img_textBox0.png")
+        self.prv_key_field = self.canvas.create_image(
             400.0, 272.5,
-            image=self.entry0_img)
+            image=self.prv_key_field_img)
 
-        self.entry0 = TextField(
+        self.prv_key_field = TextField(
             genesis_root=self.root,
             bd=0,
             bg="#ffffff",
             highlightthickness=0)
 
-        self.entry0.place(
+        self.prv_key_field.place(
             x=210.5, y=258,
             width=379.0,
             height=31)
@@ -70,14 +71,13 @@ class ImportPage(Page):
             height=38)
 
     def import_account(self):
-
-        # - Verificare che il testo presente nell'Entry rispetti il regex.
-        # - Verificare che la private key o la seed phrase sia valida
-
-        account = self.web3.eth.account.from_key(self.entry0.get())
-        self.to_page(
-            page=SignUpPage,
-            previous_page=self.previous_page,
-            eth_account=EthereumAccount(web3=self.web3, account=account),
-        ),
+        try:
+            account = self.web3.eth.account.from_key(self.prv_key_field.text)
+            self.to_page(
+                page=SignUpPage,
+                previous_page=self.previous_page,
+                eth_account=EthereumAccount(web3=self.web3, account=account),
+            )
+        except ValueError:
+            self.prv_key_field.show_error(error=constants.ERRORS["ERROR_INCORRECT_PRIVATE_KEY"])
 
