@@ -55,9 +55,9 @@ class WalletPage(Page):
 
         self.tokens_list_frame = Frame(self.frame)
         self.tokens_list_frame.place(
-            x=10, y=150,
+            x=10, y=146,
             width=240,
-            height=255,
+            height=260,
         )
 
         self.token_list = ListWidget(
@@ -76,9 +76,9 @@ class WalletPage(Page):
 
         self.nfts_list_frame = Frame(self.frame)
         self.nfts_list_frame.place(
-            x=280, y=150,
+            x=280, y=146,
             width=240,
-            height=255,
+            height=260,
         )
 
         self.nfts_list = ListWidget(
@@ -102,7 +102,7 @@ class WalletPage(Page):
             )
         )
         self.import_tokens.place(
-            x=79.8, y=420
+            x=79.8, y=430
         )
 
         self.import_nft_img = PhotoImage(file=self.IMPORT_NFT_IMG)
@@ -120,7 +120,7 @@ class WalletPage(Page):
             )
         )
         self.import_nft.place(
-            x=352, y=420
+            x=352, y=430
         )
 
     def get_tokens(self):
