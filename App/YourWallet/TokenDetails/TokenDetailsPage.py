@@ -1,8 +1,11 @@
 from tkinter import *
 
 import eth_generic_functions
+import utility_functions
 from App.ReusableComponents.ListElement import ListElement
 from App.ReusableComponents.ListWidget import ListWidget
+from App.YourWallet.TokenDetails.BuyPage.BuyPage import BuyPage
+from App.YourWallet.TokenDetails.SendPage.SendPage import SendPage
 from App.YourWallet.TokenDetails.TransactionTile.TransactionTile import TransactionTile
 from Page import Page
 
@@ -13,6 +16,9 @@ class TokenDetailsPage(Page):
     SEND_BUTTON_IMG = "App/YourWallet/TokenDetails/send_button_img.png"
     BUY_BUTTON_IMG = "App/YourWallet/TokenDetails/buy_button_img.png"
     BACK_ARROW_IMG = "KeyImport/img1.png"
+
+    buy_page = None
+    send_page = None
 
     def __init__(self, root, web3, **kwargs):
         super().__init__(root, web3, **kwargs)
@@ -53,6 +59,7 @@ class TokenDetailsPage(Page):
             image=self.send_button_img,
             borderwidth=0,
             highlightthickness=0,
+            command=self.show_send_page,
             relief="flat"
         )
 
@@ -68,6 +75,7 @@ class TokenDetailsPage(Page):
             image=self.buy_button_img,
             borderwidth=0,
             highlightthickness=0,
+            command=self.show_buy_page,
             relief="flat"
         )
 
@@ -130,3 +138,20 @@ class TokenDetailsPage(Page):
                     )
                 )
         return transactions
+
+    def show_buy_page(self):
+        if utility_functions.toplevel_exist(toplevel=self.buy_page) is False:
+            self.buy_page = BuyPage(self.root, self.web3, bg="white")
+            self.buy_page.mainloop()
+
+    def show_send_page(self):
+        if utility_functions.toplevel_exist(toplevel=self.send_page) is False:
+            self.send_page = SendPage(
+                self.root,
+                self.web3,
+                token=self.token,
+                eth_account=self.eth_account,
+                bg="white"
+            )
+            print(self.token_amount)
+            self.send_page.mainloop()

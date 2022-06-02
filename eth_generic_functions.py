@@ -12,13 +12,30 @@ def get_nft_owner(nft_address=None, nft_id=None, user_address=None, web3=None):
     return False
 
 
+def send_ERC721(web3=None, contract_address=None, sender=None, receiver=None, token_id=None):
+    contract = web3.eth.contract(address=contract_address, abi=constants.ERC721_ABI)
+    print(web3.toChecksumAddress(sender))
+    tx_hash = contract.functions.transferFrom(
+        web3.toChecksumAddress(sender),
+        web3.toChecksumAddress(receiver),
+        int(token_id)
+    ).transact()
+
+
 def get_nft_metadata(contract_address=None, web3=None, token_id=None):
     contract = web3.eth.contract(address=contract_address, abi=constants.ERC721_ABI)
     uri = contract.functions.tokenURI(token_id).call()
     response = utility_functions.get_api_response(
         url=f"{constants.IPFS_BASE_URL}{uri.replace('ipfs://', '')}" if "ipfs://" in uri else uri
     )
-    response["image"] = format_ipfs_url(url=response["image"])
+
+    image_url = None
+    for attr in response:
+        if "image" in attr:
+            image_url = response[attr]
+            break
+
+    image_url = format_ipfs_url(url=image_url)
 
     name = utility_functions.format_nft_name(
         nft_metadata=response,
@@ -26,13 +43,11 @@ def get_nft_metadata(contract_address=None, web3=None, token_id=None):
         token_id=token_id
     )
 
-    print(response["image"])
-
     return {
         "name": name,
         "address": contract_address,
         "token_id": token_id,
-        "image": response["image"]
+        "image": image_url
     }
 
 

@@ -1,5 +1,7 @@
 from tkinter import *
 
+import constants
+import eth_generic_functions
 import utility_functions
 from App.ReusableComponents.ListElement import ListElement
 from App.ReusableComponents.ListWidget import ListWidget
@@ -64,7 +66,7 @@ class NFTDetailsPage(Page):
 
         self.selected_nft_label = Label(
             self.frame,
-            text=self.selected_nft["name"],
+            text=utility_functions.format_string(string=self.selected_nft["name"], cut_to=47),
             font=("OpenSansRoman-SemiBold", int(14.0)),
             bg="white"
         )
@@ -98,7 +100,7 @@ class NFTDetailsPage(Page):
             image=self.send_button_img,
             borderwidth=0,
             highlightthickness=0,
-            command=None,
+            command=self.send_nft,
             relief="flat"
         )
 
@@ -144,3 +146,16 @@ class NFTDetailsPage(Page):
     def set_active_nft(self, nft_clicked=None):
         self.selected_nft = nft_clicked
         self.selected_nft_label.config(text=self.selected_nft["name"])
+
+    def send_nft(self):
+        try:
+            print(self.selected_nft)
+            eth_generic_functions.send_ERC721(
+                web3=self.web3,
+                contract_address=self.selected_nft["address"],
+                sender=self.eth_account.account.address,
+                receiver=self.address_field.text,
+                token_id=self.selected_nft["token_id"]
+            )
+        except:
+            self.address_field.show_error(error=constants.ERRORS["ERROR_SENDING_ERC721"])

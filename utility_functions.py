@@ -143,7 +143,7 @@ def get_date_from_timestamp(timestamp=None):
 
 
 def format_balance(amount=None, decimals=None, round_to=5, cut_until=5):
-    rounded_value = round(amount / (10**decimals), round_to)
+    rounded_value = round(amount / (10 ** decimals), round_to)
     str_token = str(rounded_value)
     if str_token[len(str_token) - 2] == ".":
         return int(str_token[0:cut_until][:-2])
@@ -153,5 +153,11 @@ def format_balance(amount=None, decimals=None, round_to=5, cut_until=5):
 
 def format_string(string="", cut_to=20):
     if len(string) > cut_to:
-        return f"{string}"[0:(cut_to-3)] + "..."
+        return f"{string}"[0:(cut_to - 3)] + "..."
     return string[0:cut_to]
+
+
+def toplevel_exist(toplevel=None):
+    if toplevel is None or not Toplevel.winfo_exists(toplevel):
+        return False
+    return True
