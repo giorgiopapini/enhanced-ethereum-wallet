@@ -28,7 +28,6 @@ class TextField(Entry):
         else:
             self.text = utility_functions.format_query(event=event, pasted=True)
             self.delete(0, len(pasted_text))
-        print(self.text)
         if self.callback is not None:
             self.callback()
 
