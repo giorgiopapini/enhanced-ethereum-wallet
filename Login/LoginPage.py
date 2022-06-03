@@ -78,7 +78,7 @@ class LoginPage(Page):
 
     def login(self):
         try:
-            private_key = utility_functions.get_private_key(self.web3, self.entry0.text)
+            private_key = utility_functions.get_private_key(self.web3, self.entry0.get())
             account = self.web3.eth.account.from_key(private_key)
 
             utility_functions.create_qrcode(account.address)

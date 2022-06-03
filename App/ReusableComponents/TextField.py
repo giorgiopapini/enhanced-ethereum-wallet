@@ -17,6 +17,7 @@ class TextField(Entry):
         self.callback = callback
 
         self.bind("<Key>", self.get_text)
+        self.bind("<Return>", self.enter_pressed)
         self.bind("<<Paste>>", self.paste)
         self.bind("<Button>", self.clear_error)
 
@@ -27,9 +28,13 @@ class TextField(Entry):
         else:
             self.text = utility_functions.format_query(event=event, pasted=True)
             self.delete(0, len(pasted_text))
-
+        print(self.text)
         if self.callback is not None:
             self.callback()
+
+    def enter_pressed(self, event):
+        if self.text[len(self.text) - 1] is " ":
+            self.text = self.text[:-1]
 
     def paste(self, event):
         pasted_text = self.genesis_root.clipboard_get()

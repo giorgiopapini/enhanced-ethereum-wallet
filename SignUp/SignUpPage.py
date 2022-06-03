@@ -95,7 +95,7 @@ class SignUpPage(Page):
             image=self.background_img)
 
     def sign_up(self):
-        if len(self.entry1.text) > constants.MIN_LENGTH_PASSWORD and self.entry1.text != constants.ERRORS["ERROR_PASSWORD_LENGTH"]:
+        if len(self.entry1.text) > constants.MIN_LENGTH_PASSWORD and self.entry1.get() != constants.ERRORS["ERROR_PASSWORD_LENGTH"]:
             for widget in self.root.winfo_children():
                 widget.destroy()
             json_string = json.dumps(self.eth_account.account.encrypt(self.entry1.text))
@@ -111,7 +111,6 @@ class SignUpPage(Page):
                 eth_account=self.eth_account,
                 default_active_page=WalletPage
             )
-            print(self.web3.eth.account.decrypt(json_string, self.entry1.text).hex())
         else:
             self.entry1.show_error(error=constants.ERRORS["ERROR_PASSWORD_LENGTH"])
 

@@ -1,5 +1,6 @@
 from tkinter import *
 
+import constants
 import utility_functions
 from App.ReusableComponents.TextField import TextField
 
@@ -21,8 +22,6 @@ class SendPage(Toplevel):
         self.eth_account = eth_account
 
         self.token_symbol = self.token["symbol"] if self.token is not None else "ETH"
-
-        print(self.token)
 
         self.title(f"Send {self.token_symbol} Page")
         self.geometry("380x380")
@@ -51,7 +50,7 @@ class SendPage(Toplevel):
             bg="white"
         )
         self.send_label.place(
-            x=25, y=24
+            x=23, y=24
         )
 
         self.description_label = Label(
@@ -61,12 +60,12 @@ class SendPage(Toplevel):
             bg="white"
         )
         self.description_label.place(
-            x=25, y=70
+            x=23, y=70
         )
 
         self.sender_field_img = PhotoImage(file=self.SENDER_FIELD_IMAGE)
         self.sender_field_bg = self.canvas.create_image(
-            178.5, 178.5,
+            175, 178.5,
             image=self.sender_field_img
         )
 
@@ -81,14 +80,14 @@ class SendPage(Toplevel):
         )
 
         self.sender_field.place(
-            x=44.5, y=166,
+            x=42, y=166,
             width=268.0,
             height=27
         )
 
         self.receiver_field_img = PhotoImage(file=self.RECEIVER_FIELD_IMAGE)
         self.receiver_field_bg = self.canvas.create_image(
-            178.5, 252.5,
+            175, 252.5,
             image=self.receiver_field_img
         )
 
@@ -101,14 +100,14 @@ class SendPage(Toplevel):
         )
 
         self.receiver_field.place(
-            x=44.5, y=240,
+            x=42, y=240,
             width=268.0,
             height=27
         )
 
         self.amount_field_img = PhotoImage(file=self.AMOUNT_FIELD_IMAGE)
         self.amount_field_bg = self.canvas.create_image(
-            83.0, 326.5,
+            80.5, 326.5,
             image=self.amount_field_img
         )
 
@@ -121,7 +120,7 @@ class SendPage(Toplevel):
         )
 
         self.amount_field.place(
-            x=44.5, y=314,
+            x=42, y=314,
             width=77.0,
             height=27
         )
@@ -133,7 +132,7 @@ class SendPage(Toplevel):
             bg="white"
         )
         self.token_symbol_label.place(
-            x=143, y=316
+            x=140.5, y=316
         )
 
         self.send_button_image = PhotoImage(file=self.SEND_BUTTON_IMG)
@@ -142,7 +141,7 @@ class SendPage(Toplevel):
             image=self.send_button_image,
             borderwidth=0,
             highlightthickness=0,
-            command=self.btn_clicked,
+            command=self.send_amount,
             relief="flat"
         )
 
@@ -152,5 +151,10 @@ class SendPage(Toplevel):
             height=39
         )
 
-    def btn_clicked(self):
-        pass
+    def send_amount(self):
+        try:
+            print(self.receiver_field.text)
+            print(self.amount_field.text)
+        except:
+            self.receiver_field.show_error(error=constants.ERRORS["ERROR_SENDING_ERC20"])
+            self.amount_field.show_error(error=constants.ERRORS["ERROR_SENDING_ERC20"])
