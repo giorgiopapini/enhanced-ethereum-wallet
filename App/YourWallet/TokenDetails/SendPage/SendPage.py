@@ -153,8 +153,21 @@ class SendPage(Toplevel):
 
     def send_amount(self):
         try:
-            print(self.receiver_field.text)
-            print(self.amount_field.text)
+            if self.token is None:
+                self.eth_account.send_ether(
+                    receiver_addr=self.receiver_field.text,
+                    amount_in_eth=self.amount_field.text
+                )
+            else:
+                self.eth_account.send_erc20_token(
+                    erc20_address=self.token["address"],
+                    receiver_addr=self.receiver_field.text,
+                    amount=self.amount_field.text
+                )
+            self.destroy()
+            self.update()
         except:
             self.receiver_field.show_error(error=constants.ERRORS["ERROR_SENDING_ERC20"])
-            self.amount_field.show_error(error=constants.ERRORS["ERROR_SENDING_ERC20"])
+            self.amount_field.show_error(
+                error=utility_functions.format_string(string=constants.ERRORS["ERROR_SENDING_ERC20"], cut_to=15)
+            )

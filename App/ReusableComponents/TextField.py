@@ -42,9 +42,8 @@ class TextField(Entry):
         self.get_text(event=event, pasted_text=pasted_text)
 
     def clear_error(self, event):
-        for error in constants.ERRORS:
-            if event.widget.get() == constants.ERRORS[error]:
-                self.clear_field()
+        if event.widget.cget("fg") == "red":
+            self.clear_field()
 
     def clear_field(self):
         self.config(state="normal")

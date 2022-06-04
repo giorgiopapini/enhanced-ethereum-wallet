@@ -88,7 +88,6 @@ def get_eth_transactions(user_address=None):
         startblock="0",
         endblock="latest",
         sort="desc",
-        apikey=config.ETHERSCAN_API_KEY
     )
     return utility_functions.get_api_response(url=url)["result"]
 
@@ -105,6 +104,14 @@ def get_token_transactions(token_address=None, user_address=None):
             startblock="0",
             endblock="latest",
             sort="desc",
-            apikey=config.ETHERSCAN_API_KEY
         )
         return utility_functions.get_api_response(url=url)["result"]
+
+
+def get_eth_gas_prices():
+    url = utility_functions.make_etherscan_api_url(
+        base_url=constants.ETHERSCAN_BASE_MAINNET_API_URL,
+        module="gastracker",
+        action="gasoracle",
+    )
+    return utility_functions.get_api_response(url=url)["result"]

@@ -31,8 +31,8 @@ def check_var_type(variable=None, requested_type=None, error_msg=None):
         raise TypeError(error_msg)
 
 
-def make_etherscan_api_url(module=None, action=None, address=None, **kwargs):
-    url = f"{constants.ETHERSCAN_BASE_API_URL}?module={module}&action={action}&address={address}&apikey={config.ETHERSCAN_API_KEY}"
+def make_etherscan_api_url(base_url=constants.ETHERSCAN_BASE_API_URL, module=None, action=None, **kwargs):
+    url = f"{base_url}?module={module}&action={action}&apikey={config.ETHERSCAN_API_KEY}"
     for key, value in kwargs.items():
         url += f"&{key}={value}"
     return url
