@@ -52,7 +52,6 @@ class ListWidget:
                 widget.pack(
                     pady=self.space_between
                 )
-                widget.bind_all("<Button>", self.clicked)
 
     def is_empty(self, arr):
         if arr is None or len(arr) is 0:
@@ -73,12 +72,6 @@ class ListWidget:
             **element.widget_attributes
         )
         return obj
-
-    def print_a(self):
-        print(f"elementi: {self.elements}")
-
-    def clicked(self, event):
-        print(event.widget)
 
     def destroy(self):
         self.canvas.delete("all")

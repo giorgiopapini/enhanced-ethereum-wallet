@@ -161,3 +161,9 @@ def toplevel_exist(toplevel=None):
     if toplevel is None or not Toplevel.winfo_exists(toplevel):
         return False
     return True
+
+
+def bind_all_components(obj=None, sequence=None, func=None, add=None):
+    obj.bind(sequence, func, add)
+    for child in obj.winfo_children():
+        child.bind(sequence, func, add)

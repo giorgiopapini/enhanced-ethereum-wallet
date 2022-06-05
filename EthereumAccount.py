@@ -42,7 +42,7 @@ class EthereumAccount:
             {
                 "chainId": constants.GOERLI_CHAIN_ID,
                 "nonce": nonce,
-                "gas": 50000,  # How to dynamically regulate the gas limit?
+                "gas": 200000,  # How to dynamically regulate the gas limit?
                 "gasPrice": self.web3.toWei(current_gas_price, 'gwei')
             }
         )

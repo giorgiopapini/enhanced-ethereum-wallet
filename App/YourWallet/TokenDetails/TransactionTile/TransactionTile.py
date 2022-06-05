@@ -1,6 +1,7 @@
 from tkinter import *
 
 import utility_functions
+from App.YourWallet.TokenDetails.TransactionTile.TransactionDetails.TransactionDetails import TransactionDetails
 
 
 class TransactionTile(Frame):
@@ -17,6 +18,7 @@ class TransactionTile(Frame):
         self.transaction_json = transaction_json
         self.eth_account = eth_account
         self.token = token
+        self.transaction_details_page = None
 
         self.background_img = PhotoImage(file=self.TILE_BACKGROUND)
         self.background = Label(
@@ -81,12 +83,18 @@ class TransactionTile(Frame):
 
         self.token_symbol = Label(
             self,
-            text="ETH" if self.token is None else self.token["symbol"],
+            text="ETH" if self.token is None else utility_functions.format_string(string=self.token["symbol"], cut_to=9),
             font=("Arial", 8),
             bg="white"
         )
         self.token_symbol.place(
             x=302, y=26,
+        )
+
+        utility_functions.bind_all_components(
+            obj=self,
+            sequence="<Button>",
+            func=self.show_transaction_details,
         )
 
     def is_sent(self):
@@ -97,10 +105,21 @@ class TransactionTile(Frame):
 
     def get_transaction_value(self):
         value = float(self.transaction_json['value'])
-        gas_fee = float((int(self.transaction_json['gas']) * int(self.transaction_json["gasPrice"])))
-        total = value + gas_fee
+        gas_fee = float((int(self.transaction_json['gasUsed']) * int(self.transaction_json["gasPrice"])))
+        print(gas_fee)
+        total = value  #+ gas_fee
         if self.token is None:
             str_amount = str(round(self.web3.fromWei(total, 'ether'), 5))[0:5]
             return float(str_amount)
         else:
             return utility_functions.format_balance(amount=total, decimals=self.token['decimals'], cut_until=5)
+
+    def show_transaction_details(self, event):
+        if utility_functions.toplevel_exist(toplevel=self.transaction_details_page) is False:
+            self.transaction_details_page = TransactionDetails(
+                self.genesis_root,
+                self.web3,
+                transaction_json=self.transaction_json,
+                bg="white"
+            )
+            self.transaction_details_page.mainloop()
