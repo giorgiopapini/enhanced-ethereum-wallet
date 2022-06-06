@@ -115,3 +115,12 @@ def get_eth_gas_prices():
         action="gasoracle",
     )
     return utility_functions.get_api_response(url=url)["result"]
+
+
+def get_transaction_status(tx_hash):
+    url = utility_functions.make_etherscan_api_url(
+        module="transaction",
+        action="gettxreceiptstatus",
+        txhash=tx_hash
+    )
+    return "Confirmed" if utility_functions.get_api_response(url=url)['result']['status'] is '1' else "Cancelled"

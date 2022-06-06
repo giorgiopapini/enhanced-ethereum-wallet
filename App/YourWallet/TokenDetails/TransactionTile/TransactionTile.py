@@ -106,7 +106,6 @@ class TransactionTile(Frame):
     def get_transaction_value(self):
         value = float(self.transaction_json['value'])
         gas_fee = float((int(self.transaction_json['gasUsed']) * int(self.transaction_json["gasPrice"])))
-        print(gas_fee)
         total = value  #+ gas_fee
         if self.token is None:
             str_amount = str(round(self.web3.fromWei(total, 'ether'), 5))[0:5]
@@ -120,6 +119,8 @@ class TransactionTile(Frame):
                 self.genesis_root,
                 self.web3,
                 transaction_json=self.transaction_json,
+                token=self.token,
+                is_sent=self.is_sent(),
                 bg="white"
             )
             self.transaction_details_page.mainloop()
