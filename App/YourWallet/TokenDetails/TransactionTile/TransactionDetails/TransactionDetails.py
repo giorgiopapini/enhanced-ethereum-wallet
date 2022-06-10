@@ -1,12 +1,11 @@
 from tkinter import *
-
 import eth_generic_functions
-import utility_functions
 
 
 class TransactionDetails(Toplevel):
 
     BACKGROUND = "App/YourWallet/TokenDetails/TransactionTile/TransactionDetails/background.png"
+    COPY_BUTTON_IMG = "App/YourWallet/TokenDetails/TransactionTile/TransactionDetails/copy_button.png"
 
     def __init__(self, root, web3, transaction_json=None, token=None, is_sent=None, **kwargs):
         super().__init__(**kwargs)
@@ -50,6 +49,22 @@ class TransactionDetails(Toplevel):
             x=70, y=77
         )
 
+        self.copy_btn_img = PhotoImage(file=self.COPY_BUTTON_IMG)
+        self.copy_from_btn = Button(
+            self,
+            image=self.copy_btn_img,
+            borderwidth=0,
+            highlightthickness=0,
+            command=lambda: self.copy_to_clipboard(self.transaction_json["from"]),
+            relief="flat"
+        )
+
+        self.copy_from_btn.place(
+            x=255, y=80,
+            width=18,
+            height=17
+        )
+
         self.to_label = Label(
             self,
             text=self.format_address(address=self.transaction_json["to"]),
@@ -58,6 +73,21 @@ class TransactionDetails(Toplevel):
         )
         self.to_label.place(
             x=52, y=106
+        )
+
+        self.copy_to_btn = Button(
+            self,
+            image=self.copy_btn_img,
+            borderwidth=0,
+            highlightthickness=0,
+            command=lambda: self.copy_to_clipboard(self.transaction_json["to"]),
+            relief="flat"
+        )
+
+        self.copy_to_btn.place(
+            x=255, y=109,
+            width=18,
+            height=17
         )
 
         self.status_label = Label(
@@ -128,9 +158,6 @@ class TransactionDetails(Toplevel):
             image=self.background_img
         )
 
-        print(self.get_total_gas_fee())
-        print(self.format_address(address=self.transaction_json["from"]))
-
     def get_decimals(self):
         if self.token is None:
             return 18
@@ -143,3 +170,9 @@ class TransactionDetails(Toplevel):
     def get_total_gas_fee(self):
         raw_gas_fee = float((int(self.transaction_json['gasUsed']) * int(self.transaction_json["gasPrice"]))) / 10 ** self.get_decimals()
         return "{:.8f}".format(float(raw_gas_fee)).rstrip("0")
+
+    def copy_to_clipboard(self, data):
+        if self.root is not None:
+            self.root[0].clipboard_clear()
+            self.root[0].clipboard_append(data)
+            self.root[0].update()
