@@ -1,4 +1,5 @@
 from tkinter import *
+import webbrowser
 
 
 class BuyPage(Toplevel):
@@ -32,8 +33,29 @@ class BuyPage(Toplevel):
 
         self.background_img = PhotoImage(file=self.BACKGROUND)
         self.background = self.canvas.create_image(
-            192.0, 164.0,
+            190.0, 207.5,
             image=self.background_img
+        )
+
+        self.send_label = Label(
+            self,
+            text=f"Buy ETH",
+            font=("OpenSansRoman-SemiBold", 30),
+            bg="white"
+        )
+        self.send_label.place(
+            x=23, y=24
+        )
+
+        self.description_label = Label(
+            self,
+            text=f"Buy ETH to exchange money with\naddresses or smart contracts",
+            font=("OpenSansRoman-Regular", 14),
+            justify=LEFT,
+            bg="white"
+        )
+        self.description_label.place(
+            x=25, y=75
         )
 
         self.moonpay_btn_img = PhotoImage(file=self.MOONPAY_IMG)
@@ -42,7 +64,7 @@ class BuyPage(Toplevel):
             image=self.moonpay_btn_img,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: self.open_website(self.MOONPAY_URL),
+            command=lambda: webbrowser.open(self.MOONPAY_URL, new=2),
             relief="flat"
         )
 
@@ -58,7 +80,7 @@ class BuyPage(Toplevel):
             image=self.wyre_btn_img,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: self.open_website(self.WYRE_URL),
+            command=lambda: webbrowser.open(self.WYRE_URL, new=2),
             relief="flat"
         )
 
@@ -67,6 +89,3 @@ class BuyPage(Toplevel):
             width=153,
             height=35
         )
-
-    def open_website(self, url):
-        pass
