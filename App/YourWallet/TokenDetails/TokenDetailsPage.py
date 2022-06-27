@@ -151,7 +151,7 @@ class TokenDetailsPage(Page):
                 self.web3,
                 token=self.token,
                 eth_account=self.eth_account,
-                bg="white"
+                bg="white",
             )
             print(self.token_amount)
             self.send_page.mainloop()

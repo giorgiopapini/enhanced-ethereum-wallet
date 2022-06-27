@@ -28,6 +28,8 @@ MAINNET_CHAIN_ID = 1
 
 IPFS_BASE_URL = "https://ipfs.io/ipfs/"
 
+COINGECKO_BASE_API_URL = "https://api.coingecko.com/api/v3"
+
 HEADERS = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
 
 BACKSPACE_KEYSYM_NUM = 65288

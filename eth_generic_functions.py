@@ -108,6 +108,19 @@ def get_token_transactions(token_address=None, user_address=None):
         return utility_functions.get_api_response(url=url)["result"]
 
 
+def get_coin_price_data(coin_id=None, to="usd", days=1, interval=None):
+    if coin_id is not None:
+        url = utility_functions.make_coingecko_coins_api_url(
+            coin_id=coin_id,
+            action="market_chart",
+            vs_currency=to,
+            days=days,
+            interval=interval
+        )
+        print(url)
+        return utility_functions.get_api_response(url=url)
+
+
 def get_eth_gas_prices():
     url = utility_functions.make_etherscan_api_url(
         base_url=constants.ETHERSCAN_BASE_MAINNET_API_URL,

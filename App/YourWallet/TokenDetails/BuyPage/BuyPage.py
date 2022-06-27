@@ -50,12 +50,12 @@ class BuyPage(Toplevel):
         self.description_label = Label(
             self,
             text=f"Buy ETH to exchange money with\naddresses or smart contracts",
-            font=("OpenSansRoman-Regular", 14),
+            font=("OpenSansRoman-Regular", int(13.7)),
             justify=LEFT,
             bg="white"
         )
         self.description_label.place(
-            x=25, y=75
+            x=26, y=74
         )
 
         self.moonpay_btn_img = PhotoImage(file=self.MOONPAY_IMG)

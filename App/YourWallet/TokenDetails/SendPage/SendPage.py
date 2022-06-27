@@ -56,11 +56,11 @@ class SendPage(Toplevel):
         self.description_label = Label(
             self,
             text=f"Send {'ETH' if self.token is None else 'token'} to an Ethereum address",
-            font=("OpenSansRoman-Regular", 14),
+            font=("OpenSansRoman-Regular", int(13.7)),
             bg="white"
         )
         self.description_label.place(
-            x=23, y=70
+            x=26, y=73
         )
 
         self.sender_field_img = PhotoImage(file=self.SENDER_FIELD_IMAGE)

@@ -1,7 +1,7 @@
 from tkinter import *
 from PIL import Image
 import utility_functions
-from App.Automation.AutomationPage import AutomationPage
+from App.MarketAnalysis.AutomationPage import AutomationPage
 from App.Contacts.ContactsPage import ContactsPage
 from App.ManageFunds.FundsPage import FundsPage
 from App.MenuButton import MenuButton
