@@ -43,7 +43,7 @@ class AutomationPage(Page):
 
         self.id_field_img = PhotoImage(file=self.FIELD_IMG)
         self.id_field_bg = self.canvas.create_image(
-            133.0, 139.5,
+            107.0, 139.5,
             image=self.id_field_img
         )
 
@@ -58,13 +58,13 @@ class AutomationPage(Page):
 
         self.id_field.place(
             x=72.5, y=127,
-            width=121.0,
+            width=67.0,
             height=27
         )
 
         self.to_field_img = PhotoImage(file=self.FIELD_IMG)
         self.to_field_bg = self.canvas.create_image(
-            315.0, 139.5,
+            228.0, 139.5,
             image=self.to_field_img
         )
 
@@ -78,8 +78,29 @@ class AutomationPage(Page):
         )
 
         self.to_field.place(
-            x=254.5, y=127,
-            width=121.0,
+            x=194.5, y=127,
+            width=67.0,
+            height=27
+        )
+
+        self.days_field_img = PhotoImage(file=self.FIELD_IMG)
+        self.days_field_bg = self.canvas.create_image(
+            349.0, 139.5,
+            image=self.days_field_img
+        )
+
+        self.days_field = TextField(
+            master=self.frame,
+            genesis_root=self.root,
+            placeholder_text=30,
+            bd=0,
+            bg="#ffffff",
+            highlightthickness=0
+        )
+
+        self.days_field.place(
+            x=315.5, y=127,
+            width=67.0,
             height=27
         )
 
@@ -107,9 +128,9 @@ class AutomationPage(Page):
 
     def place_update_chart(self):
         result = eth_generic_functions.get_coin_price_data(
-            coin_id=self.id_field.text.lower().strip(),
-            to=self.to_field.text.lower().strip(),
-            days=365
+            coin_id=self.id_field.get().lower().strip(),
+            to=self.to_field.get().lower().strip(),
+            days=int(self.days_field.get())
         )
 
         self.graph_frame.destroy()
