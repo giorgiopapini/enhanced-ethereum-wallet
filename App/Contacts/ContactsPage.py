@@ -17,6 +17,8 @@ class ContactsPage(Page):
     ADD_CONTACT_IMAGE = "App/Contacts/add_contact_img.png"
     CONTACTS_JSON_PATH = "App/Contacts/contacts.json"
 
+    add_contact_page = None
+
     def __init__(self, root, web3, **kwargs):
         super().__init__(root, web3, **kwargs)
 
@@ -79,11 +81,7 @@ class ContactsPage(Page):
             bd=0,
             highlightthickness=0,
             relief="ridge",
-            command=lambda: self.to_page(
-                page=AddContactPage,
-                frame=self.frame,
-                previous_page=ContactsPage
-            )
+            command=self.show_add_contact_page
         )
 
         self.new_contact_label.place(
@@ -103,6 +101,16 @@ class ContactsPage(Page):
         )
 
         self.search_box.bind("<Key>", self.filter_contacts)
+
+    def show_add_contact_page(self):
+        if utility_functions.toplevel_exist(toplevel=self.add_contact_page) is False:
+            self.add_contact_page = AddContactPage(
+                self.root,
+                self.web3,
+                callback=lambda: self.refresh_contacts_frame(contacts=self.get_contacts()),
+                bg="white"
+            )
+            self.add_contact_page.mainloop()
 
     def get_contacts(self):
         try:

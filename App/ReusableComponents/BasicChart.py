@@ -38,4 +38,4 @@ class BasicChart:
         ax.spines["right"].set_visible(False)
         ax.spines["top"].set_visible(False)
 
-        ax.set_title(self.title)
+        ax.set_title(self.title)  # use pad=num for adding space, ad maybe move the title to the left

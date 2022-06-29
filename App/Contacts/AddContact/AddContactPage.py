@@ -7,92 +7,103 @@ from Page import Page
 import json
 
 
-class AddContactPage(Page):
+class AddContactPage(Toplevel):
 
     BACKGROUND_IMG = "App/Contacts/AddContact/background.png"
-    INPUT_FIELD_IMG = "App/Contacts/AddContact/img_textBox.png"
-    BACK_ARROW_IMG = "KeyImport/img1.png"
-    CREATE_CONTACT_IMG = "App/Contacts/AddContact/create_btn_img.png"
+    INPUT_FIELD_IMG = "App/Contacts/AddContact/field_img.png"
+    CREATE_CONTACT_IMG = "App/Contacts/AddContact/create_contact_img.png"
     CONTACTS_JSON_PATH = "App/Contacts/contacts.json"
 
-    def __init__(self, root, web3, **kwargs):
-        super().__init__(root, web3, **kwargs)
+    def __init__(self, root, web3, callback=None, **kwargs):
+        super().__init__(**kwargs)
+
+        self.root = root
+        self.web3 = web3
+        self.callback = callback
+
+        self.title("Add contact")
+        self.geometry("380x380")
+        self.resizable(False, False)
 
         self.canvas = Canvas(
-            self.frame,
-            bg="white",
-            height=466,
-            width=522,
+            self,
+            bg="#ffffff",
+            height=380,
+            width=380,
             bd=0,
             highlightthickness=0,
-            relief="ridge"
-        )
+            relief="ridge")
         self.canvas.place(x=0, y=0)
 
         self.background_img = PhotoImage(file=self.BACKGROUND_IMG)
         self.background = self.canvas.create_image(
-            189.0, 132.5,
+            183.0, 167.0,
             image=self.background_img
+        )
+
+        self.new_contact_label = Label(
+            self,
+            text="New contact",
+            font=("OpenSansRoman-SemiBold", 30),
+            bg="white"
+        )
+        self.new_contact_label.place(
+            x=23, y=24
+        )
+
+        self.description_label = Label(
+            self,
+            text=f"Add a new contact to your address book",
+            font=("OpenSansRoman-Regular", int(13.7)),
+            bg="white"
+        )
+        self.description_label.place(
+            x=26, y=73
         )
 
         self.username_field_img = PhotoImage(file=self.INPUT_FIELD_IMG)
         self.username_field_bg = self.canvas.create_image(
-            217.0, 159.5,
+            178.5, 259.5,
             image=self.username_field_img
         )
 
         self.username_field = TextField(
-            master=self.frame,
-            bd=0,
-            bg="#ffffff",
-            highlightthickness=0
-        )
-
-        self.username_field.place(
-            x=73.5, y=147,
-            width=287.0,
-            height=27
-        )
-
-        self.address_field_img = PhotoImage(file=self.INPUT_FIELD_IMG)
-        self.address_field_bg = self.canvas.create_image(
-            217.0, 254.5,
-            image=self.address_field_img
-        )
-
-        self.address_field = TextField(
-            master=self.frame,
+            master=self,
             genesis_root=self.root,
             bd=0,
             bg="#ffffff",
             highlightthickness=0
         )
 
-        self.address_field.place(
-            x=73.5, y=242,
-            width=287.0,
+        self.username_field.place(
+            x=44.5, y=170,
+            width=268.0,
             height=27
+
         )
 
-        self.back_button_img = PhotoImage(file=self.BACK_ARROW_IMG)
-        self.back_button = Button(
-            self.frame,
-            image=self.back_button_img,
-            borderwidth=0,
-            highlightthickness=0,
-            command=lambda: self.to_page(
-                page=self.previous_page,
-                frame=self.frame
-            ),
-            relief="flat"
+        self.address_field_img = PhotoImage(file=self.INPUT_FIELD_IMG)
+        self.address_field_bg = self.canvas.create_image(
+            178.5, 182.5,
+            image=self.address_field_img
         )
-        self.back_button.place(
-            x=60, y=350
+
+        self.address_field = TextField(
+            master=self,
+            genesis_root=self.root,
+            bd=0,
+            bg="#ffffff",
+            highlightthickness=0)
+
+        self.address_field.place(
+            x=44.5, y=247,
+            width=268.0,
+            height=27
         )
 
         self.add_button_img = PhotoImage(file=self.CREATE_CONTACT_IMG)
         self.add_button = Button(
-            self.frame,
+            self,
             image=self.add_button_img,
             borderwidth=0,
             highlightthickness=0,
@@ -101,14 +112,14 @@ class AddContactPage(Page):
         )
 
         self.add_button.place(
-            x=246, y=350,
-            width=229,
-            height=59
+            x=179, y=311,
+            width=180,
+            height=42
         )
 
     def add_contact(self):
-        username = self.username_field.text
-        address = self.address_field.text
+        username = self.username_field.get()
+        address = self.address_field.get()
 
         valid = utility_functions.check_fields_validity(
             fields=[self.username_field, self.address_field],
@@ -131,8 +142,5 @@ class AddContactPage(Page):
                 json.dump(contacts, file)
                 file.truncate()
 
-            self.to_page(
-                page=self.previous_page,
-                frame=self.frame
-            )
-
+                self.callback()
+                self.destroy()
