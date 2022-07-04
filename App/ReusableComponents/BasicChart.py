@@ -3,7 +3,6 @@ from tkinter import *
 from pandas import DataFrame
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-import matplotlib.dates as mdates
 
 from datetime import datetime
 
@@ -38,4 +37,4 @@ class BasicChart:
         ax.spines["right"].set_visible(False)
         ax.spines["top"].set_visible(False)
 
-        ax.set_title(self.title)  # use pad=num for adding space, ad maybe move the title to the left
+        ax.set_title(self.title, pad=17, loc="left")

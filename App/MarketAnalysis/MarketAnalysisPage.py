@@ -1,6 +1,7 @@
 from tkinter import *
 
 import eth_generic_functions
+from App.MenuButton import MenuButton
 from App.ReusableComponents.BasicChart import BasicChart
 from App.ReusableComponents.TextField import TextField
 from Page import Page
@@ -13,11 +14,19 @@ import matplotlib.dates as mdates
 from datetime import datetime
 
 
-class AutomationPage(Page):
+class MarketAnalysisPage(Page):
 
     BACKGROUND = "App/MarketAnalysis/background.png"
+    MENU_BG_IMG = "App/MarketAnalysis/menu_bg_img.png"
     DONE_BTN_IMG = "App/MarketAnalysis/done_btn_img.png"
     FIELD_IMG = "App/MarketAnalysis/field_img.png"
+
+    PRICE_BTN_IMG = "App/BtnAssets/price_btn.png"
+    PRICE_BTN_FOCUS_IMG = "App/BtnAssets/price_btn_focus.png"
+    VOLUME_BTN_IMG = "App/BtnAssets/volume_btn.png"
+    VOLUME_BTN_FOCUS_IMG = "App/BtnAssets/volume_btn_focus.png"
+    MARKET_CAP_BTN_IMG = "App/BtnAssets/market_cap_btn.png"
+    MARKET_CAP_BTN_FOCUS_IMG = "App/BtnAssets/market_cap_btn_focus.png"
 
     def __init__(self, root, web3, **kwargs):
         super().__init__(root, web3, **kwargs)
@@ -37,7 +46,7 @@ class AutomationPage(Page):
 
         self.background_img = PhotoImage(file=self.BACKGROUND)
         self.background = self.canvas.create_image(
-            263.0, 242.0,
+            263.0, 246.5,
             image=self.background_img
         )
 
@@ -126,6 +135,78 @@ class AutomationPage(Page):
         # https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=eur&days=4&interval=daily
         # https://api.coingecko.com/api/v3/coins/list
 
+        self.menu_bg_img = PhotoImage(file=self.MENU_BG_IMG)
+        self.menu_bg = Label(
+            self.frame,
+            image=self.menu_bg_img,
+            borderwidth=0,
+            highlightthickness=0,
+            relief="flat"
+        )
+
+        self.menu_bg.place(
+            x=272, y=200,
+            width=173,
+            height=32
+        )
+
+        self.price_btn_img = PhotoImage(file=self.PRICE_BTN_IMG)
+        self.price_btn_focus_img = PhotoImage(file=self.PRICE_BTN_FOCUS_IMG)
+        self.price_btn = MenuButton(
+            master=self.frame,
+            image=self.price_btn_img,
+            focused_image=self.price_btn_focus_img,
+            borderwidth=0,
+            highlightthickness=0,
+            relief="flat"
+        )
+
+        self.price_btn.place(
+            x=278, y=202,  # x = +3, y = -2
+            width=44,
+            height=28
+        )
+
+        self.mk_cap_btn_img = PhotoImage(file=self.MARKET_CAP_BTN_IMG)
+        self.mk_cap_btn_focus_img = PhotoImage(file=self.MARKET_CAP_BTN_FOCUS_IMG)
+        self.mk_cap_btn = MenuButton(
+            master=self.frame,
+            image=self.mk_cap_btn_img,
+            focused_image=self.mk_cap_btn_focus_img,
+            borderwidth=0,
+            highlightthickness=0,
+            relief="flat"
+        )
+
+        self.mk_cap_btn.place(
+            x=329.3, y=202,
+            width=61,
+            height=28
+        )
+
+        self.volume_btn_img = PhotoImage(file=self.VOLUME_BTN_IMG)
+        self.volume_btn_focus_img = PhotoImage(file=self.VOLUME_BTN_FOCUS_IMG)
+        self.volume_btn = MenuButton(
+            master=self.frame,
+            image=self.volume_btn_img,
+            focused_image=self.volume_btn_focus_img,
+            borderwidth=0,
+            highlightthickness=0,
+            relief="flat"
+        )
+
+        self.volume_btn.place(
+            x=396, y=202,
+            width=44,
+            height=28
+        )
+
+        self.buttons = [self.price_btn, self.mk_cap_btn, self.volume_btn]
+
+        self.price_btn.bind("<Button>", self.btn_clicked)
+        self.mk_cap_btn.bind("<Button>", self.btn_clicked)
+        self.volume_btn.bind("<Button>", self.btn_clicked)
+
     def place_update_chart(self):
         result = eth_generic_functions.get_coin_price_data(
             coin_id=self.id_field.get().lower().strip(),
@@ -133,10 +214,12 @@ class AutomationPage(Page):
             days=int(self.days_field.get())
         )
 
+        print(result)
+
         self.graph_frame.destroy()
         self.graph_frame = Frame(self.frame)
         self.graph_frame.place(
-            x=60, y=196.5
+            x=60, y=204
         )
 
         self.price_chart = BasicChart(
@@ -149,3 +232,27 @@ class AutomationPage(Page):
             title=f"{self.id_field.text.lower().strip()} / {self.to_field.text.lower().strip()}",
         )
         self.price_chart.place_chart()
+
+    def update_menu(self, clicked_btn):
+        clicked_btn.config(
+            image=clicked_btn.focused_image
+        )
+        for btn in self.buttons:
+            if btn is not clicked_btn:
+                btn.config(
+                    image=btn.default_image
+                )
+
+    def clean_frame(self):
+        for widget in self.graph_frame.winfo_children():
+            widget.destroy()
+
+    def btn_clicked(self, event=None, def_btn=None):
+        btn = None
+        if def_btn is None:
+            btn = event.widget
+        elif event is None:
+            btn = def_btn
+
+        self.update_menu(btn)
+        self.clean_frame()

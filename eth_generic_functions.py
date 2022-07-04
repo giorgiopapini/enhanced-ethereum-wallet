@@ -117,7 +117,6 @@ def get_coin_price_data(coin_id=None, to="usd", days=1, interval=None):
             days=days,
             interval=interval
         )
-        print(url)
         return utility_functions.get_api_response(url=url)
 
 

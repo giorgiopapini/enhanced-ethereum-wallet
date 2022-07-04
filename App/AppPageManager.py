@@ -1,7 +1,7 @@
 from tkinter import *
 from PIL import Image
 import utility_functions
-from App.MarketAnalysis.AutomationPage import AutomationPage
+from App.MarketAnalysis.MarketAnalysisPage import MarketAnalysisPage
 from App.Contacts.ContactsPage import ContactsPage
 from App.ManageFunds.FundsPage import FundsPage
 from App.MenuButton import MenuButton
@@ -116,27 +116,27 @@ class AppPageManager(Page):
             width=204,
             height=42)
 
-        self.root.img_automation = PhotoImage(file=self.AUTOMATION_BTN)
-        self.root.focused_img_automation = PhotoImage(file=self.AUTOMATION_BTN_FOCUS)
-        self.automation_btn = MenuButton(
-            image=self.root.img_automation,
-            focused_image=self.root.focused_img_automation,
-            related_page=AutomationPage,
+        self.root.img_market = PhotoImage(file=self.AUTOMATION_BTN)
+        self.root.focused_img_market = PhotoImage(file=self.AUTOMATION_BTN_FOCUS)
+        self.market_analysis_btn = MenuButton(
+            image=self.root.img_market,
+            focused_image=self.root.focused_img_market,
+            related_page=MarketAnalysisPage,
             borderwidth=0,
             highlightthickness=0,
             relief="flat")
 
-        self.automation_btn.place(
+        self.market_analysis_btn.place(
             x=28, y=380,
             width=202,
             height=42)
 
-        self.buttons = [self.wallet_btn, self.funds_btn, self.contacts_btn, self.automation_btn]
+        self.buttons = [self.wallet_btn, self.funds_btn, self.contacts_btn, self.market_analysis_btn]
 
         self.wallet_btn.bind("<Button>", self.btn_clicked)
         self.funds_btn.bind("<Button>", self.btn_clicked)
         self.contacts_btn.bind("<Button>", self.btn_clicked)
-        self.automation_btn.bind("<Button>", self.btn_clicked)
+        self.market_analysis_btn.bind("<Button>", self.btn_clicked)
 
         self.render_default_page()
 
