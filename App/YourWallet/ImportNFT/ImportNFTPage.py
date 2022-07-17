@@ -11,7 +11,7 @@ from Page import Page
 class ImportNFTPage(Page):
 
     BACKGROUND_IMG = "App/YourWallet/ImportNFT/background.png"
-    INPUT_FIELD_IMG = "App/Contacts/AddContact/img_textBox.png"
+    INPUT_FIELD_IMG = "App/Contacts/AddContact/field_img.png"
     DISABLED_TEXT_BOX_IMAGE = "App/YourWallet/ImportToken/disabled_textbox_img.png"
     IMPORT_BUTTON_IMG = "App/YourWallet/ImportNFT/import_button.png"
     COPY_BUTTON_IMG = "App/Contacts/ContactTile/copy_img.png"
@@ -46,7 +46,8 @@ class ImportNFTPage(Page):
             borderwidth=0,
             highlightthickness=0,
             command=self.import_nft,
-            relief="flat"
+            relief="flat",
+            cursor="hand2"
         )
 
         self.import_button.place(
@@ -125,7 +126,8 @@ class ImportNFTPage(Page):
             borderwidth=0,
             highlightthickness=0,
             command=self.copy_to_clipboard,
-            relief="flat"
+            relief="flat",
+            cursor="hand2"
         )
 
         self.copy_button.place(
@@ -145,7 +147,8 @@ class ImportNFTPage(Page):
                 frame=self.frame,
                 eth_account=self.eth_account
             ),
-            relief="flat"
+            relief="flat",
+            cursor="hand2"
         )
         self.back_button.place(
             x=60, y=383

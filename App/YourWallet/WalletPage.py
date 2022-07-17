@@ -99,7 +99,8 @@ class WalletPage(Page):
                 frame=self.frame,
                 previous_page=WalletPage,
                 eth_account=self.eth_account
-            )
+            ),
+            cursor="hand2"
         )
         self.import_tokens.place(
             x=79.8, y=430
@@ -117,7 +118,8 @@ class WalletPage(Page):
                 frame=self.frame,
                 previous_page=WalletPage,
                 eth_account=self.eth_account
-            )
+            ),
+            cursor="hand2"
         )
         self.import_nft.place(
             x=352, y=430

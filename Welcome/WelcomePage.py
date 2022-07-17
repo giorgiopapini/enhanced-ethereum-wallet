@@ -33,7 +33,9 @@ class WelcomePage(Page):
             borderwidth=0,
             highlightthickness=0,
             command=self.render_sign_up,
-            relief="flat")
+            relief="flat",
+            cursor="hand2"
+        )
 
         self.b0.place(
             x=306, y=263,
@@ -46,7 +48,9 @@ class WelcomePage(Page):
             borderwidth=0,
             highlightthickness=0,
             command=self.render_import,
-            relief="flat")
+            relief="flat",
+            cursor="hand2"
+        )
 
         self.b1.place(
             x=307, y=318,

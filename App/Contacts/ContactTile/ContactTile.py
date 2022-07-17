@@ -82,7 +82,8 @@ class ContactTile(Frame):
             bd=0,
             highlightthickness=0,
             relief="ridge",
-            command=self.copy_address
+            command=self.copy_address,
+            cursor="hand2"
         )
         self.copy_btn.place(
             x=295, y=10
@@ -95,7 +96,8 @@ class ContactTile(Frame):
             bd=0,
             highlightthickness=0,
             relief="ridge",
-            command=self.delete_contact
+            command=self.delete_contact,
+            cursor="hand2"
         )
         self.delete_btn.place(
             x=328, y=9

@@ -35,6 +35,7 @@ class SignUpPage(Page):
             command=lambda: self.to_page(
                 page=self.previous_page,
             ),
+            cursor="hand2",
             relief="flat")
 
         self.b1.place(
@@ -48,7 +49,9 @@ class SignUpPage(Page):
             borderwidth=0,
             highlightthickness=0,
             command=self.sign_up,
-            relief="flat")
+            relief="flat",
+            cursor="hand2"
+        )
 
         self.b0.place(
             x=220, y=409,

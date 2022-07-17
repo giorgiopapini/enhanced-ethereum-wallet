@@ -60,7 +60,8 @@ class TokenDetailsPage(Page):
             borderwidth=0,
             highlightthickness=0,
             command=self.show_send_page,
-            relief="flat"
+            relief="flat",
+            cursor="hand2"
         )
 
         self.send_button.place(
@@ -76,7 +77,8 @@ class TokenDetailsPage(Page):
             borderwidth=0,
             highlightthickness=0,
             command=self.show_buy_page,
-            relief="flat"
+            relief="flat",
+            cursor="hand2"
         )
 
         self.buy_button.place(

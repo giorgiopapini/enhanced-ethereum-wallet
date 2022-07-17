@@ -19,6 +19,7 @@ class TransactionTile(Frame):
         self.eth_account = eth_account
         self.token = token
         self.transaction_details_page = None
+        self.config(cursor="hand2")
 
         self.background_img = PhotoImage(file=self.TILE_BACKGROUND)
         self.background = Label(

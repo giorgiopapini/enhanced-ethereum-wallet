@@ -69,7 +69,8 @@ class TokenTile(Frame):
             borderwidth=0,
             highlightthickness=0,
             command=self.to_token_details,
-            relief="flat"
+            relief="flat",
+            cursor="hand2"
         )
 
         self.arrow.place(

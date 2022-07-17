@@ -65,7 +65,8 @@ class BuyPage(Toplevel):
             borderwidth=0,
             highlightthickness=0,
             command=lambda: webbrowser.open(self.MOONPAY_URL, new=2),
-            relief="flat"
+            relief="flat",
+            cursor="hand2"
         )
 
         self.moonpay_btn.place(
@@ -81,7 +82,8 @@ class BuyPage(Toplevel):
             borderwidth=0,
             highlightthickness=0,
             command=lambda: webbrowser.open(self.WYRE_URL, new=2),
-            relief="flat"
+            relief="flat",
+            cursor="hand2"
         )
 
         self.wyre_btn.place(

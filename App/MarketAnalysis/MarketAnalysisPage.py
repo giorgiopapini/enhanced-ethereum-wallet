@@ -6,13 +6,6 @@ from App.ReusableComponents.BasicChart import BasicChart
 from App.ReusableComponents.TextField import TextField
 from Page import Page
 
-from pandas import DataFrame
-import matplotlib.pyplot as plt
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-import matplotlib.dates as mdates
-
-from datetime import datetime
-
 
 class MarketAnalysisPage(Page):
 
@@ -27,6 +20,10 @@ class MarketAnalysisPage(Page):
     VOLUME_BTN_FOCUS_IMG = "App/BtnAssets/volume_btn_focus.png"
     MARKET_CAP_BTN_IMG = "App/BtnAssets/market_cap_btn.png"
     MARKET_CAP_BTN_FOCUS_IMG = "App/BtnAssets/market_cap_btn_focus.png"
+
+    PRICE_JSON = "prices"
+    MARKET_CAP_JSON = "market_caps"
+    VOLUME_JSON = "total_volumes"
 
     def __init__(self, root, web3, **kwargs):
         super().__init__(root, web3, **kwargs)
@@ -119,8 +116,9 @@ class MarketAnalysisPage(Page):
             image=self.done_btn_img,
             borderwidth=0,
             highlightthickness=0,
-            command=self.place_update_chart,
-            relief="flat"
+            command=self.place_default_chart,
+            relief="flat",
+            cursor="hand2"
         )
 
         self.done_btn.place(
@@ -129,7 +127,10 @@ class MarketAnalysisPage(Page):
             height=39
         )
 
-        self.place_update_chart()
+        self.graph_frame = Frame(self.frame)
+        self.graph_frame.place(
+            x=60, y=204
+        )
 
         # https://api.coingecko.com/api/v3/coins/bitcoin/ohlc?vs_currency=eur&days=7
         # https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=eur&days=4&interval=daily
@@ -156,6 +157,7 @@ class MarketAnalysisPage(Page):
             master=self.frame,
             image=self.price_btn_img,
             focused_image=self.price_btn_focus_img,
+            related_page=self.PRICE_JSON,
             borderwidth=0,
             highlightthickness=0,
             relief="flat"
@@ -173,6 +175,7 @@ class MarketAnalysisPage(Page):
             master=self.frame,
             image=self.mk_cap_btn_img,
             focused_image=self.mk_cap_btn_focus_img,
+            related_page=self.MARKET_CAP_JSON,
             borderwidth=0,
             highlightthickness=0,
             relief="flat"
@@ -190,6 +193,7 @@ class MarketAnalysisPage(Page):
             master=self.frame,
             image=self.volume_btn_img,
             focused_image=self.volume_btn_focus_img,
+            related_page=self.VOLUME_JSON,
             borderwidth=0,
             highlightthickness=0,
             relief="flat"
@@ -207,27 +211,27 @@ class MarketAnalysisPage(Page):
         self.mk_cap_btn.bind("<Button>", self.btn_clicked)
         self.volume_btn.bind("<Button>", self.btn_clicked)
 
-    def place_update_chart(self):
+        self.place_default_chart()
+
+    def place_default_chart(self):
+        self.update_menu(clicked_btn=self.price_btn)
+        self.place_update_chart()
+
+    def place_update_chart(self, chart_type=PRICE_JSON):
         result = eth_generic_functions.get_coin_price_data(
             coin_id=self.id_field.get().lower().strip(),
             to=self.to_field.get().lower().strip(),
             days=int(self.days_field.get())
         )
 
-        print(result)
-
-        self.graph_frame.destroy()
-        self.graph_frame = Frame(self.frame)
-        self.graph_frame.place(
-            x=60, y=204
-        )
+        self.clean_frame()
 
         self.price_chart = BasicChart(
             master=self.graph_frame,
-            data=result["prices"],
+            data=result[chart_type],
             kind="line",
             # if first value is greater than last value it means that the asset has lost value
-            color="red" if result["prices"][0][1] > result["prices"][len(result["prices"]) - 1][
+            color="red" if result[chart_type][0][1] > result[chart_type][len(result[chart_type]) - 1][
                 1] else "green",
             title=f"{self.id_field.text.lower().strip()} / {self.to_field.text.lower().strip()}",
         )
@@ -255,4 +259,4 @@ class MarketAnalysisPage(Page):
             btn = def_btn
 
         self.update_menu(btn)
-        self.clean_frame()
+        self.place_update_chart(chart_type=btn.related_page)

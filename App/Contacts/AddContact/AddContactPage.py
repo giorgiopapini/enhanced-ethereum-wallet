@@ -108,7 +108,8 @@ class AddContactPage(Toplevel):
             borderwidth=0,
             highlightthickness=0,
             command=self.add_contact,
-            relief="flat"
+            relief="flat",
+            cursor="hand2"
         )
 
         self.add_button.place(

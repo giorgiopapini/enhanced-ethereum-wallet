@@ -8,3 +8,5 @@ class MenuButton(Label):
         self.default_image = kwargs.get("image")
         self.focused_image = focused_image
         self.related_page = related_page
+
+        self.config(cursor="hand2")

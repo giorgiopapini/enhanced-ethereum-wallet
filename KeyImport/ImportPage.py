@@ -43,7 +43,9 @@ class ImportPage(Page):
             borderwidth=0,
             highlightthickness=0,
             command=self.import_account,
-            relief="flat")
+            relief="flat",
+            cursor="hand2"
+        )
 
         self.b0.place(
             x=292, y=310,
@@ -63,6 +65,7 @@ class ImportPage(Page):
             command=lambda: self.to_page(
                 page=self.previous_page,
             ),
+            cursor="hand2",
             relief="flat")
 
         self.b1.place(

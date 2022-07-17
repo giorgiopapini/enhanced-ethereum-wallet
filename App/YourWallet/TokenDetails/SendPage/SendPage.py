@@ -142,7 +142,8 @@ class SendPage(Toplevel):
             borderwidth=0,
             highlightthickness=0,
             command=self.send_amount,
-            relief="flat"
+            relief="flat",
+            cursor="hand2"
         )
 
         self.send_button.place(

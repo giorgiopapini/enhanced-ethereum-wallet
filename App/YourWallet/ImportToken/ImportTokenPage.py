@@ -11,7 +11,7 @@ from Page import Page
 class ImportTokenPage(Page):
 
     BACKGROUND_IMG = "App/YourWallet/ImportToken/background.png"
-    TEXT_BOX_IMAGE = "App/Contacts/AddContact/img_textBox.png"
+    TEXT_BOX_IMAGE = "App/Contacts/AddContact/field_img.png"
     DISABLED_TEXT_BOX_IMAGE = "App/YourWallet/ImportToken/disabled_textbox_img.png"
     BACK_ARROW_IMG = "KeyImport/img1.png"
     IMPORT_BUTTON_IMAGE = "App/YourWallet/ImportToken/import_button_img.png"
@@ -107,7 +107,8 @@ class ImportTokenPage(Page):
             borderwidth=0,
             highlightthickness=0,
             command=self.import_token,
-            relief="flat"
+            relief="flat",
+            cursor="hand2"
         )
 
         self.import_button.place(
@@ -127,7 +128,8 @@ class ImportTokenPage(Page):
                 frame=self.frame,
                 eth_account=self.eth_account
             ),
-            relief="flat"
+            relief="flat",
+            cursor="hand2"
         )
         self.back_button.place(
             x=60, y=383

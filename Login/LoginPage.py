@@ -38,7 +38,9 @@ class LoginPage(Page):
             borderwidth=0,
             highlightthickness=0,
             command=self.login,
-            relief="flat")
+            relief="flat",
+            cursor="hand2"
+        )
 
         self.b0.place(
             x=307, y=279,
@@ -69,6 +71,7 @@ class LoginPage(Page):
                 page=ImportPage,
                 previous_page=LoginPage
             ),
+            cursor="hand2",
             relief="flat")
 
         self.b1.place(

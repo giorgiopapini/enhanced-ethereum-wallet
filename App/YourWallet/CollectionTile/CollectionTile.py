@@ -49,7 +49,8 @@ class CollectionTile(Frame):
             borderwidth=0,
             highlightthickness=0,
             command=self.to_nfts_details,
-            relief="flat"
+            relief="flat",
+            cursor="hand2"
         )
 
         self.arrow.place(

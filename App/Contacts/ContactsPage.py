@@ -65,7 +65,8 @@ class ContactsPage(Page):
             borderwidth=0,
             highlightthickness=0,
             command=self.clean_search_box,
-            relief="flat"
+            relief="flat",
+            cursor="hand2"
         )
 
         self.search_button.place(
@@ -81,7 +82,8 @@ class ContactsPage(Page):
             bd=0,
             highlightthickness=0,
             relief="ridge",
-            command=self.show_add_contact_page
+            command=self.show_add_contact_page,
+            cursor="hand2"
         )
 
         self.new_contact_label.place(
