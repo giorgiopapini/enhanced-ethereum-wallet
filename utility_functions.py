@@ -38,7 +38,7 @@ def make_etherscan_api_url(base_url=constants.ETHERSCAN_BASE_API_URL, module=Non
     return url
 
 
-def make_coingecko_coins_api_url(base_url=constants.COINGECKO_BASE_API_URL, coin_id=None, action=None, **kwargs):
+def make_coingecko_coins_api_url(base_url=constants.COINGECKO_BASE_API_URL, coin_id="", action="", **kwargs):
     url = f"{base_url}/coins/{coin_id}/{action}?"
     for key, value in kwargs.items():
         url += f"&{str(key)}={str(value)}"

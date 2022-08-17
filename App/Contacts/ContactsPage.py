@@ -109,7 +109,10 @@ class ContactsPage(Page):
             self.add_contact_page = AddContactPage(
                 self.root,
                 self.web3,
-                callback=lambda: self.refresh_contacts_frame(contacts=self.get_contacts()),
+                callback=lambda: self.contacts_list.refresh_list(
+                    parent_frame=self.contacts_list_frame,
+                    elements=self.get_contacts()
+                ),
                 bg="white"
             )
             self.add_contact_page.mainloop()
@@ -133,7 +136,7 @@ class ContactsPage(Page):
                     filtered_raw_contacts.append(contact)
 
         contacts = self.create_list_elements(raw_contacts=filtered_raw_contacts)
-        self.refresh_contacts_frame(contacts=contacts)
+        self.contacts_list.refresh_list(parent_frame=self.contacts_list_frame, elements=contacts)
 
     def clean_search_box(self):
         self.search_box.delete(0, END)
@@ -157,7 +160,3 @@ class ContactsPage(Page):
                 )
             )
         return contact_list
-
-    def refresh_contacts_frame(self, contacts):
-        self.contacts_list.destroy()
-        self.contacts_list.__init__(parent=self.contacts_list_frame, elements=contacts)

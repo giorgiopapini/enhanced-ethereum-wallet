@@ -121,7 +121,8 @@ class NFTDetailsPage(Page):
                 frame=self.frame,
                 eth_account=self.eth_account
             ),
-            relief="flat"
+            relief="flat",
+            cursor="hand2"
         )
         self.back_button.place(
             x=47, y=415

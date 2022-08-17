@@ -20,8 +20,8 @@ class AppPageManager(Page):
     CONTACTS_BTN = "App/BtnAssets/contacts_btn.png"
     CONTACTS_BTN_FOCUS = "App/BtnAssets/contacts_btn_focus.png"
 
-    AUTOMATION_BTN = "App/BtnAssets/automation_btn.png"
-    AUTOMATION_BTN_FOCUS = "App/BtnAssets/automation_btn_focus.png"
+    MARKET_ANALYSIS_BTN = "App/BtnAssets/market_analysis_btn.png"
+    MARKET_ANALYSIS_BTN_FOCUS = "App/BtnAssets/market_analysis_btn_focus.png"
 
     buttons = []
 
@@ -116,15 +116,16 @@ class AppPageManager(Page):
             width=204,
             height=42)
 
-        self.root.img_market = PhotoImage(file=self.AUTOMATION_BTN)
-        self.root.focused_img_market = PhotoImage(file=self.AUTOMATION_BTN_FOCUS)
+        self.root.img_market = PhotoImage(file=self.MARKET_ANALYSIS_BTN)
+        self.root.focused_img_market = PhotoImage(file=self.MARKET_ANALYSIS_BTN_FOCUS)
         self.market_analysis_btn = MenuButton(
             image=self.root.img_market,
             focused_image=self.root.focused_img_market,
             related_page=MarketAnalysisPage,
             borderwidth=0,
             highlightthickness=0,
-            relief="flat")
+            relief="flat"
+        )
 
         self.market_analysis_btn.place(
             x=28, y=380,

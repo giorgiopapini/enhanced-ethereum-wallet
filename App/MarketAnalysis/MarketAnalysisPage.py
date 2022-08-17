@@ -1,6 +1,8 @@
 from tkinter import *
 
 import eth_generic_functions
+import utility_functions
+from App.MarketAnalysis.CoinsList.CoinsList import CoinsList
 from App.MenuButton import MenuButton
 from App.ReusableComponents.BasicChart import BasicChart
 from App.ReusableComponents.TextField import TextField
@@ -13,6 +15,7 @@ class MarketAnalysisPage(Page):
     MENU_BG_IMG = "App/MarketAnalysis/menu_bg_img.png"
     DONE_BTN_IMG = "App/MarketAnalysis/done_btn_img.png"
     FIELD_IMG = "App/MarketAnalysis/field_img.png"
+    COINS_LIST_BTN_IMG = "App/MarketAnalysis/coins_list_btn_img.png"
 
     PRICE_BTN_IMG = "App/BtnAssets/price_btn.png"
     PRICE_BTN_FOCUS_IMG = "App/BtnAssets/price_btn_focus.png"
@@ -24,6 +27,8 @@ class MarketAnalysisPage(Page):
     PRICE_JSON = "prices"
     MARKET_CAP_JSON = "market_caps"
     VOLUME_JSON = "total_volumes"
+
+    coins_list_toplevel = None
 
     def __init__(self, root, web3, **kwargs):
         super().__init__(root, web3, **kwargs)
@@ -45,6 +50,23 @@ class MarketAnalysisPage(Page):
         self.background = self.canvas.create_image(
             263.0, 246.5,
             image=self.background_img
+        )
+
+        self.coins_list_btn_img = PhotoImage(file=self.COINS_LIST_BTN_IMG)
+        self.coins_list_btn = Button(
+            self.frame,
+            image=self.coins_list_btn_img,
+            borderwidth=0,
+            highlightthickness=0,
+            command=self.show_coins_list,
+            relief="flat",
+            cursor="hand2"
+        )
+
+        self.coins_list_btn.place(
+            x=383, y=57,
+            width=63,
+            height=20
         )
 
         self.id_field_img = PhotoImage(file=self.FIELD_IMG)
@@ -164,7 +186,7 @@ class MarketAnalysisPage(Page):
         )
 
         self.price_btn.place(
-            x=278, y=202,  # x = +3, y = -2
+            x=278, y=202,
             width=44,
             height=28
         )
@@ -233,7 +255,10 @@ class MarketAnalysisPage(Page):
             # if first value is greater than last value it means that the asset has lost value
             color="red" if result[chart_type][0][1] > result[chart_type][len(result[chart_type]) - 1][
                 1] else "green",
-            title=f"{self.id_field.text.lower().strip()} / {self.to_field.text.lower().strip()}",
+            title=f""
+                  f"{utility_functions.format_string(self.id_field.text.lower().strip(), 8)} "
+                  f"/ "
+                  f"{utility_functions.format_string(self.to_field.text.lower().strip(), 8)}",
         )
         self.price_chart.place_chart()
 
@@ -260,3 +285,12 @@ class MarketAnalysisPage(Page):
 
         self.update_menu(btn)
         self.place_update_chart(chart_type=btn.related_page)
+
+    def show_coins_list(self):
+        if utility_functions.toplevel_exist(toplevel=self.coins_list_toplevel) is False:
+            self.coins_list_toplevel = CoinsList(
+                self.root,
+                self.web3,
+                bg="white"
+            )
+            self.coins_list_toplevel.mainloop()

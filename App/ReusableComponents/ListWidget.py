@@ -77,3 +77,7 @@ class ListWidget:
         self.canvas.delete("all")
         self.scrollbar.destroy()
         self.frame.destroy()
+
+    def refresh_list(self, parent_frame=None, elements=None):
+        self.destroy()
+        self.__init__(parent=parent_frame, elements=elements)
