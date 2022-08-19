@@ -155,15 +155,14 @@ class ImportNFTPage(Page):
         )
 
     def get_nft_data(self):
-        self.nft_metadata = eth_generic_functions.get_nft_metadata(
-            web3=self.web3,
-            contract_address=self.address_field.text,
-            token_id=int(self.nft_id_field.text)
-        )
-        self.nft_url_field.clear_field()
-        self.nft_url_field.override_text(text=self.nft_metadata["image"])
         try:
-            pass
+            self.nft_metadata = eth_generic_functions.get_nft_metadata(
+                web3=self.web3,
+                contract_address=self.address_field.text,
+                token_id=int(self.nft_id_field.text)
+            )
+            self.nft_url_field.clear_field()
+            self.nft_url_field.override_text(text=self.nft_metadata["image"])
         except:
             self.nft_url_field.show_error(error=constants.ERRORS["ERROR_ERC721_NOT_FOUND"])
 
