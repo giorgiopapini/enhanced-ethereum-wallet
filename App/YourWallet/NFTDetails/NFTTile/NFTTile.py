@@ -64,7 +64,8 @@ class NFTTile(Frame):
             borderwidth=0,
             highlightthickness=0,
             command=self.arrow_clicked,
-            relief="flat"
+            relief="flat",
+            cursor="hand2"
         )
 
         self.arrow.place(

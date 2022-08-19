@@ -26,7 +26,6 @@ class EthereumAccount:
 
         signed_tx = self.web3.eth.account.signTransaction(tx, priv_key)
         tx_hash = self.web3.eth.sendRawTransaction(signed_tx.rawTransaction)
-        print(self.web3.toHex(tx_hash))
 
     def send_erc20_token(self, erc20_address=None, receiver_addr=None, amount=None):
         priv_key = self.account.privateKey.hex()
@@ -49,4 +48,24 @@ class EthereumAccount:
 
         signed_tx = self.web3.eth.account.signTransaction(erc20_tx, priv_key)
         tx_hash = self.web3.eth.sendRawTransaction(signed_tx.rawTransaction)
-        print(self.web3.toHex(tx_hash))
+
+    def send_ERC721(self, contract_address=None, sender=None, receiver=None, token_id=None):
+        contract = self.web3.eth.contract(address=self.web3.toChecksumAddress(contract_address), abi=constants.ERC721_ABI)
+        nonce = self.web3.eth.getTransactionCount(self.account.address)
+        current_gas_price = eth_generic_functions.get_eth_gas_prices()["SafeGasPrice"]
+
+        from_address = self.web3.toChecksumAddress(sender)
+        to_address = self.web3.toChecksumAddress(receiver)
+
+        mint_txn = contract.functions.transferFrom(from_address, to_address, int(token_id)).buildTransaction(
+            {
+                "chainId": constants.GOERLI_CHAIN_ID,
+                "nonce": nonce,
+                "from": from_address,
+                "gas": 1000000,
+                "gasPrice": self.web3.toWei(current_gas_price, 'gwei')
+            }
+        )
+
+        signed_tx = self.web3.eth.account.sign_transaction(mint_txn, private_key=self.account.privateKey.hex())
+        tx_hash = self.web3.eth.sendRawTransaction(signed_tx.rawTransaction)

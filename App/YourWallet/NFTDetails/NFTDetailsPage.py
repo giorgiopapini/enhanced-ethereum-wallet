@@ -1,3 +1,4 @@
+import json
 from tkinter import *
 
 import constants
@@ -16,6 +17,8 @@ class NFTDetailsPage(Page):
     SEND_BUTTON_IMG = "App/YourWallet/NFTDetails/send_button_img.png"
     ADDRESS_FIELD_IMG = "App/YourWallet/NFTDetails/address_field_img.png"
     BACK_ARROW_IMG = "KeyImport/img1.png"
+
+    NFT_JSON_PATH = "App/YourWallet/nfts.json"
 
     def __init__(self, root, web3, **kwargs):
         super().__init__(root, web3, **kwargs)
@@ -101,7 +104,8 @@ class NFTDetailsPage(Page):
             borderwidth=0,
             highlightthickness=0,
             command=self.send_nft,
-            relief="flat"
+            relief="flat",
+            cursor="hand2"
         )
 
         self.send_button.place(
@@ -150,13 +154,34 @@ class NFTDetailsPage(Page):
 
     def send_nft(self):
         try:
-            print(self.selected_nft)
-            eth_generic_functions.send_ERC721(
-                web3=self.web3,
+            self.eth_account.send_ERC721(
                 contract_address=self.selected_nft["address"],
                 sender=self.eth_account.account.address,
                 receiver=self.address_field.text,
                 token_id=self.selected_nft["token_id"]
             )
+            self.remove_nft_from_json()
+            self.to_page(
+                page=self.previous_page,
+                frame=self.frame,
+                eth_account=self.eth_account
+            )
         except:
             self.address_field.show_error(error=constants.ERRORS["ERROR_SENDING_ERC721"])
+
+    def remove_nft_from_json(self):
+        with open(self.NFT_JSON_PATH, "r+") as file:
+            json_collections = json.load(file)
+            json_nfts = json_collections[self.collection_name]
+            for i in range(len(json_nfts)):
+                if json_nfts[i] == self.selected_nft:
+                    if len(json_nfts) == 1:
+                        del json_collections[self.collection_name]
+                        break
+                    else:
+                        del json_collections[self.collection_name][i]
+                        break
+
+            file.seek(0)
+            json.dump(json_collections, file)
+            file.truncate()

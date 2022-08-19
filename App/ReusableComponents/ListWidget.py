@@ -29,6 +29,7 @@ class ListWidget:
             self.parent,
             orient="vertical",
             command=self.canvas.yview,
+            cursor="hand2"
         )
         self.canvas.configure(
             scrollregion=self.canvas.bbox('all'),
