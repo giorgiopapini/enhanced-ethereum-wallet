@@ -3,7 +3,6 @@ from tkinter import *
 import constants
 import utility_functions
 from App.ReusableComponents.TextField import TextField
-from Page import Page
 import json
 
 
@@ -12,14 +11,14 @@ class AddContactPage(Toplevel):
     BACKGROUND_IMG = "App/Contacts/AddContact/background.png"
     INPUT_FIELD_IMG = "App/Contacts/AddContact/field_img.png"
     CREATE_CONTACT_IMG = "App/Contacts/AddContact/create_contact_img.png"
-    CONTACTS_JSON_PATH = "App/Contacts/contacts.json"
 
-    def __init__(self, root, web3, callback=None, **kwargs):
+    def __init__(self, root, web3, callback=None, address=None, **kwargs):
         super().__init__(**kwargs)
 
         self.root = root
         self.web3 = web3
         self.callback = callback
+        self.address = address
 
         self.title("Add contact")
         self.geometry("380x380")
@@ -134,7 +133,8 @@ class AddContactPage(Toplevel):
         )
 
         if valid is True:
-            with open(self.CONTACTS_JSON_PATH, "r+") as file:
+            path = f"App/Accounts/{self.address}/contacts.json"
+            with open(path, "r+") as file:
                 contacts = json.load(file)
                 contacts.append({"name": username.lower().capitalize(), "address": address})
                 contacts.sort(key=lambda x: x["name"])

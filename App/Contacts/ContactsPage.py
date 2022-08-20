@@ -15,7 +15,6 @@ class ContactsPage(Page):
     SEARCH_BOX_IMAGE = "App/Contacts/search_box.png"
     CLEAN_BUTTON_IMAGE = "App/Contacts/clean_button.png"
     ADD_CONTACT_IMAGE = "App/Contacts/add_contact_img.png"
-    CONTACTS_JSON_PATH = "App/Contacts/contacts.json"
 
     add_contact_page = None
 
@@ -113,13 +112,15 @@ class ContactsPage(Page):
                     parent_frame=self.contacts_list_frame,
                     elements=self.get_contacts()
                 ),
+                address=self.eth_account.account.address,
                 bg="white"
             )
             self.add_contact_page.mainloop()
 
     def get_contacts(self):
         try:
-            with open(self.CONTACTS_JSON_PATH, "r") as file:
+            path = f"{self.eth_account.account_path}/contacts.json"
+            with open(path, "r") as file:
                 raw_contacts = json.load(file)
                 contacts = self.create_list_elements(raw_contacts=raw_contacts)
                 return contacts
@@ -128,7 +129,8 @@ class ContactsPage(Page):
 
     def filter_contacts(self, event):
         query = utility_functions.format_query(event=event)
-        with open(self.CONTACTS_JSON_PATH, "r") as file:
+        path = f"{self.eth_account.account_path}/contacts.json"
+        with open(path, "r") as file:
             raw_contacts = json.load(file)
             filtered_raw_contacts = []
             for contact in raw_contacts:
@@ -156,6 +158,7 @@ class ContactsPage(Page):
                     genesis_root=self.root,
                     username=contact["name"],
                     address=contact["address"],
+                    user_address=self.eth_account.account.address,
                     height=50,
                 )
             )

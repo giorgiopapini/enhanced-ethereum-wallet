@@ -14,8 +14,6 @@ from Page import Page
 class WalletPage(Page):
 
     BACKGROUND_IMG = "App/YourWallet/background.png"
-    TOKENS_PATH = "App/YourWallet/tokens.json"
-    COLLECTIONS_PATH = "App/YourWallet/nfts.json"
     IMPORT_TOKEN_IMG = "App/YourWallet/import_token_img.png"
     NFTS_PATH = "App/YourWallet/nfts.json"
     IMPORT_NFT_IMG = "App/YourWallet/import_nft_img.png"
@@ -126,8 +124,10 @@ class WalletPage(Page):
         )
 
     def get_tokens(self):
+        path = f"{self.eth_account.account_path}/tokens.json"
+
         tokens = []
-        with open(self.TOKENS_PATH, "r") as file:
+        with open(path, "r") as file:
             raw_tokens = json.load(file)
             for token in raw_tokens:
                 tokens.append(
@@ -145,8 +145,10 @@ class WalletPage(Page):
             return tokens
 
     def get_collections(self):
+        path = f"{self.eth_account.account_path}/nfts.json"
+
         collections = []
-        with open(self.COLLECTIONS_PATH, "r") as file:
+        with open(path, "r") as file:
             raw_collections = json.load(file)
             for collection in raw_collections:
                 collections.append(

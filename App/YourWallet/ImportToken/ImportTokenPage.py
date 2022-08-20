@@ -15,7 +15,6 @@ class ImportTokenPage(Page):
     DISABLED_TEXT_BOX_IMAGE = "App/YourWallet/ImportToken/disabled_textbox_img.png"
     BACK_ARROW_IMG = "KeyImport/img1.png"
     IMPORT_BUTTON_IMAGE = "App/YourWallet/ImportToken/import_button_img.png"
-    TOKENS_JSON_PATH = "App/YourWallet/tokens.json"
 
     def __init__(self, root, web3, **kwargs):
         super().__init__(root, web3, **kwargs)
@@ -158,7 +157,9 @@ class ImportTokenPage(Page):
         self.decimals_field.show_error(error=constants.ERRORS["ERROR_ERC20_NOT_FOUND"])
 
     def import_token(self):
-        with open(self.TOKENS_JSON_PATH, "r+") as file:
+        path = f"{self.eth_account.account_path}/tokens.json"
+
+        with open(path, "r+") as file:
             tokens = json.load(file)
             token_already_saved = utility_functions.is_token_saved(
                 tokens=tokens,

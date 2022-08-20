@@ -2,7 +2,6 @@ import json
 from tkinter import *
 
 import constants
-import eth_generic_functions
 import utility_functions
 from App.ReusableComponents.ListElement import ListElement
 from App.ReusableComponents.ListWidget import ListWidget
@@ -17,8 +16,6 @@ class NFTDetailsPage(Page):
     SEND_BUTTON_IMG = "App/YourWallet/NFTDetails/send_button_img.png"
     ADDRESS_FIELD_IMG = "App/YourWallet/NFTDetails/address_field_img.png"
     BACK_ARROW_IMG = "KeyImport/img1.png"
-
-    NFT_JSON_PATH = "App/YourWallet/nfts.json"
 
     def __init__(self, root, web3, **kwargs):
         super().__init__(root, web3, **kwargs)
@@ -170,7 +167,8 @@ class NFTDetailsPage(Page):
             self.address_field.show_error(error=constants.ERRORS["ERROR_SENDING_ERC721"])
 
     def remove_nft_from_json(self):
-        with open(self.NFT_JSON_PATH, "r+") as file:
+        path = f"{self.eth_account.account_path}/nfts.json"
+        with open(path, "r+") as file:
             json_collections = json.load(file)
             json_nfts = json_collections[self.collection_name]
             for i in range(len(json_nfts)):

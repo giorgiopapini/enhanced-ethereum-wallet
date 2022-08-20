@@ -8,13 +8,13 @@ class ContactTile(Frame):
     LETTER_BG_IMG = "App/Contacts/ContactTile/letter_bg_img.png"
     COPY_BTN_IMG = "App/Contacts/ContactTile/copy_img.png"
     DELETE_BTN_IMG = "App/Contacts/ContactTile/delete_img.png"
-    CONTACTS_JSON_PATH = "App/Contacts/contacts.json"
 
-    def __init__(self, genesis_root=None, username=None, address=None, **kwargs):
+    def __init__(self, genesis_root=None, username=None, address=None, user_address=None, **kwargs):
         super().__init__(**kwargs)
         self.genesis_root = genesis_root
         self.username = username
         self.address = address
+        self.user_address = user_address
 
         self.background_img = PhotoImage(file=self.CONTACT_BG_IMG)
         self.background = Label(
@@ -104,7 +104,6 @@ class ContactTile(Frame):
         )
 
     def config(self, *args, **kwargs):
-        # Avoid hardcoded code like this, config method should be rewritten
         self.username = kwargs.get("username", self.username)
         self.address = kwargs.get("address", self.address)
         self.genesis_root = kwargs.get("genesis_root", self.genesis_root)
@@ -120,7 +119,8 @@ class ContactTile(Frame):
             self.genesis_root.update()
 
     def delete_contact(self):
-        with open(self.CONTACTS_JSON_PATH, "r+") as file:
+        path = f"App/Accounts/{self.user_address}/contacts.json"
+        with open(path, "r+") as file:
             contacts = json.load(file)
             index = contacts.index({"name": self.username, "address": self.address})
             contacts.pop(index)

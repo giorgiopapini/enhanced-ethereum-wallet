@@ -16,7 +16,6 @@ class ImportNFTPage(Page):
     IMPORT_BUTTON_IMG = "App/YourWallet/ImportNFT/import_button.png"
     COPY_BUTTON_IMG = "App/Contacts/ContactTile/copy_img.png"
     BACK_ARROW_IMG = "KeyImport/img1.png"
-    NFT_JSON_PATH = "App/YourWallet/nfts.json"
 
     nft_metadata = {}
 
@@ -167,7 +166,8 @@ class ImportNFTPage(Page):
             self.nft_url_field.show_error(error=constants.ERRORS["ERROR_ERC721_NOT_FOUND"])
 
     def import_nft(self):
-        with open(self.NFT_JSON_PATH, "r+") as file:
+        path = f"{self.eth_account.account_path}/nfts.json"
+        with open(path, "r+") as file:
             collections = json.load(file)
             try:
                 collection_name = eth_generic_functions.get_contract_name(

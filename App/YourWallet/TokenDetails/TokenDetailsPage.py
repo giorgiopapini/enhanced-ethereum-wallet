@@ -156,5 +156,4 @@ class TokenDetailsPage(Page):
                 eth_account=self.eth_account,
                 bg="white",
             )
-            print(self.token_amount)
             self.send_page.mainloop()

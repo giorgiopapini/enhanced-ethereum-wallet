@@ -1,3 +1,4 @@
+import os
 import json
 from tkinter import *
 import constants
@@ -10,6 +11,9 @@ from Page import Page
 
 
 class SignUpPage(Page):
+
+    JSON_NFTS_PATH = "App/YourWallet/nfts.json"
+    JSON_TOKENS_PATH = "App/YourWallet/tokens.json"
 
     def __init__(self, root, web3, **kwargs):
         super().__init__(root, web3, **kwargs)
@@ -108,6 +112,9 @@ class SignUpPage(Page):
             with open("encrypted_private_keys.json", "w+") as priv_key_json:
                 priv_key_json.write(json.dumps({"keys": [json_string]}))
 
+            if not self.account_exist():
+                self.create_account_folder()
+
             self.to_page(
                 page=AppPageManager,
                 previous_page=None,
@@ -117,10 +124,20 @@ class SignUpPage(Page):
         else:
             self.entry1.show_error(error=constants.ERRORS["ERROR_PASSWORD_LENGTH"])
 
-    def show_entire_private_key(self):
-        # IMPORTANTE!!! --> Creare tasto che crei un popup che mostri la private key per intero --> La private key
-        # é piú lunga del textbox, quindi é necessario che per procedere l'utenta debba attivare il popup --> Tramite
-        # una variabile booleana verificare se l'utente ha preso visione del popup e permettergli (dopo aver inserito
-        # la password) di procedere alla schermata successiva
-        pass
+    def create_account_folder(self):
+        path = f"App/Accounts/{self.eth_account.account.address}/"
+        os.mkdir(path)
 
+        with open(f"{path}tokens.json", "w") as file:
+            file.write("[]")
+
+        with open(f"{path}nfts.json", "w") as file:
+            file.write("{}")
+
+        with open(f"{path}contacts.json", "w") as file:
+            file.write("[]")
+
+    def account_exist(self):
+        if os.path.isdir(f"App/Accounts/{self.eth_account.account.address}/"):
+            return True
+        return False
