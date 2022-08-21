@@ -1,7 +1,6 @@
 import json
 from tkinter import *
 
-import eth_generic_functions
 from App.ReusableComponents.ListWidget import ListWidget
 from App.ReusableComponents.ListElement import ListElement
 from App.YourWallet.ImportNFT.ImportNFTPage import ImportNFTPage
@@ -15,7 +14,6 @@ class WalletPage(Page):
 
     BACKGROUND_IMG = "App/YourWallet/background.png"
     IMPORT_TOKEN_IMG = "App/YourWallet/import_token_img.png"
-    NFTS_PATH = "App/YourWallet/nfts.json"
     IMPORT_NFT_IMG = "App/YourWallet/import_nft_img.png"
 
     def __init__(self, root, web3, **kwargs):

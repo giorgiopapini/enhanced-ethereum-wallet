@@ -37,21 +37,6 @@ class TokenTile(Frame):
         )
         self.background.pack()
 
-        self.token_icon_img = PhotoImage(file=self.TOKEN_ICON_IMG)
-        self.token_icon = Label(
-            self,
-            image=self.token_icon_img,
-            borderwidth=0,
-            highlightthickness=0,
-            relief="flat"
-        )
-
-        self.token_icon.place(
-            x=14, y=2,
-            width=35,
-            height=35
-        )
-
         self.amount = Label(
             self,
             text=(f"ETH: " if self.token is None else f"{self.token['symbol']}: ") + str(self.token_amount)[0:5],
@@ -59,7 +44,7 @@ class TokenTile(Frame):
             bg="white"
         )
         self.amount.place(
-            x=55, y=8.5
+            x=20, y=8.5
         )
 
         self.arrow_img = PhotoImage(file=self.ARROW_IMG)
