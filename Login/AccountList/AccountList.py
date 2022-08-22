@@ -1,3 +1,4 @@
+import json
 import os
 from tkinter import *
 
@@ -55,6 +56,8 @@ class AccountList(Toplevel):
     def load_accounts(self):
         accounts = []
         addresses = self.get_addresses()
+        current_address = self.get_active_address()
+
         for address in addresses:
             accounts.append(
                 ListElement(
@@ -63,6 +66,7 @@ class AccountList(Toplevel):
                     address=address,
                     callback_reload_list=self.reload_accounts,
                     accounts_num=len(addresses),
+                    deletable=False if current_address.lower() == address[2:].lower() else True,
                     height=50
                 )
             )
@@ -70,6 +74,12 @@ class AccountList(Toplevel):
 
     def get_addresses(self):
         return os.listdir("App/Accounts/")
+
+    def get_active_address(self):
+        with open("encrypted_private_keys.json", "r") as file:
+            json_data = json.load(file)
+            data = json.loads(json_data["keys"][0])
+            return data["address"]
 
     def reload_accounts(self):
         self.account_list.refresh_list(
