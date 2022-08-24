@@ -6,7 +6,7 @@ import utility_functions
 
 def get_nft_owner(nft_address=None, nft_id=None, user_address=None, web3=None):
     contract = web3.eth.contract(address=web3.toChecksumAddress(nft_address), abi=constants.ERC721_ABI)
-    nft_owner = web3.toChecksumAddress(contract.functions.ownerOf(nft_id).call())
+    nft_owner = web3.toChecksumAddress(contract.functions.ownerOf(int(nft_id)).call())
     if web3.toChecksumAddress(user_address) == web3.toChecksumAddress(nft_owner):
         return True
     return False

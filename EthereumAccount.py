@@ -1,3 +1,4 @@
+import time
 import constants
 import eth_generic_functions
 
@@ -70,3 +71,33 @@ class EthereumAccount:
 
         signed_tx = self.web3.eth.account.sign_transaction(mint_txn, private_key=self.account.privateKey.hex())
         tx_hash = self.web3.eth.sendRawTransaction(signed_tx.rawTransaction)
+
+    def swap_eth_for_token(self, amount_in_eth=None, token_address=None):
+        contract = self.web3.eth.contract(address=constants.UNISWAP_V2_ROUTER_ADDRESS, abi=constants.UNISWAP_V2_ROUTER_ABI)
+        nonce = self.web3.eth.getTransactionCount(self.account.address)
+        current_gas_price = eth_generic_functions.get_eth_gas_prices()["SafeGasPrice"]
+
+        weth_address_checksum = self.web3.toChecksumAddress(constants.WETH_ADDRESS)
+        token_address_checksum = self.web3.toChecksumAddress(token_address)
+
+        swap_txn = contract.functions.swapExactETHForTokens(
+            0,
+            [weth_address_checksum, token_address_checksum],
+            self.web3.toChecksumAddress(self.account.address),
+            int(time.time()) + (60 * 1000)
+        ).buildTransaction(
+            {
+                "nonce": nonce,
+                "from": self.web3.toChecksumAddress(self.account.address),
+                "value": self.web3.toWei(amount_in_eth, "ether"),
+                "gas": 1000000,
+                "gasPrice": self.web3.toWei(current_gas_price, 'gwei')
+            }
+        )
+
+        signed_tx = self.web3.eth.account.sign_transaction(swap_txn, private_key=self.account.privateKey.hex())
+        tx_hash = self.web3.eth.sendRawTransaction(signed_tx.rawTransaction)
+        print(tx_hash.hex())
+
+    def swap_token_for_token(self, from_token_address=None, to_token_address=None):
+        pass

@@ -2,6 +2,7 @@ import json
 from tkinter import *
 
 import constants
+import eth_generic_functions
 import utility_functions
 from App.ReusableComponents.ListElement import ListElement
 from App.ReusableComponents.ListWidget import ListWidget
@@ -129,20 +130,35 @@ class NFTDetailsPage(Page):
             x=47, y=415
         )
 
+        self.back_to_previous_page_if_no_nfts()
+
     def create_nfts_list(self):
         nfts_list = []
         for nft in self.nfts:
-            nfts_list.append(
-                ListElement(
-                    widget=NFTTile,
-                    genesis_root=self.root,
-                    web3=self.web3,
-                    eth_account=self.eth_account,
-                    nft=nft,
-                    callback=self.set_active_nft,
-                    height=50
-                )
+
+            is_owner = eth_generic_functions.get_nft_owner(
+                nft_address=nft["address"],
+                nft_id=nft["token_id"],
+                user_address=self.eth_account.account.address,
+                web3=self.web3
             )
+
+            if is_owner is True:
+                nfts_list.append(
+                    ListElement(
+                        widget=NFTTile,
+                        genesis_root=self.root,
+                        web3=self.web3,
+                        eth_account=self.eth_account,
+                        nft=nft,
+                        callback=self.set_active_nft,
+                        height=50
+                    )
+                )
+            else:
+                self.selected_nft = nft
+                self.remove_nft_from_json()
+
         return nfts_list
 
     def set_active_nft(self, nft_clicked=None):
@@ -183,3 +199,11 @@ class NFTDetailsPage(Page):
             file.seek(0)
             json.dump(json_collections, file)
             file.truncate()
+
+    def back_to_previous_page_if_no_nfts(self):
+        if len(self.nfts_list.elements) == 0:
+            self.to_page(
+                page=self.previous_page,
+                frame=self.frame,
+                eth_account=self.eth_account
+            )

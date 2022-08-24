@@ -3,7 +3,7 @@ from PIL import Image
 import utility_functions
 from App.MarketAnalysis.MarketAnalysisPage import MarketAnalysisPage
 from App.Contacts.ContactsPage import ContactsPage
-from App.ManageFunds.FundsPage import FundsPage
+from App.SwapAssets.SwapAssetsPage import FundsPage
 from App.MenuButton import MenuButton
 from App.YourWallet.WalletPage import WalletPage
 from Page import Page
@@ -109,7 +109,8 @@ class AppPageManager(Page):
             related_page=ContactsPage,
             borderwidth=0,
             highlightthickness=0,
-            relief="flat")
+            relief="flat"
+        )
 
         self.contacts_btn.place(
             x=28, y=334,
