@@ -1,6 +1,8 @@
 from tkinter import *
 
 import utility_functions
+from App.SwapAssets.SwapEthWithToken.SwapEthWithTokenToplevel import SwapETHWithToken
+from App.SwapAssets.SwapTokenWithToken.SwapTokenWithTokenToplevel import SwapTokenWithToken
 from Page import Page
 
 
@@ -37,7 +39,7 @@ class FundsPage(Page):
             image=self.swap_eth_to_token_btn_img,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: self.show_toplevel(self.swap_eth_with_token_toplevel),
+            command=self.show_eth_with_token_toplevel,
             relief="flat",
             cursor="hand2"
         )
@@ -54,7 +56,7 @@ class FundsPage(Page):
             image=self.swap_token_to_token_btn_img,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: self.show_toplevel(self.swap_token_with_token_toplevel),
+            command=self.show_token_with_token_toplevel,
             relief="flat",
             cursor="hand2"
         )
@@ -65,5 +67,22 @@ class FundsPage(Page):
             height=39
         )
 
-    def show_toplevel(self, toplevel):
-        pass
+    def show_eth_with_token_toplevel(self):
+        if utility_functions.toplevel_exist(toplevel=self.swap_eth_with_token_toplevel) is False:
+            self.swap_eth_with_token_toplevel = SwapETHWithToken(
+                self.root,
+                self.web3,
+                eth_account=self.eth_account,
+                bg="white"
+            )
+            self.swap_eth_with_token_toplevel.mainloop()
+
+    def show_token_with_token_toplevel(self):
+        if utility_functions.toplevel_exist(toplevel=self.swap_token_with_token_toplevel) is False:
+            self.swap_token_with_token_toplevel = SwapTokenWithToken(
+                self.root,
+                self.web3,
+                eth_account=self.eth_account,
+                bg="white"
+            )
+            self.swap_token_with_token_toplevel.mainloop()

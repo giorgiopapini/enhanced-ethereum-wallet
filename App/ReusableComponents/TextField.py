@@ -75,3 +75,9 @@ class TextField(Entry):
         self.config(fg="red")
         self.insert(END, error)
         self.config(state=self.state)
+
+    def disable(self):
+        self.state = "disabled"
+
+    def enable(self):
+        self.state = "normal"
