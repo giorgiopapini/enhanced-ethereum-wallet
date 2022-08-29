@@ -53,6 +53,7 @@ class SwapETHWithToken(Toplevel):
 
         self.textfield_from = TextField(
             master=self,
+            genesis_root=self.root,
             bd=0,
             bg="#ffffff",
             highlightthickness=0,
@@ -90,6 +91,7 @@ class SwapETHWithToken(Toplevel):
 
         self.textfield_to = TextField(
             master=self,
+            genesis_root=self.root,
             bd=0,
             bg="#ffffff",
             highlightthickness=0
@@ -109,6 +111,7 @@ class SwapETHWithToken(Toplevel):
 
         self.textfield_amount = TextField(
             master=self,
+            genesis_root=self.root,
             bd=0,
             bg="#ffffff",
             highlightthickness=0
@@ -146,7 +149,7 @@ class SwapETHWithToken(Toplevel):
     def eth_to_token(self):
         try:
             self.eth_account.swap_eth_for_token(
-                amount_int_eth=self.textfield_amount.get(),
+                amount_in_eth=self.textfield_amount.get(),
                 token_address=self.textfield_to.get()
             )
         except:
@@ -159,7 +162,28 @@ class SwapETHWithToken(Toplevel):
             self.textfield_to.show_error(error=constants.ERRORS["ERROR_SWAP_FAILED"])
 
     def token_to_eth(self):
-        pass
+        if not self.eth_account.user_has_enough_erc20(erc20_address=self.textfield_from.get(), amount=self.textfield_amount.get()):
+            self.textfield_amount.show_error(
+                error=utility_functions.format_string(
+                    string=constants.ERRORS["ERROR_NOT_ENOUGH_ERC20"],
+                    cut_to=21
+                )
+            )
+            self.textfield_from.show_error(error=constants.ERRORS["ERROR_NOT_ENOUGH_ERC20"])
+        else:
+            try:
+                self.eth_account.swap_token_for_eth(
+                    amount=self.textfield_amount.get(),
+                    token_address=self.textfield_from.get()
+                )
+            except:
+                self.textfield_amount.show_error(
+                    error=utility_functions.format_string(
+                        string=constants.ERRORS["ERROR_SWAP_FAILED"],
+                        cut_to=21
+                    )
+                )
+                self.textfield_from.show_error(error=constants.ERRORS["ERROR_SWAP_FAILED"])
 
     def interchange_fields(self):
         if self.swap_eth_for_token is True:
@@ -188,3 +212,5 @@ class SwapETHWithToken(Toplevel):
         self.textfield_from.override_text(text="ETH")
 
         self.swap_eth_for_token = True
+
+
