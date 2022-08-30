@@ -107,8 +107,6 @@ class EthereumAccount:
         weth_address_checksum = self.web3.toChecksumAddress(constants.WETH_ADDRESS)
         token_address_checksum = self.web3.toChecksumAddress(token_address)
 
-        # self.approve_token(token_address=token_address_checksum, amount=int(float(amount) * (10 ** decimals)))
-
         swap_txn = contract.functions.swapExactTokensForETH(
             int(float(amount) * (10 ** decimals)),
             0,
@@ -139,8 +137,6 @@ class EthereumAccount:
         from_address_checksum = self.web3.toChecksumAddress(from_token_address)
         to_address_checksum = self.web3.toChecksumAddress(to_token_address)
 
-        # self.approve_token(token_address=token_address_checksum, amount=int(float(amount) * (10 ** decimals)))
-
         swap_txn = contract.functions.swapExactTokensForETH(
             int(float(amount) * (10 ** from_token_decimals)),
             0,
@@ -165,11 +161,16 @@ class EthereumAccount:
         erc20_token = self.web3.eth.contract(address=token_address, abi=constants.ERC20_ABI)
         nonce = self.web3.eth.getTransactionCount(self.account.address)
         current_gas_price = eth_generic_functions.get_eth_gas_prices()["SafeGasPrice"]
+        decimals = eth_generic_functions.get_token_decimals(token_address=token_address, web3=self.web3)
 
-        approve_txn = erc20_token.functions.approve(self.account.address, amount).buildTransaction(
+        approve_txn = erc20_token.functions.approve(
+            constants.UNISWAP_V2_ROUTER_ADDRESS,
+            int(float(amount) * (10 ** decimals))
+        ).buildTransaction(
             {
                 "nonce": nonce,
                 "from": self.account.address,
+                "value": 0,
                 "gas": 2000000,
                 "gasPrice": self.web3.toWei(current_gas_price, 'gwei')
             }
@@ -178,6 +179,23 @@ class EthereumAccount:
         signed_tx = self.web3.eth.account.sign_transaction(approve_txn, private_key=self.account.privateKey.hex())
         tx_hash = self.web3.eth.sendRawTransaction(signed_tx.rawTransaction)
         print(tx_hash.hex())
+
+    def token_transfer_approved(self, token_address=None, user_address=None, amount=0):
+        token_allowance = eth_generic_functions.get_token_allowance(
+            token_address=self.web3.toChecksumAddress(token_address),
+            user_address=self.web3.toChecksumAddress(user_address),
+            web3=self.web3
+        )
+
+        decimals = eth_generic_functions.get_token_decimals(
+            token_address=self.web3.toChecksumAddress(token_address),
+            web3=self.web3
+        )
+
+        if token_allowance >= int(float(amount) * (10 ** decimals)):
+            return True
+        else:
+            return False
 
     def user_has_enough_erc20(self, erc20_address=None, amount=0):
         real_amount = eth_generic_functions.get_basic_token_amount(

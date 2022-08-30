@@ -75,6 +75,12 @@ def get_token_amount(token_address=None, user_address=None, web3=None):
     return token_amount
 
 
+def get_token_allowance(token_address=None, user_address=None, web3=None):
+    token = web3.eth.contract(address=web3.toChecksumAddress(token_address), abi=constants.ERC20_ABI)
+    token_allowance = token.functions.allowance(user_address, constants.UNISWAP_V2_ROUTER_ADDRESS).call()
+    return token_allowance
+
+
 def get_eth_transactions(user_address=None):
     url = utility_functions.make_etherscan_api_url(
         module="account",
