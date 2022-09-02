@@ -125,7 +125,6 @@ class EthereumAccount:
 
         signed_tx = self.web3.eth.account.sign_transaction(swap_txn, private_key=self.account.privateKey.hex())
         tx_hash = self.web3.eth.sendRawTransaction(signed_tx.rawTransaction)
-        print(tx_hash.hex())
 
     def swap_token_for_token(self, amount=None, from_token_address=None, to_token_address=None):
         contract = self.web3.eth.contract(address=constants.UNISWAP_V2_ROUTER_ADDRESS, abi=constants.UNISWAP_V2_ROUTER_ABI)
@@ -137,7 +136,7 @@ class EthereumAccount:
         from_address_checksum = self.web3.toChecksumAddress(from_token_address)
         to_address_checksum = self.web3.toChecksumAddress(to_token_address)
 
-        swap_txn = contract.functions.swapExactTokensForETH(
+        swap_txn = contract.functions.swapExactTokensForTokens(
             int(float(amount) * (10 ** from_token_decimals)),
             0,
             [from_address_checksum, to_address_checksum],
@@ -155,7 +154,6 @@ class EthereumAccount:
 
         signed_tx = self.web3.eth.account.sign_transaction(swap_txn, private_key=self.account.privateKey.hex())
         tx_hash = self.web3.eth.sendRawTransaction(signed_tx.rawTransaction)
-        print(tx_hash.hex())
 
     def approve_token(self, token_address=None, amount=None):
         erc20_token = self.web3.eth.contract(address=token_address, abi=constants.ERC20_ABI)
