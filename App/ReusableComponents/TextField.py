@@ -50,9 +50,14 @@ class TextField(Entry):
     def clear(self, event):
         if self.clean_on_click is True:
             self.clear_field()
-            self.callback_on_click()
         else:
             self.clear_error(event)
+
+        self.execute_callback_on_click()
+
+    def execute_callback_on_click(self):
+        if self.callback_on_click is not None:
+            self.callback_on_click()
 
     def clear_field(self):
         self.config(state="normal")

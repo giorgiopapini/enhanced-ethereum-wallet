@@ -115,7 +115,8 @@ class SwapTokenWithToken(Toplevel):
             genesis_root=self.root,
             bd=0,
             bg="#ffffff",
-            highlightthickness=0
+            highlightthickness=0,
+            callback_on_click=self.clean_min_amount
         )
 
         self.textfield_amount.place(
@@ -124,13 +125,25 @@ class SwapTokenWithToken(Toplevel):
             height=27
         )
 
+        self.min_amount_label = Label(
+            self,
+            text="",
+            font=("OpenSansRoman-SemiBold", int(9)),
+            fg="red",
+            bg="white"
+        )
+
+        self.min_amount_label.place(
+            x=26, y=349
+        )
+
         self.approve_btn_img = PhotoImage(file=self.APPROVE_BTN_IMG)
         self.approve_btn = Button(
             self,
             image=self.approve_btn_img,
             borderwidth=0,
             highlightthickness=0,
-            command=self.check_token_amount_and_approve,
+            command=self.check_liquidity_in_pool,
             relief="flat",
             cursor="hand2"
         )
@@ -167,13 +180,52 @@ class SwapTokenWithToken(Toplevel):
         self.textfield_from.override_text(text=to_textfield_text)
         self.textfield_to.override_text(text=from_textfield_text)
 
+    def check_liquidity_in_pool(self):
+        try:
+            decimals = eth_generic_functions.get_token_decimals(token_address=self.textfield_from.get(), web3=self.web3)
+            amount_int = int(float(self.textfield_amount.get()) * (10 ** decimals))
+
+            liquidity = eth_generic_functions.uniswap_get_amounts_out(
+                path=[self.textfield_from.get(), self.textfield_to.get()],
+                amount_in=amount_int,
+                web3=self.web3
+            )
+
+            if liquidity[1] == 0:
+                self.textfield_amount.show_error(
+                    error=utility_functions.format_string(
+                        string=constants.ERRORS["ERROR_INSUFFICIENT_INPUT_AMOUNT"],
+                        cut_to=21
+                    )
+                )
+
+                min_amount = eth_generic_functions.uniswap_get_min_amount_in(
+                    path=[self.textfield_from.get(), self.textfield_to.get()],
+                    web3=self.web3
+                )
+
+                self.min_amount_label.config(
+                    text=f"Min amount: {float(min_amount / (10 ** decimals))}"
+                )
+            else:
+                self.check_token_amount_and_approve()
+        except:
+            self.textfield_from.show_error(error=constants.ERRORS["ERROR_NOT_ENOUGH_LIQUIDITY"])
+            self.textfield_to.show_error(error=constants.ERRORS["ERROR_NOT_ENOUGH_LIQUIDITY"])
+            self.textfield_amount.show_error(
+                error=utility_functions.format_string(
+                    string=constants.ERRORS["ERROR_NOT_ENOUGH_LIQUIDITY"],
+                    cut_to=21
+                )
+            )
+
     def check_token_amount_and_approve(self):
-        valid = self.eth_account.user_has_enough_erc20(
+        enough_erc20 = self.eth_account.user_has_enough_erc20(
             erc20_address=self.textfield_from.get(),
             amount=self.textfield_amount.get()
         )
 
-        if valid is True:
+        if enough_erc20 is True:
             self.freeze_fields()
             self.approve_transaction()
         else:
@@ -236,6 +288,7 @@ class SwapTokenWithToken(Toplevel):
             to_token_address=self.textfield_to.get(),
             amount=self.textfield_amount.get()
         )
+        self.destroy()
 
     def freeze_fields(self):
         self.interchange_btn["state"] = "disabled"
@@ -251,3 +304,6 @@ class SwapTokenWithToken(Toplevel):
         self.canvas.itemconfig(self.textfield_amount_img, image=self.disabled_textfield_amount_img)
         self.textfield_amount.disable()
         self.textfield_amount.override_text(text=self.textfield_amount.get())
+
+    def clean_min_amount(self):
+        self.min_amount_label.config(text="")

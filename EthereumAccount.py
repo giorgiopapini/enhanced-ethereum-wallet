@@ -176,7 +176,6 @@ class EthereumAccount:
 
         signed_tx = self.web3.eth.account.sign_transaction(approve_txn, private_key=self.account.privateKey.hex())
         tx_hash = self.web3.eth.sendRawTransaction(signed_tx.rawTransaction)
-        print(tx_hash.hex())
 
     def token_transfer_approved(self, token_address=None, user_address=None, amount=0):
         token_allowance = eth_generic_functions.get_token_allowance(

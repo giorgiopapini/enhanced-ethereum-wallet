@@ -81,6 +81,26 @@ def get_token_allowance(token_address=None, user_address=None, web3=None):
     return token_allowance
 
 
+def uniswap_get_min_amount_in(path=None, web3=None):
+    uniswap_router = web3.eth.contract(
+        address=web3.toChecksumAddress(constants.UNISWAP_V2_ROUTER_ADDRESS),
+        abi=constants.UNISWAP_V2_ROUTER_ABI
+    )
+    amounts_in = uniswap_router.functions.getAmountsIn(int(1), path).call()
+
+    return amounts_in[0]
+
+
+def uniswap_get_amounts_out(path=None, amount_in=None, web3=None):
+    uniswap_router = web3.eth.contract(
+        address=web3.toChecksumAddress(constants.UNISWAP_V2_ROUTER_ADDRESS),
+        abi=constants.UNISWAP_V2_ROUTER_ABI
+    )
+    amounts_out = uniswap_router.functions.getAmountsOut(int(amount_in), path).call()
+
+    return amounts_out
+
+
 def get_eth_transactions(user_address=None):
     url = utility_functions.make_etherscan_api_url(
         module="account",
