@@ -1,5 +1,6 @@
 from tkinter import *
 import eth_generic_functions
+import utility_functions
 
 
 class TransactionDetails(Toplevel):
@@ -113,7 +114,7 @@ class TransactionDetails(Toplevel):
 
         self.amount_label = Label(
             self,
-            text=f"{float(self.transaction_json['value']) / 10**self.get_decimals()} "
+            text=f"{utility_functions.convert_exponential_to_decimal(number=self.transaction_json['value'], decimals=self.get_decimals())} "
                  f"{'ETH' if self.token is None else self.token['symbol']}",
             font=("OpenSansRoman-SemiBold", int(10.8)),
             bg="white"
@@ -134,7 +135,8 @@ class TransactionDetails(Toplevel):
 
         self.gas_price_label = Label(
             self,
-            text=f"{self.transaction_json['gasPrice']} GWEI",
+            text=f"{utility_functions.convert_exponential_to_decimal(number=self.transaction_json['gasPrice'], decimals=9)} "
+                 f"GWEI",
             font=("OpenSansRoman-SemiBold", int(10.8)),
             bg="white"
         )
@@ -168,8 +170,11 @@ class TransactionDetails(Toplevel):
         return f"{address[0:11]}...{address[31:len(address)]}"
 
     def get_total_gas_fee(self):
-        raw_gas_fee = float((int(self.transaction_json['gasUsed']) * int(self.transaction_json["gasPrice"]))) / 10 ** self.get_decimals()
-        return "{:.8f}".format(float(raw_gas_fee)).rstrip("0")
+        num = utility_functions.convert_exponential_to_decimal(
+            number=float((int(self.transaction_json['gasUsed']) * int(self.transaction_json["gasPrice"]))),
+            decimals=self.get_decimals()
+        )
+        return num
 
     def copy_to_clipboard(self, data):
         if self.root is not None:

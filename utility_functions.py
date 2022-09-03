@@ -1,4 +1,5 @@
 import mimetypes
+from decimal import *
 from tkinter import *
 from PIL import Image
 from _datetime import datetime
@@ -156,6 +157,13 @@ def format_balance(amount=None, decimals=None, round_to=5, cut_until=5):
         return int(str_token[0:cut_until][:-2])
     else:
         return float(str_token[0:cut_until])
+
+
+def convert_exponential_to_decimal(number=None, decimals=None):
+    exp = float(number) / int(10 ** decimals)
+    formatting_string = f".{decimals}f"
+    formatted_num = f"{exp:{formatting_string}}".rstrip("0").rstrip(".")
+    return formatted_num
 
 
 def format_string(string="", cut_to=20):
