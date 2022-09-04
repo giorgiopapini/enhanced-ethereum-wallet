@@ -17,18 +17,24 @@ class TransactionDetails(Toplevel):
         self.token = token
 
         self.title(f"Transaction #{transaction_json['nonce']}")
-        self.geometry("301x380")
+        self.geometry("301x432")
         self.resizable(False, False)
 
         self.canvas = Canvas(
             self,
             bg="#ffffff",
-            height=380,
+            height=432,
             width=301,
             bd=0,
             highlightthickness=0,
             relief="ridge")
         self.canvas.place(x=0, y=0)
+
+        self.background_img = PhotoImage(file=self.BACKGROUND)
+        self.background = self.canvas.create_image(
+            147.5, 246.0,
+            image=self.background_img
+        )
 
         self.title_label = Label(
             self,
@@ -57,7 +63,8 @@ class TransactionDetails(Toplevel):
             borderwidth=0,
             highlightthickness=0,
             command=lambda: self.copy_to_clipboard(self.transaction_json["from"]),
-            relief="flat"
+            relief="flat",
+            cursor="hand2"
         )
 
         self.copy_from_btn.place(
@@ -82,11 +89,38 @@ class TransactionDetails(Toplevel):
             borderwidth=0,
             highlightthickness=0,
             command=lambda: self.copy_to_clipboard(self.transaction_json["to"]),
-            relief="flat"
+            relief="flat",
+            cursor="hand2"
         )
 
         self.copy_to_btn.place(
             x=255, y=109,
+            width=18,
+            height=17
+        )
+
+        self.txn_hash_label = Label(
+            self,
+            text=self.format_txn_hash(hash=self.transaction_json["hash"]),
+            font=("OpenSansRoman-SemiBold", int(10.8)),
+            bg="white"
+        )
+        self.txn_hash_label.place(
+            x=70, y=135
+        )
+
+        self.copy_to_btn = Button(
+            self,
+            image=self.copy_btn_img,
+            borderwidth=0,
+            highlightthickness=0,
+            command=lambda: self.copy_to_clipboard(self.transaction_json["hash"]),
+            relief="flat",
+            cursor="hand2"
+        )
+
+        self.copy_to_btn.place(
+            x=255, y=138,
             width=18,
             height=17
         )
@@ -99,7 +133,7 @@ class TransactionDetails(Toplevel):
             bg="white"
         )
         self.status_label.place(
-            x=77.5, y=185
+            x=77.5, y=220
         )
 
         self.nonce_label = Label(
@@ -109,7 +143,7 @@ class TransactionDetails(Toplevel):
             bg="white"
         )
         self.nonce_label.place(
-            x=79, y=213
+            x=79, y=248
         )
 
         self.amount_label = Label(
@@ -120,7 +154,7 @@ class TransactionDetails(Toplevel):
             bg="white"
         )
         self.amount_label.place(
-            x=88.5, y=244
+            x=88.5, y=279
         )
 
         self.gas_used_label = Label(
@@ -130,7 +164,7 @@ class TransactionDetails(Toplevel):
             bg="white"
         )
         self.gas_used_label.place(
-            x=96.5, y=275
+            x=96.5, y=310
         )
 
         self.gas_price_label = Label(
@@ -141,7 +175,7 @@ class TransactionDetails(Toplevel):
             bg="white"
         )
         self.gas_price_label.place(
-            x=96.5, y=307.8
+            x=96.5, y=342.8
         )
 
         self.total_gas_fee_label = Label(
@@ -151,13 +185,7 @@ class TransactionDetails(Toplevel):
             bg="white"
         )
         self.total_gas_fee_label.place(
-            x=118.2, y=338.8
-        )
-
-        self.background_img = PhotoImage(file=self.BACKGROUND)
-        self.background = self.canvas.create_image(
-            149.5, 228.0,
-            image=self.background_img
+            x=118.2, y=373.8
         )
 
     def get_decimals(self):
@@ -168,6 +196,9 @@ class TransactionDetails(Toplevel):
 
     def format_address(self, address=None):
         return f"{address[0:11]}...{address[31:len(address)]}"
+
+    def format_txn_hash(self, hash=None):
+        return f"{hash[0:11]}...{hash[55:len(hash)]}"
 
     def get_total_gas_fee(self):
         num = utility_functions.convert_exponential_to_decimal(
