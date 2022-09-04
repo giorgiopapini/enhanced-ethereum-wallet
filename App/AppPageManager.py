@@ -3,7 +3,7 @@ from PIL import Image
 import utility_functions
 from App.MarketAnalysis.MarketAnalysisPage import MarketAnalysisPage
 from App.Contacts.ContactsPage import ContactsPage
-from App.SwapAssets.SwapAssetsPage import FundsPage
+from App.SwapAssets.SwapAssetsPage import SwapAssets
 from App.MenuButton import MenuButton
 from App.YourWallet.WalletPage import WalletPage
 from Page import Page
@@ -14,8 +14,8 @@ class AppPageManager(Page):
     WALLET_BTN = "App/BtnAssets/wallet_btn.png"
     WALLET_BTN_FOCUS = "App/BtnAssets/wallet_btn_focus.png"
 
-    FUNDS_BTN = "App/BtnAssets/funds_btn.png"
-    FUNDS_BTN_FOCUS = "App/BtnAssets/funds_btn_focus.png"
+    SWAP_ASSETS_BTN = "App/BtnAssets/swap_assets_btn.png"
+    SWAP_ASSETS_BTN_FOCUS = "App/BtnAssets/swap_assets_btn_focus.png"
 
     CONTACTS_BTN = "App/BtnAssets/contacts_btn.png"
     CONTACTS_BTN_FOCUS = "App/BtnAssets/contacts_btn_focus.png"
@@ -85,18 +85,18 @@ class AppPageManager(Page):
             width=202,
             height=42)
 
-        self.root.img_funds = PhotoImage(file=self.FUNDS_BTN)
-        self.root.focused_img_funds = PhotoImage(file=self.FUNDS_BTN_FOCUS)
-        self.funds_btn = MenuButton(
-            image=self.root.img_funds,
-            focused_image=self.root.focused_img_funds,
-            related_page=FundsPage,
+        self.root.img_swap_assets = PhotoImage(file=self.SWAP_ASSETS_BTN)
+        self.root.focused_img_swap_assets = PhotoImage(file=self.SWAP_ASSETS_BTN_FOCUS)
+        self.swap_assets_btn = MenuButton(
+            image=self.root.img_swap_assets,
+            focused_image=self.root.focused_img_swap_assets,
+            related_page=SwapAssets,
             borderwidth=0,
             highlightthickness=0,
             relief="flat",
         )
 
-        self.funds_btn.place(
+        self.swap_assets_btn.place(
             x=28, y=288,
             width=202,
             height=42)
@@ -133,10 +133,10 @@ class AppPageManager(Page):
             width=202,
             height=42)
 
-        self.buttons = [self.wallet_btn, self.funds_btn, self.contacts_btn, self.market_analysis_btn]
+        self.buttons = [self.wallet_btn, self.swap_assets_btn, self.contacts_btn, self.market_analysis_btn]
 
         self.wallet_btn.bind("<Button>", self.btn_clicked)
-        self.funds_btn.bind("<Button>", self.btn_clicked)
+        self.swap_assets_btn.bind("<Button>", self.btn_clicked)
         self.contacts_btn.bind("<Button>", self.btn_clicked)
         self.market_analysis_btn.bind("<Button>", self.btn_clicked)
 

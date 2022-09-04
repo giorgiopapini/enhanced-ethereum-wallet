@@ -6,7 +6,7 @@ from App.SwapAssets.SwapTokenWithToken.SwapTokenWithTokenToplevel import SwapTok
 from Page import Page
 
 
-class FundsPage(Page):
+class SwapAssets(Page):
 
     BACKGROUND = "App/SwapAssets/background.png"
     SWAP_BTN_IMG = "App/SwapAssets/swap_btn_img.png"

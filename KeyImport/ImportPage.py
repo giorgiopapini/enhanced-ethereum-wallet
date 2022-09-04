@@ -23,7 +23,7 @@ class ImportPage(Page):
 
         self.prv_key_field_img = PhotoImage(file=f"KeyImport/img_textBox0.png")
         self.prv_key_field = self.canvas.create_image(
-            400.0, 272.5,
+            400.0, 264.5,
             image=self.prv_key_field_img)
 
         self.prv_key_field = TextField(
@@ -33,7 +33,7 @@ class ImportPage(Page):
             highlightthickness=0)
 
         self.prv_key_field.place(
-            x=210.5, y=258,
+            x=210.5, y=250,
             width=379.0,
             height=31)
 
