@@ -170,7 +170,6 @@ class SwapETHWithToken(Toplevel):
             self.eth_to_token()
         else:
             self.token_to_eth()
-        self.destroy()
 
     def eth_to_token(self):
         try:
@@ -178,6 +177,7 @@ class SwapETHWithToken(Toplevel):
                 amount_in_eth=self.textfield_amount.get(),
                 token_address=self.textfield_to.get()
             )
+            self.destroy()
         except:
             self.textfield_amount.show_error(
                 error=utility_functions.format_string(
@@ -202,6 +202,7 @@ class SwapETHWithToken(Toplevel):
                     amount=self.textfield_amount.get(),
                     token_address=self.textfield_from.get()
                 )
+                self.destroy()
             except:
                 self.textfield_amount.show_error(
                     error=utility_functions.format_string(
