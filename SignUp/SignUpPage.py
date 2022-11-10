@@ -113,7 +113,7 @@ class SignUpPage(Page):
                 priv_key_json.write(json.dumps({"keys": [json_string]}))
 
             if not self.account_exist():
-                self.create_account_folder()
+                self.try_create_folder()
 
             self.to_page(
                 page=AppPageManager,
@@ -123,6 +123,14 @@ class SignUpPage(Page):
             )
         else:
             self.entry1.show_error(error=constants.ERRORS["ERROR_PASSWORD_LENGTH"])
+
+    def try_create_folder(self):
+        try:
+            self.create_account_folder()
+        except FileNotFoundError:
+            path = "App/Accounts"
+            os.mkdir(path)
+            self.create_account_folder()
 
     def create_account_folder(self):
         path = f"App/Accounts/{self.eth_account.account.address}/"
